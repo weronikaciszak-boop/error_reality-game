@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Error Reality</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 * {
     margin: 0;
@@ -12,19 +16,22 @@
     box-sizing: border-box;
 }
 
+/* Główny kontener strony - czarne tło, żółty tekst */
 body {
     background: #000000;
-    font-family: 'Montserrat SemiBold', monospace;
+    font-family: 'Montserrat', sans-serif;
     color: #ffff00;
     padding: 15px;
     min-height: 100vh;
 }
 
+/* Kontener dla całej zawartości */
 .container {
     max-width: 100%;
     margin: auto;
 }
 
+/* Główny tytuł strony */
 h1 {
     color: #ffff00;
     text-align: center;
@@ -32,79 +39,55 @@ h1 {
     text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
     font-size: 2em;
     letter-spacing: 2px;
+    font-weight: 600;
 }
 
+/* Podtytuł pod głównym tytułem */
 .subtitle {
     text-align: center;
     color: #ffffff;
     margin-bottom: 20px;
     font-size: 0.9em;
     animation: flicker 2s infinite;
+    font-weight: 400;
 }
 
+/* Animacja migotania dla podtytułu */
 @keyframes flicker {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
 }
 
-/* ===== STATUS BOXES ===== */
-.status-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.box {
-    border: 1px solid #ffffff;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.box:hover {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-}
-
-.box-title {
-    color: #ffff00;
-    font-size: 0.8em;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.box-value {
-    color: #ffff00;
-    font-size: 1.3em;
-    font-weight: bold;
-}
-
-/* ===== PROGRESS BAR ===== */
+/* ===== PASEK POSTĘPU - Pokazuje procent ukończenia gry ===== */
 .progress-container {
     margin: 20px 0;
-    border: 2px solid #ffffff;
+    border: 0.5px solid #ffffff;
+    border-radius: 8px;
     padding: 12px;
     background: rgba(0, 0, 0, 0.3);
 }
 
+/* Opis paska postępu */
 .progress-label {
     color: #ffff00;
-    font-size: 0.8em;
+    font-size: 0.7em;
     margin-bottom: 8px;
     text-transform: uppercase;
+    font-weight: 400;
 }
 
+/* Główny pasek z kolorową animacją */
 .progress-bar {
     width: 100%;
     height: 25px;
     background: rgba(0, 0, 0, 0.5);
-    border: 1px solid #ffffff;
+    border: 0.5px solid #ffffff;
+    border-radius: 6px;
     overflow: hidden;
     position: relative;
 }
 
+/* Żółty gradient wypełniający pasek */
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #ffff00, #ffff00);
@@ -115,9 +98,11 @@ h1 {
     justify-content: center;
     font-size: 0.7em;
     color: #000;
-    font-weight: bold;
+    font-weight: 600;
+    border-radius: 6px;
 }
 
+/* Animacja błyszczenia na pasku */
 .progress-fill::after {
     content: '';
     position: absolute;
@@ -134,117 +119,184 @@ h1 {
     100% { transform: translateX(100%); }
 }
 
+/* Procent i liczba skanów */
 .progress-percent {
     text-align: right;
     color: #ffff00;
     margin-top: 5px;
-    font-size: 0.85em;
+    font-size: 0.75em;
+    font-weight: 400;
 }
 
-/* ===== INFO SECTION ===== */
+/* ===== BOXY STATUSU - 4 sekcje pokazujące stan systemu ===== */
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+/* Każdy box statusu - biała obwódka, zaokrąglone rogi */
+.box {
+    border: 0.5px solid #ffffff;
+    border-radius: 8px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Efekt na hover - świecący box */
+.box:hover {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Tytuł boxy - żółty, mały */
+.box-title {
+    color: #ffff00;
+    font-size: 0.7em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+/* Wartość w boxy - żółta, większa czcionka */
+.box-value {
+    color: #ffff00;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+/* ===== SEKCJA INFO - Ostatni event i status połączenia ===== */
 .info-section {
-    border: 2px solid #ffffff;
+    border: 0.5px solid #ffffff;
+    border-radius: 8px;
     padding: 12px;
     background: rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
 }
 
+/* Tytuł sekcji info */
 .info-title {
     color: #ffff00;
-    font-size: 0.8em;
+    font-size: 0.7em;
     text-transform: uppercase;
     margin-bottom: 10px;
+    font-weight: 400;
 }
 
+/* Grid dla pojedynczych info elementów */
 .info-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
 }
 
+/* Zawartość pojedynczego info elementu */
 .info-item {
     color: #ffff00;
 }
 
+/* Etykieta info - mały żółty tekst */
 .info-label {
     color: #ffff00;
-    font-size: 0.75em;
+    font-size: 0.65em;
+    font-weight: 400;
 }
 
+/* Wartość info - biały, większy tekst */
 .info-value {
-    font-size: 1em;
-    font-weight: bold;
+    font-size: 0.9em;
+    font-weight: 600;
     margin-top: 2px;
     color: #ffffff;
 }
 
-/* ===== ARCHIVE/HISTORY ===== */
+/* ===== ARCHIWUM/HISTORIA - Lista wszystkich skanów z timestamp'ami ===== */
 .archive-section {
-    border: 2px solid #ffffff;
+    border: 0.5px solid #ffffff;
+    border-radius: 8px;
     padding: 15px;
     background: rgba(0, 0, 0, 0.3);
 }
 
+/* Tytuł archiwum */
 .archive-title {
     color: #ffff00;
-    font-size: 0.85em;
+    font-size: 0.75em;
     text-transform: uppercase;
     margin-bottom: 12px;
     letter-spacing: 1px;
+    font-weight: 400;
 }
 
+/* Scrollowalna lista eventów */
 .archive-list {
     max-height: 300px;
     overflow-y: auto;
 }
 
+/* Pojedynczy event w archiwum */
 .archive-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
     padding: 10px 0;
-    font-size: 0.8em;
+    font-size: 0.75em;
 }
 
+/* Ostatni item bez dolnej linii */
 .archive-item:last-child {
     border-bottom: none;
 }
 
+/* Timestamp eventu - żółty, pogrubiony */
 .archive-timestamp {
     color: #ffff00;
-    font-weight: bold;
+    font-weight: 600;
 }
 
+/* Typ eventu - biały tekst */
 .archive-type {
     color: #ffffff;
     margin: 2px 0;
+    font-weight: 400;
 }
 
+/* Dane eventu - szary tekst, mały */
 .archive-data {
     color: #cccccc;
-    font-size: 0.75em;
+    font-size: 0.7em;
     margin-top: 2px;
+    font-weight: 400;
 }
 
+/* Wiadomość gdy archiwum jest puste */
 .archive-empty {
     color: #666666;
     text-align: center;
     padding: 20px;
+    font-weight: 400;
+    font-size: 0.8em;
 }
 
-/* ===== STATUS INDICATOR ===== */
+/* ===== STATUS POŁĄCZENIA - Indicator w prawym dolnym rogu ===== */
 .connection-status {
     position: fixed;
     bottom: 15px;
     right: 15px;
     padding: 8px 12px;
-    border: 2px solid #ffffff;
+    border: 0.5px solid #ffffff;
+    border-radius: 6px;
     background: rgba(0, 0, 0, 0.5);
-    font-size: 0.75em;
+    font-size: 0.65em;
     display: flex;
     align-items: center;
     gap: 6px;
     color: #ffffff;
+    font-weight: 400;
 }
 
+/* Kolorowa kropka - zielona gdy połączone, czerwona gdy rozłączone */
 .status-dot {
     width: 8px;
     height: 8px;
@@ -252,22 +304,26 @@ h1 {
     animation: pulse 1s infinite;
 }
 
+/* Status połączone - żółty kolor z świeceniem */
 .status-dot.connected {
     background: #ffff00;
     box-shadow: 0 0 8px #ffff00;
 }
 
+/* Status rozłączone - czerwony bez animacji */
 .status-dot.disconnected {
     background: #ff0000;
     animation: none;
 }
 
+/* Animacja pulsowania dla połączonego statusu */
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
 
-/* ===== ANIMATIONS ===== */
+/* ===== ANIMACJE ===== */
+/* Animacja pojawienia się nowego eventu */
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -279,11 +335,12 @@ h1 {
     }
 }
 
+/* Klasa dla nowych eventów */
 .new-event {
     animation: slideIn 0.5s ease;
 }
 
-/* ===== SCROLLBAR ===== */
+/* ===== STYLIZACJA SCROLLBARA ===== */
 .archive-list::-webkit-scrollbar {
     width: 6px;
 }
@@ -297,7 +354,7 @@ h1 {
     border-radius: 3px;
 }
 
-/* ===== MOBILE FIRST - VERTICAL ===== */
+/* ===== RESPONSYWNOŚĆ - MOBILE FIRST ===== */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8em;
@@ -327,59 +384,71 @@ h1 {
 
 <div class="container">
     
+    <!-- GŁÓWNY NAGŁÓWEK -->
     <h1>ERROR REALITY OS</h1>
-    <p class="subtitle">USER DETECTED</p>
+    <p class="subtitle">Recover. Restore. Escape.</p>
 
-    <!-- ===== PROGRESS BAR ===== -->
+    <!-- ===== PASEK POSTĘPU - Pokazuje ile % gry ukończone ===== -->
     <div class="progress-container">
         <div class="progress-label">Reality Stability</div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="progress-percent">
-            <span id="progressPercent">0</span>% - <span id="scansCount">0</span> / <span id="totalScans">100</span> skanów
+            <span id="progressPercent">0</span>% - <span id="scansCount">0</span> / <span id="totalScans">89</span> skanów
         </div>
     </div>
 
-    <!-- ===== STATUS BOXES ===== -->
+    <!-- ===== BOXY STATUSU - 4 sekcje pokazujące stan systemu ===== -->
     <div class="status-grid">
+        <!-- Box 1: Stan zasilania systemu -->
         <div class="box">
             <div class="box-title">Power Status</div>
             <div class="box-value" id="powerStatus">OFF</div>
         </div>
         
+        <!-- Box 2: Stan rdzenia systemu -->
         <div class="box">
             <div class="box-title">Core Status</div>
             <div class="box-value" id="coreStatus">CORRUPTED</div>
         </div>
         
+        <!-- Box 3: Ilość aktywnych skanów -->
         <div class="box">
             <div class="box-title">Active Scans</div>
             <div class="box-value" id="activeScanCount">0</div>
         </div>
         
+        <!-- Box 4: Ogólny stan zdrowia systemu -->
         <div class="box">
             <div class="box-title">System Health</div>
             <div class="box-value" id="systemHealth">CRITICAL</div>
         </div>
     </div>
 
-    <!-- ===== INFO SECTION ===== -->
+    <!-- ===== SEKCJA INFO - Ostatni event, timestamp, połączenie ===== -->
     <div class="info-section">
         <div class="info-title">Current Status</div>
         <div class="info-grid">
+            <!-- Info 1: Ostatni otrzymany event -->
             <div class="info-item">
                 <div class="info-label">Last Event</div>
                 <div class="info-value" id="lastEvent">Waiting...</div>
             </div>
+            
+            <!-- Info 2: Godzina ostatniego eventu -->
             <div class="info-item">
                 <div class="info-label">Last Timestamp</div>
                 <div class="info-value" id="lastTimestamp">--:--:--</div>
             </div>
+            
+            <!-- Info 3: Status połączenia z backendem -->
             <div class="info-item">
                 <div class="info-label">Connection</div>
                 <div class="info-value" id="connectionStatus">DISCONNECTED</div>
             </div>
+            
+            <!-- Info 4: Całkowita liczba otrzymanych eventów -->
             <div class="info-item">
                 <div class="info-label">Total Events</div>
                 <div class="info-value" id="totalEvents">0</div>
@@ -387,7 +456,7 @@ h1 {
         </div>
     </div>
 
-    <!-- ===== ARCHIVE/HISTORY ===== -->
+    <!-- ===== ARCHIWUM/HISTORIA - Scrollowalna lista wszystkich skanów ===== -->
     <div class="archive-section">
         <div class="archive-title">📋 Event Archive - Historia Skanów</div>
         <div class="archive-list" id="archiveList">
@@ -397,36 +466,45 @@ h1 {
 
 </div>
 
-<!-- ===== CONNECTION STATUS INDICATOR ===== -->
+<!-- ===== STATUS POŁĄCZENIA - Indicator w dolnym rogu (FIXED) ===== -->
 <div class="connection-status">
     <div class="status-dot disconnected" id="statusDot"></div>
     <span id="statusText">DISCONNECTED</span>
 </div>
 
-<!-- ===== JAVASCRIPT ===== -->
+<!-- ===== JAVASCRIPT - Logika obsługi WebSocket i UI ===== -->
 <script>
+/**
+ * ErrorRealityClient - Główna klasa obsługująca komunikację z backendem
+ * - Łączy się z WebSocket'em na localhost:8000
+ * - Ładuje istniejące eventy z API
+ * - Aktualizuje UI w czasie rzeczywistym
+ */
 class ErrorRealityClient {
     constructor() {
-        this.ws = null;
-        this.events = [];
-        this.totalScans = 89;
-        this.wsUrl = 'ws://localhost:8000/ws';
-        this.apiUrl = 'http://localhost:8000';
+        this.ws = null; // WebSocket połączenie
+        this.events = []; // Tablica wszystkich otrzymanych eventów
+        this.totalScans = 89; // Całkowita liczba skanów do ukończenia
+        this.wsUrl = 'ws://localhost:8000/ws'; // URL WebSocket'a
+        this.apiUrl = 'http://localhost:8000'; // URL API dla REST
         
-        // Init
+        // Inicjalizacja
         this.init();
     }
 
+    /**
+     * Inicjalizacja - ładuje eventy i łączy się z WebSocket'em
+     */
     async init() {
         console.log('🎮 Initializing Error Reality Client...');
         
-        // Load existing events
+        // Załaduj istniejące eventy z backendu
         await this.loadExistingEvents();
         
-        // Connect to WebSocket
+        // Nawiąż połączenie WebSocket
         this.connectWebSocket();
         
-        // Retry connection every 5 seconds if disconnected
+        // Spróbuj ponownie co 5 sekund jeśli połączenie spadło
         setInterval(() => {
             if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
                 console.log('🔄 Reconnecting...');
@@ -435,7 +513,9 @@ class ErrorRealityClient {
         }, 5000);
     }
 
-    // Load events from backend
+    /**
+     * Załaduj istniejące eventy z backendu (REST API)
+     */
     async loadExistingEvents() {
         try {
             const response = await fetch(`${this.apiUrl}/events`);
@@ -451,30 +531,37 @@ class ErrorRealityClient {
         }
     }
 
-    // Connect to WebSocket
+    /**
+     * Nawiąż połączenie WebSocket z backendem
+     */
     connectWebSocket() {
         try {
             this.ws = new WebSocket(this.wsUrl);
 
+            // Połączenie nawiązane
             this.ws.onopen = () => {
                 console.log('✅ WebSocket Connected');
                 this.updateConnectionStatus(true);
             };
 
+            // Otrzymano wiadomość z backendu
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 console.log('📨 Received:', data);
                 
+                // Dodaj nowy event do tablicy
                 this.events.push(data);
                 this.updateUI();
                 this.addEventToArchive(data);
             };
 
+            // Błąd WebSocket'a
             this.ws.onerror = (error) => {
                 console.error('❌ WebSocket Error:', error);
                 this.updateConnectionStatus(false);
             };
 
+            // Połączenie zamknięte
             this.ws.onclose = () => {
                 console.log('🔌 WebSocket Disconnected');
                 this.updateConnectionStatus(false);
@@ -485,17 +572,19 @@ class ErrorRealityClient {
         }
     }
 
-    // Update UI elements
+    /**
+     * Aktualizuj całe UI - pasek postępu, boxy statusu, info
+     */
     updateUI() {
         const scansCount = this.events.length;
         const progressPercent = Math.round((scansCount / this.totalScans) * 100);
         
-        // Update progress bar
+        // Zaktualizuj pasek postępu
         document.getElementById('progressFill').style.width = progressPercent + '%';
         document.getElementById('progressPercent').textContent = progressPercent;
         document.getElementById('scansCount').textContent = scansCount;
 
-        // Update power status based on progress
+        // Zmień status na podstawie progresu
         let powerStatus = 'OFF';
         let coreStatus = 'CORRUPTED';
         let systemHealth = 'CRITICAL';
@@ -509,10 +598,11 @@ class ErrorRealityClient {
         document.getElementById('coreStatus').textContent = coreStatus;
         document.getElementById('systemHealth').textContent = systemHealth;
 
-        // Update other info
+        // Zaktualizuj liczę skanów
         document.getElementById('activeScanCount').textContent = scansCount;
         document.getElementById('totalEvents').textContent = scansCount;
 
+        // Zaktualizuj info o ostatnim evencie
         if (this.events.length > 0) {
             const lastEvent = this.events[this.events.length - 1];
             document.getElementById('lastEvent').textContent = lastEvent.type;
@@ -520,15 +610,18 @@ class ErrorRealityClient {
         }
     }
 
-    // Add event to archive
+    /**
+     * Dodaj nowy event do archiwum/historii
+     */
     addEventToArchive(event) {
         const archiveList = document.getElementById('archiveList');
         
-        // If this is first event, clear the empty message
+        // Jeśli to pierwszy event, wyczyść wiadomość "oczekiwanie"
         if (archiveList.querySelector('.archive-empty')) {
             archiveList.innerHTML = '';
         }
 
+        // Utwórz nowy element dla eventu
         const eventElement = document.createElement('div');
         eventElement.className = 'archive-item new-event';
         eventElement.innerHTML = `
@@ -537,16 +630,18 @@ class ErrorRealityClient {
             <div class="archive-data">📊 ID: ${JSON.stringify(event.data).substring(0, 100)}...</div>
         `;
 
-        // Add to top of list
+        // Dodaj na górę listy (najnowszy najpierw)
         archiveList.insertBefore(eventElement, archiveList.firstChild);
 
-        // Keep only last 50 events in UI
+        // Zachowaj tylko ostatnie 50 eventów w UI
         while (archiveList.children.length > 50) {
             archiveList.removeChild(archiveList.lastChild);
         }
     }
 
-    // Format timestamp
+    /**
+     * Formatuj timestamp ISO do czasu PL (HH:MM:SS)
+     */
     formatTime(isoString) {
         const date = new Date(isoString);
         return date.toLocaleTimeString('pl-PL', { 
@@ -556,7 +651,9 @@ class ErrorRealityClient {
         });
     }
 
-    // Update connection status
+    /**
+     * Aktualizuj status połączenia (kolor kropki i tekst)
+     */
     updateConnectionStatus(connected) {
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
@@ -574,7 +671,7 @@ class ErrorRealityClient {
     }
 }
 
-// Initialize when page loads
+// Inicjalizuj klienta gdy strona się załaduje
 document.addEventListener('DOMContentLoaded', () => {
     window.client = new ErrorRealityClient();
 });
