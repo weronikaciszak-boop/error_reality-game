@@ -87,10 +87,20 @@ h1 {
     position: relative;
 }
 
+
+
+                                                                                                            /* core podtekst*/
+.core-subtext{
+    margin-top:8px;
+    font-size:0.75em;
+    color:#ffffff;
+    opacity:0.8;
+    line-height:1.4;
+    }
 /* Żółty gradient wypełniający pasek */
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, ##ffe100, ##ffe100);
+    background: linear-gradient(90deg, #ffe100, #ffe100);
     width: 0%;
     transition: width 0.5s ease;
     display: flex;
@@ -122,7 +132,7 @@ h1 {
                                                                                         /* Procent i liczba skanów */
 .progress-percent {
     text-align: LEFT;
-    color: ##ffe100;
+    color: #ffe100;
     margin-top: 5px;
     font-size: 0.75em;
     font-weight: 400;
@@ -186,6 +196,57 @@ h1 {
     font-weight: 400;
 }
 
+    .section-title{
+    font-size:1.1em;
+    font-weight:600;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.module{
+    border:0.5px solid #ffffff;
+    border-radius:8px;
+    margin-bottom:10px;
+    overflow:hidden;
+}
+
+.module summary{
+    padding:14px;
+    cursor:pointer;
+    font-size:1em;
+    font-weight:600;
+    list-style:none;
+}
+
+.module-content{
+    padding:14px;
+    border-top:0.5px solid rgba(255,255,255,0.2);
+    font-size:0.8em;
+    color:#ffffff;
+}
+.badge{
+    float:right;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:0.7em;
+    font-weight:600;
+}
+
+.locked{
+    background:#ff007f;
+    color:white;
+}
+
+.unlocked{
+    background:#ffe100;
+    color:black;
+}
+
+.restored{
+    background:#ffe100;
+    color:black;
+    opacity:0.5;
+}
 /* Grid dla pojedynczych info elementów */
 .info-grid {
     display: grid;
@@ -384,22 +445,22 @@ h1 {
 
 <div class="container">
     
-    <!-- GŁÓWNY NAGŁÓWEK -->
+                                                                                            <!-- GŁÓWNY NAGŁÓWEK -->
     <h1>ERROR REALITY OS</h1>
-    <p class="subtitle">USER DETECTED</p>
+    <p class="subtitle">UNAUTHORIZED ENTITY DETECTED</p>
 
     <!-- ===== PASEK POSTĘPU - Pokazuje ile % gry ukończone ===== -->
     <div class="progress-container">
-        <div class="progress-label">Reality Stability</div>
-        <div class="progress-percent">
-            <span id="progressPercent">0</span>% - <span id="scansCount">0
-        </div>
+        <div class="progress-label">REALITY STABILITY</div>
+    <div class="progress-percent">
+    Stability: <span id="progressPercent">4</span>%
+    </div>
          <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
     </div>
 
-    <!-- ===== BOXY STATUSU - 4 sekcje pokazujące stan systemu ===== -->
+                                                                            <!-- ===== BOXY STATUSU - 4 sekcje pokazujące stan systemu ===== -->
     <div class="status-grid">
         <!-- Box 1: Stan zasilania systemu -->
         <div class="box">
@@ -410,58 +471,84 @@ h1 {
         <!-- Box 2: Stan rdzenia systemu -->
         <div class="box">
             <div class="box-title">Core Status</div>
-            <div class="box-value" id="coreStatus">CORRUPTED</div>
-        </div>
-        
-        <!-- Box 3: Ilość aktywnych skanów -->
-        <div class="box">
-            <div class="box-title">Active Scans</div>
-            <div class="box-value" id="activeScanCount">0</div>
-        </div>
-        
-        <!-- Box 4: Ogólny stan zdrowia systemu -->
-        <div class="box">
-            <div class="box-title">System Health</div>
-            <div class="box-value" id="systemHealth">CRITICAL</div>
-        </div>
-    </div>
+           <div class="box-value" id="coreStatus">
+         CORRUPTED
+         </div>
 
-    <!-- ===== SEKCJA INFO - Ostatni event, timestamp, połączenie ===== -->
-    <div class="info-section">
-        <div class="info-title">Current Status</div>
-        <div class="info-grid">
-            <!-- Info 1: Ostatni otrzymany event -->
-            <div class="info-item">
-                <div class="info-label">Last Event</div>
-                <div class="info-value" id="lastEvent">Waiting...</div>
-            </div>
-            
-            <!-- Info 2: Godzina ostatniego eventu -->
-            <div class="info-item">
-                <div class="info-label">Last Timestamp</div>
-                <div class="info-value" id="lastTimestamp">--:--:--</div>
-            </div>
-            
-            <!-- Info 3: Status połączenia z backendem -->
-            <div class="info-item">
-                <div class="info-label">Connection</div>
-                <div class="info-value" id="connectionStatus">DISCONNECTED</div>
-            </div>
-            
-            <!-- Info 4: Całkowita liczba otrzymanych eventów -->
-            <div class="info-item">
-                <div class="info-label">Total Events</div>
-                <div class="info-value" id="totalEvents">0</div>
-            </div>
+         <div class="core-subtext">
+         REALITY SAVE PROCESS FAILED
         </div>
-    </div>
+                                                                                    <!-- : wklejone z chatu  -->
+    <div class="modules-section">
+
+<h2 class="section-title">AVAILABLE MODULES</h2>
+
+<details class="module">
+<summary>
+FOOD STATION
+<span class="badge locked">LOCKED</span>
+</summary>
+
+<div class="module-content">
+Food database corrupted.
+</div>
+</details>
+
+<details class="module">
+<summary>
+LIVING SPACE
+<span class="badge locked">LOCKED</span>
+</summary>
+
+<div class="module-content">
+Object registry unavailable.
+</div>
+</details>
+
+<details class="module">
+<summary>
+MEMORY ARCHIVE
+<span class="badge locked">LOCKED</span>
+</summary>
+
+<div class="module-content">
+Archive fragments missing.
+</div>
+</details>
+
+<details class="module">
+<summary>
+SANITATION MODULE
+<span class="badge locked">LOCKED</span>
+</summary>
+
+<div class="module-content">
+Render cache damaged.
+</div>
+</details>
+
+</div>          
+
+
+
+            
+
 
     <!-- ===== ARCHIWUM/HISTORIA - Scrollowalna lista wszystkich skanów ===== -->
     <div class="archive-section">
-        <div class="archive-title">📋 Event Archive - Historia Skanów</div>
+        <div class="archive-title">SYSTEM LOG</div>
         <div class="archive-list" id="archiveList">
-            <div class="archive-empty">Oczekiwanie na pierwsze skanowanie...</div>
-        </div>
+            <div class="archive-empty">
+
+[00:00]
+
+Core corruption detected.
+
+Reality save process failed.
+
+Waiting for external intervention.
+
+</div>
     </div>
 
 </div>
