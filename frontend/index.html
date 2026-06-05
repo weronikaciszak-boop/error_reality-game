@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error Reality</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0e27;
+    font-family: 'Courier New', monospace;
+    color: #e8c83a;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+h1 {
+    color: #e8c83a;
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(232, 200, 58, 0.5);
+    font-size: 2.5em;
+    letter-spacing: 3px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #00ff00;
+    margin-bottom: 30px;
+    font-size: 0.9em;
+    animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ===== STATUS BOXES ===== */
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.box {
+    border: 2px solid #e8c83a;
+    padding: 20px;
+    background: rgba(232, 200, 58, 0.05);
+    transition: all 0.3s ease;
+}
+
+.box:hover {
+    box-shadow: 0 0 15px rgba(232, 200, 58, 0.3);
+    transform: translateY(-2px);
+}
+
+.box-title {
+    color: #00ff00;
+    font-size: 0.85em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.box-value {
+    color: #e8c83a;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-container {
+    margin: 20px 0;
+    border: 2px solid #e8c83a;
+    padding: 15px;
+    background: rgba(232, 200, 58, 0.05);
+}
+
+.progress-label {
+    color: #00ff00;
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #e8c83a;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff00, #e8c83a);
+    width: 0%;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    color: #000;
+    font-weight: bold;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-percent {
+    text-align: right;
+    color: #e8c83a;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+/* ===== INFO SECTION ===== */
+.info-section {
+    border: 2px solid #e8c83a;
+    padding: 15px;
+    background: rgba(232, 200, 58, 0.05);
+    margin-bottom: 30px;
+}
+
+.info-title {
+    color: #00ff00;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.info-item {
+    color: #e8c83a;
+}
+
+.info-label {
+    color: #00ff00;
+    font-size: 0.8em;
+}
+
+.info-value {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+/* ===== ARCHIVE/HISTORY ===== */
+.archive-section {
+    border: 2px solid #e8c83a;
+    padding: 20px;
+    background: rgba(232, 200, 58, 0.05);
+}
+
+.archive-title {
+    color: #00ff00;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.archive-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.archive-item {
+    border-bottom: 1px solid rgba(232, 200, 58, 0.2);
+    padding: 12px 0;
+    font-size: 0.85em;
+}
+
+.archive-item:last-child {
+    border-bottom: none;
+}
+
+.archive-timestamp {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.archive-type {
+    color: #e8c83a;
+    margin: 3px 0;
+}
+
+.archive-data {
+    color: #888;
+    font-size: 0.8em;
+    margin-top: 3px;
+}
+
+.archive-empty {
+    color: #666;
+    text-align: center;
+    padding: 30px;
+}
+
+/* ===== STATUS INDICATOR ===== */
+.connection-status {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border: 2px solid #e8c83a;
+    background: rgba(232, 200, 58, 0.05);
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+
+.status-dot.connected {
+    background: #00ff00;
+    box-shadow: 0 0 8px #00ff00;
+}
+
+.status-dot.disconnected {
+    background: #ff0000;
+    animation: none;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.new-event {
+    animation: slideIn 0.5s ease;
+}
+
+/* ===== SCROLLBAR ===== */
+.archive-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.archive-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.archive-list::-webkit-scrollbar-thumb {
+    background: #e8c83a;
+    border-radius: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+    
+    <h1>ERROR REALITY OS</h1>
+    <p class="subtitle">Recover. Restore. Escape.</p>
+
+    <!-- ===== PROGRESS BAR ===== -->
+    <div class="progress-container">
+        <div class="progress-label">Reality Stability</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-percent">
+            <span id="progressPercent">0</span>% - <span id="scansCount">0</span> / <span id="totalScans">89</span> skanów
+        </div>
+    </div>
+
+    <!-- ===== STATUS BOXES ===== -->
+    <div class="status-grid">
+        <div class="box">
+            <div class="box-title">Power Status</div>
+            <div class="box-value" id="powerStatus">OFF</div>
+        </div>
+        
+        <div class="box">
+            <div class="box-title">Core Status</div>
+            <div class="box-value" id="coreStatus">CORRUPTED</div>
+        </div>
+        
+        <div class="box">
+            <div class="box-title">Active Scans</div>
+            <div class="box-value" id="activeScanCount">0</div>
+        </div>
+        
+        <div class="box">
+            <div class="box-title">System Health</div>
+            <div class="box-value" id="systemHealth">CRITICAL</div>
+        </div>
+    </div>
+
+    <!-- ===== INFO SECTION ===== -->
+    <div class="info-section">
+        <div class="info-title">Current Status</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Last Event</div>
+                <div class="info-value" id="lastEvent">Waiting...</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Last Timestamp</div>
+                <div class="info-value" id="lastTimestamp">--:--:--</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Connection</div>
+                <div class="info-value" id="connectionStatus">DISCONNECTED</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Total Events</div>
+                <div class="info-value" id="totalEvents">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ARCHIVE/HISTORY ===== -->
+    <div class="archive-section">
+        <div class="archive-title">📋 Event Archive - Historia Skanów</div>
+        <div class="archive-list" id="archiveList">
+            <div class="archive-empty">Oczekiwanie na pierwsze skanowanie...</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== CONNECTION STATUS INDICATOR ===== -->
+<div class="connection-status">
+    <div class="status-dot disconnected" id="statusDot"></div>
+    <span id="statusText">DISCONNECTED</span>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+class ErrorRealityClient {
+    constructor() {
+        this.ws = null;
+        this.events = [];
+        this.totalScans = 89;
+        this.wsUrl = 'ws://localhost:8000/ws';
+        this.apiUrl = 'http://localhost:8000';
+        
+        // Init
+        this.init();
+    }
+
+    async init() {
+        console.log('🎮 Initializing Error Reality Client...');
+        
+        // Load existing events
+        await this.loadExistingEvents();
+        
+        // Connect to WebSocket
+        this.connectWebSocket();
+        
+        // Retry connection every 5 seconds if disconnected
+        setInterval(() => {
+            if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+                console.log('🔄 Reconnecting...');
+                this.connectWebSocket();
+            }
+        }, 5000);
+    }
+
+    // Load events from backend
+    async loadExistingEvents() {
+        try {
+            const response = await fetch(`${this.apiUrl}/events`);
+            const data = await response.json();
+            
+            if (data.events) {
+                this.events = data.events;
+                this.updateUI();
+                console.log(`📥 Loaded ${data.events.length} existing events`);
+            }
+        } catch (error) {
+            console.error('❌ Error loading events:', error);
+        }
+    }
+
+    // Connect to WebSocket
+    connectWebSocket() {
+        try {
+            this.ws = new WebSocket(this.wsUrl);
+
+            this.ws.onopen = () => {
+                console.log('✅ WebSocket Connected');
+                this.updateConnectionStatus(true);
+            };
+
+            this.ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('📨 Received:', data);
+                
+                this.events.push(data);
+                this.updateUI();
+                this.addEventToArchive(data);
+            };
+
+            this.ws.onerror = (error) => {
+                console.error('❌ WebSocket Error:', error);
+                this.updateConnectionStatus(false);
+            };
+
+            this.ws.onclose = () => {
+                console.log('🔌 WebSocket Disconnected');
+                this.updateConnectionStatus(false);
+            };
+        } catch (error) {
+            console.error('❌ WebSocket Connection Error:', error);
+            this.updateConnectionStatus(false);
+        }
+    }
+
+    // Update UI elements
+    updateUI() {
+        const scansCount = this.events.length;
+        const progressPercent = Math.round((scansCount / this.totalScans) * 100);
+        
+        // Update progress bar
+        document.getElementById('progressFill').style.width = progressPercent + '%';
+        document.getElementById('progressPercent').textContent = progressPercent;
+        document.getElementById('scansCount').textContent = scansCount;
+
+        // Update power status based on progress
+        let powerStatus = 'OFF';
+        let coreStatus = 'CORRUPTED';
+        let systemHealth = 'CRITICAL';
+
+        if (progressPercent > 0) powerStatus = 'BOOTING...';
+        if (progressPercent > 33) { powerStatus = 'ON'; coreStatus = 'REPAIRING...'; }
+        if (progressPercent > 66) { coreStatus = 'RESTORED'; systemHealth = 'RECOVERING'; }
+        if (progressPercent >= 100) { systemHealth = 'ONLINE'; }
+
+        document.getElementById('powerStatus').textContent = powerStatus;
+        document.getElementById('coreStatus').textContent = coreStatus;
+        document.getElementById('systemHealth').textContent = systemHealth;
+
+        // Update other info
+        document.getElementById('activeScanCount').textContent = scansCount;
+        document.getElementById('totalEvents').textContent = scansCount;
+
+        if (this.events.length > 0) {
+            const lastEvent = this.events[this.events.length - 1];
+            document.getElementById('lastEvent').textContent = lastEvent.type;
+            document.getElementById('lastTimestamp').textContent = this.formatTime(lastEvent.timestamp);
+        }
+    }
+
+    // Add event to archive
+    addEventToArchive(event) {
+        const archiveList = document.getElementById('archiveList');
+        
+        // If this is first event, clear the empty message
+        if (archiveList.querySelector('.archive-empty')) {
+            archiveList.innerHTML = '';
+        }
+
+        const eventElement = document.createElement('div');
+        eventElement.className = 'archive-item new-event';
+        eventElement.innerHTML = `
+            <div class="archive-timestamp">⏰ ${this.formatTime(event.timestamp)}</div>
+            <div class="archive-type">🔹 Typ: ${event.type}</div>
+            <div class="archive-data">📊 ID: ${JSON.stringify(event.data).substring(0, 100)}...</div>
+        `;
+
+        // Add to top of list
+        archiveList.insertBefore(eventElement, archiveList.firstChild);
+
+        // Keep only last 50 events in UI
+        while (archiveList.children.length > 50) {
+            archiveList.removeChild(archiveList.lastChild);
+        }
+    }
+
+    // Format timestamp
+    formatTime(isoString) {
+        const date = new Date(isoString);
+        return date.toLocaleTimeString('pl-PL', { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        });
+    }
+
+    // Update connection status
+    updateConnectionStatus(connected) {
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const connectionStatus = document.getElementById('connectionStatus');
+
+        if (connected) {
+            statusDot.className = 'status-dot connected';
+            statusText.textContent = 'CONNECTED';
+            connectionStatus.textContent = 'CONNECTED';
+        } else {
+            statusDot.className = 'status-dot disconnected';
+            statusText.textContent = 'DISCONNECTED';
+            connectionStatus.textContent = 'DISCONNECTED';
+        }
+    }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.client = new ErrorRealityClient();
+});
+</script>
+
+</body>
+</html>
