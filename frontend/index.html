@@ -664,7 +664,9 @@ class ErrorRealityClient {
      */
     updateUI() {
         const scansCount = this.events.length;
-        const progressPercent = Math.round((scansCount / this.totalScans) * 100);
+        let progressPercent = 4;
+        +12 za QR
+        +12 za rozwiązanie
         
         // Zaktualizuj pasek postępu
         document.getElementById('progressFill').style.width = progressPercent + '%';
