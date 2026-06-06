@@ -277,7 +277,6 @@
             box-shadow: 0 4px 6px -2px rgba(255, 225, 0, 0.3);
         }
 
-        /* PRZYWRÓCONE WRAPPERY DLA OBRAZKÓW */
         .puzzle-image-wrapper {
             width: 100%;
             max-width: 200px;
@@ -619,7 +618,7 @@ class ErrorRealityClient {
                 
                 if(inputGroup) inputGroup.style.display = 'none';
                 if(err) err.style.display = 'none';
-                if(imgWrapper) imgWrapper.style.display = 'none'; // Ukrywa obrazek po zaliczeniu
+                if(imgWrapper) imgWrapper.style.display = 'none';
                 
                 const textElement = document.getElementById('text-' + moduleId);
                 if(textElement) {
@@ -628,7 +627,6 @@ class ErrorRealityClient {
                 container.removeAttribute('open');
             }
         }
-        this.updateUI();
     }
 
     unlockModule(moduleId){
@@ -644,7 +642,6 @@ class ErrorRealityClient {
                 parentModule.setAttribute('open', 'true');
             }
         }
-        this.updateUI();
     }
 
     handleCharInput(currentInput, nextInputId) {
@@ -794,13 +791,13 @@ class ErrorRealityClient {
     setGameStage(stage){
         let task = '';
         switch(stage){
-            case 'BOOT': task = '>>> Locate external power source'; break;
-            case 'POWER_ON': task = '>>> Locate external code module'; break;
-            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module'; break;
-            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core'; break;
-            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute'; break;
-            case 'GOOD_CORE': task = '>>> Rebooting reality...'; break;
-            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety'; break;
+            case 'BOOT': task = '>>> LOCATE EXTERNAL POWER SOURCE'; break;
+            case 'POWER_ON': task = '>>> LOCATE EXTERNAL CODE MODULE'; break;
+            case 'MODULE_UNLOCKED': task = '>>> CLEAR UNLOCKED MODULE'; break;
+            case 'ALL_MODULES_CLEARED': task = '>>> SUBSTITUTE CORRUPTED CORE'; break;
+            case 'BAD_CORE': task = '>>> CORE VALIDATION FAILED. LOCATE VALID SUBSTITUTE'; break;
+            case 'GOOD_CORE': task = '>>> REBOOTING REALITY...'; break;
+            case 'ENDING': task = '>>> REALITY REBOOTING. EXIT SYSTEM FOR SAFETY'; break;
         }
         this.updateTask(task);
     }
@@ -894,7 +891,40 @@ class ErrorRealityClient {
         }
     }
 
+    // TUTAJ JEST NOWA, ZINTEGROWANA LOGIKA DETEKCJI PRĄDU Z BACKENDU
     updateUI() {
+        let isPowerOn = false;
+        
+        // Przeszukujemy historię z bazy danych serwera
+        this.events.forEach(event => {
+            if (event.type === 'POWER_ON') {
+                isPowerOn = true;
+            }
+            if (event.type === 'PUZZLE_SOLVED' || event.type === 'MODULE_RESTORED') {
+                if (event.data && event.data.includes('food')) this.clearModule('foodBadge');
+                if (event.data && event.data.includes('living')) this.clearModule('livingBadge');
+                if (event.data && event.data.includes('memory')) this.clearModule('memoryBadge');
+                if (event.data && event.data.includes('sanitation')) this.clearModule('sanitationBadge');
+            }
+        });
+
+        const powerStatusEl = document.getElementById('powerStatus');
+        
+        // Dynamiczna zmiana stanów na ekranie
+        if (isPowerOn) {
+            if (powerStatusEl) powerStatusEl.textContent = 'ONLINE';
+            this.setGameStage('POWER_ON');
+            
+            const foodBadge = document.getElementById('foodBadge');
+            if (foodBadge && !foodBadge.classList.contains('restored')) {
+                this.unlockModule('foodBadge');
+            }
+        } else {
+            if (powerStatusEl) powerStatusEl.textContent = 'OFF';
+            this.setGameStage('BOOT');
+        }
+
+        // Pasek postępu rzeczywistości
         const totalModules = 4;
         let restoredCount = 0;
         
