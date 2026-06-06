@@ -909,6 +909,31 @@ this.updateTask(currentTask);
     }
 }
 
+window.unlockFood = () =>
+client.unlockModule('foodBadge');
+
+window.clearFood = () =>
+client.clearModule('foodBadge');
+
+window.unlockLiving = () =>
+client.unlockModule('livingBadge');
+
+window.clearLiving = () =>
+client.clearModule('livingBadge');
+
+window.unlockMemory = () =>
+client.unlockModule('memoryBadge');
+
+window.clearMemory = () =>
+client.clearModule('memoryBadge');
+
+window.unlockSanitation = () =>
+client.unlockModule('sanitationBadge');
+
+window.clearSanitation = () =>
+client.clearModule('sanitationBadge');
+
+    
 // Inicjalizuj klienta gdy strona się załaduje
 document.addEventListener('DOMContentLoaded', () => {
     window.client = new ErrorRealityClient();
