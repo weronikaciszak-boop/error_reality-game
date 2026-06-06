@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,7 +203,6 @@
             user-select: none;
         }
 
-        /* Kursor sygnalizujący blokadę dla zamkniętych modułów */
         .module.disabled-summary summary {
             cursor: not-allowed;
             opacity: 0.6;
@@ -216,7 +215,6 @@
             color: #ffffff;
         }
 
-        /* Formularz zagadki wewnątrz modułu */
         .puzzle-container {
             margin-top: 10px;
             display: flex;
@@ -232,7 +230,10 @@
 
         .puzzle-input-group {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .puzzle-input {
@@ -246,7 +247,12 @@
             font-size: 0.9em;
         }
 
-        /* Kontener na 4 litery obok siebie */
+        .puzzle-input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 225, 0, 0.5);
+        }
+
+        /* Kontener na 4 litery obok siebie (FOOD STATION) */
         .letter-inputs-container {
             display: flex;
             gap: 15px;
@@ -273,27 +279,35 @@
             border-bottom-color: #ffffff;
             box-shadow: 0 4px 6px -2px rgba(255, 225, 0, 0.3);
         }
-        
-        /* Poprawka dla kontenera grupy, aby ładnie układał kreski i przycisk w jednej linii */
-        .puzzle-input-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
+
+        /* Stylizacja i dopasowanie obrazka dla LIVING SPACE */
+        .puzzle-image-wrapper {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            background: #000;
         }
 
-        .puzzle-input:focus {
-            outline: none;
-            box-shadow: 0 0 5px rgba(255, 225, 0, 0.5);
+        .puzzle-img {
+            width: 100%;
+            display: block;
+            height: auto;
         }
 
-       .puzzle-btn {
+        .single-choice {
+            width: 50px;
+            font-size: 1.6em;
+        }
+
+        .puzzle-btn {
             background: #ffe100;
             color: #000000;
             border: none;
             padding: 10px 20px;
-            border-radius: 8px; /* Spójne z .box i .module */
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
@@ -422,7 +436,6 @@
     <h1>ERROR REALITY OS</h1>
     <p class="subtitle">UNAUTHORIZED ENTITY DETECTED</p>
 
-    <!-- PASEK POSTĘPU -->
     <div class="progress-container">
         <div class="progress-label">REALITY STABILITY</div>
         <div class="progress-percent">Stability: <span id="progressPercent">0</span>%</div>
@@ -431,7 +444,6 @@
         </div>
     </div>
 
-    <!-- SYSTEM GRIDS -->
     <div class="status-grid">
         <div class="box">
             <div class="box-title">Power Status</div>
@@ -449,388 +461,54 @@
             <div class="task-text" id="activeTask">&gt;&gt;&gt; Locate external power source.</div>
         </div>
 
-        <!-- MODUŁY Z FILTREM I FORMULARZAMI ZAGADEK -->
         <div class="box">
             <div class="modules-section">
                 <h2 class="section-title">AVAILABLE MODULES</h2>
                 
-               <!-- FOOD STATION -->
-        <details class="module disabled-summary" id="module-foodBadge">
-    <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
-    <div class="module-content">
-        <div class="puzzle-container">
-            <p class="puzzle-text" id="text-foodBadge">CORRECT SYRUP ORDER DATA</p>
-            <div class="puzzle-input-group">
-                <div class="letter-inputs-container">
-                    <input type="text" maxlength="1" class="char-input" id="food-input-1" placeholder="_" oninput="client.handleCharInput(this, 'food-input-2')">
-                    <input type="text" maxlength="1" class="char-input" id="food-input-2" placeholder="_" oninput="client.handleCharInput(this, 'food-input-3')">
-                    <input type="text" maxlength="1" class="char-input" id="food-input-3" placeholder="_" oninput="client.handleCharInput(this, 'food-input-4')">
-                    <input type="text" maxlength="1" class="char-input" id="food-input-4" placeholder="_" oninput="client.handleCharInput(this, '')">
-                </div>
-                <button class="puzzle-btn" onclick="client.checkFoodArchiveAnswer()">UPLOAD</button>
-            </div>
-            <div class="puzzle-error" id="error-foodBadge">ACCESS DENIED: INVALID AUTHORIZATION CODE.</div>
-        </div>
-    </div>
-</details>
-
-<details class="module disabled-summary" id="module-livingBadge">
-    <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
-    <div class="module-content">
-        <div class="puzzle-container">
-            <p class="puzzle-text" id="text-livingBadge">CRITICAL ERROR: OBJECT RENDER FAILED – ELIMINATE NON-EXISTING ELEMENT.</p>
-            
-            <div class="puzzle-image-wrapper">
-                <img src="living_puzzle.jpg" alt="Render Error Data" class="puzzle-img">
-            </div>
-
-            <div class="puzzle-input-group">
-                <div class="answer-input-container">
-                    <input type="text" maxlength="1" class="char-input single-choice" id="living-input" placeholder="?">
-                </div>
-                <button class="puzzle-btn" onclick="client.checkLivingAnswer()">UPLOAD</button>
-            </div>
-            <div class="puzzle-error" id="error-livingBadge">ACCESS DENIED: UNRECOGNIZED SELECTION.</div>
-        </div>
-    </div>
-</details>
-
-        <!-- MEMORY ARCHIVE -->
-        <details class="module disabled-summary" id="module-memoryBadge">
-            <summary>MEMORY ARCHIVE <span class="badge locked" id="memoryBadge">LOCKED</span></summary>
-            <div class="module-content">
-                <div class="puzzle-container">
-                    <p class="puzzle-text">ZAGADKA: Istnieję tylko tam, gdzie jest światło, ale bezpośrednie światło mnie zabija.</p>
-                    <div class="puzzle-input-group">
-                        <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Input info">
-                        <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'cień')">UPLOAD</button>
+                <details class="module disabled-summary" id="module-foodBadge">
+                    <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
+                    <div class="module-content">
+                        <div class="puzzle-container">
+                            <p class="puzzle-text" id="text-foodBadge">CORRECT SYRUP ORDER DATA</p>
+                            <div class="puzzle-input-group">
+                                <div class="letter-inputs-container">
+                                    <input type="text" maxlength="1" class="char-input" id="food-input-1" placeholder="_" oninput="client.handleCharInput(this, 'food-input-2')">
+                                    <input type="text" maxlength="1" class="char-input" id="food-input-2" placeholder="_" oninput="client.handleCharInput(this, 'food-input-3')">
+                                    <input type="text" maxlength="1" class="char-input" id="food-input-3" placeholder="_" oninput="client.handleCharInput(this, 'food-input-4')">
+                                    <input type="text" maxlength="1" class="char-input" id="food-input-4" placeholder="_" oninput="client.handleCharInput(this, '')">
+                                </div>
+                                <button class="puzzle-btn" onclick="client.checkFoodArchiveAnswer()">UPLOAD</button>
+                            </div>
+                            <div class="puzzle-error" id="error-foodBadge">ACCESS DENIED: INVALID AUTHORIZATION CODE.</div>
+                        </div>
                     </div>
-                    <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT INPUT</div>
-                </div>
-            </div>
-        </details>
+                </details>
 
-        <!-- SANITATION MODULE -->
-        <details class="module disabled-summary" id="module-sanitationBadge">
-            <summary>SANITATION MODULE <span class="badge locked" id="sanitationBadge">LOCKED</span></summary>
-            <div class="module-content">
-                <div class="puzzle-container">
-                    <p class="puzzle-text">ZAGADKA: Co potrafi biec, chociaż nie ma nóg, i szemrze, chociaż nie ma ust?</p>
-                    <div class="puzzle-input-group">
-                        <input type="text" class="puzzle-input" id="input-sanitationBadge" placeholder="Input info">
-                        <button class="puzzle-btn" onclick="client.checkAnswer('sanitationBadge', 'rzeka')">UPLOAD</button>
+                <details class="module disabled-summary" id="module-livingBadge">
+                    <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
+                    <div class="module-content">
+                        <div class="puzzle-container">
+                            <p class="puzzle-text" id="text-livingBadge">CRITICAL ERROR: OBJECT RENDER FAILED – ELIMINATE NON-EXISTING ELEMENT.</p>
+                            
+                            <div class="puzzle-image-wrapper">
+                                <img src="living_puzzle.jpg" alt="Render Error Data" class="puzzle-img">
+                            </div>
+
+                            <div class="puzzle-input-group">
+                                <div class="answer-input-container">
+                                    <input type="text" maxlength="1" class="char-input single-choice" id="living-input" placeholder="?">
+                                </div>
+                                <button class="puzzle-btn" onclick="client.checkLivingAnswer()">UPLOAD</button>
+                            </div>
+                            <div class="puzzle-error" id="error-livingBadge">ACCESS DENIED: UNRECOGNIZED SELECTION.</div>
+                        </div>
                     </div>
-                    <div class="puzzle-error" id="error-sanitationBadge">ERROR - INCORRECT INPUT</div>
-                </div>
-            </div>
-        </details>
-            </div>          
-        </div>   
-    </div> 
+                </details>
 
-    <!-- ARCHIWUM / LOGI -->
-    <div class="box">
-        <div class="archive-section">
-            <div class="archive-title">SYSTEM LOG</div>
-            <div class="archive-list" id="archiveList">
-                <div class="archive-empty">
-                    [00:00]<br>
-                    Core corruption detected.<br>
-                    Reality save process failed.<br>
-                    Waiting for external intervention.
-                </div>
-            </div>
-        </div>
-    </div>
-</div> 
-
-<!-- STATUS POŁĄCZENIA -->
-<div class="connection-status">
-    <div class="status-dot disconnected" id="statusDot"></div>
-    <span id="statusText">DISCONNECTED</span>
-</div>
-
-<script>
-class ErrorRealityClient {
-    constructor() {
-        this.ws = null;
-        this.events = [];
-        this.totalScans = 89;
-        this.wsUrl = 'ws://localhost:8000/ws';
-        this.apiUrl = 'http://localhost:8000';
-        this.init();
-    }
-
-    updateTask(taskText){
-        const task = document.getElementById('activeTask');
-        if(task){
-            task.textContent = taskText;
-        }
-    }
-
-    clearModule(moduleId){
-        const badge = document.getElementById(moduleId);
-        if(badge) {
-            badge.classList.remove('unlocked');
-            badge.classList.add('restored');
-            badge.textContent = 'RESTORED';
-            
-            // Po poprawnym rozwiązaniu chowamy formularz wpisywania i czyścimy błędy
-            const container = badge.closest('.module');
-            if(container) {
-                const inputGroup = container.querySelector('.puzzle-input-group');
-                const err = container.querySelector('.puzzle-error');
-                if(inputGroup) inputGroup.style.display = 'none';
-                if(err) err.style.display = 'none';
-                container.querySelector('.puzzle-text').textContent = 'MODULE RESTORATION CONFIRMED';
-                container.removeAttribute('open'); // opcjonalnie zamyka moduł po skończeniu
-            }
-        }
-        this.updateTask('>>> Locate external code module.');
-        this.updateUI();
-    }
-
-    unlockModule(moduleId){
-        const badge = document.getElementById(moduleId);
-        if(badge) {
-            badge.classList.remove('locked');
-            badge.classList.add('unlocked');
-            badge.textContent = 'UNLOCKED';
-
-            // Znajdujemy kontener modułu i pozwalamy go rozwinąć
-            const parentModule = document.getElementById(`module-${moduleId}`);
-            if(parentModule) {
-                parentModule.classList.remove('disabled-summary');
-                parentModule.setAttribute('open', 'true'); // Automatyczne rozwinięcie po unlocku
-            }
-        }
-        this.updateTask('>>> Clear unlocked module.');
-        this.updateUI();
-    }
-
-    // Obsługa automatycznego przeskakiwania do kolejnej kreski po wpisaniu litery
-    handleCharInput(currentInput, nextInputId) {
-        if (currentInput.value.length >= 1 && nextInputId !== '') {
-            const nextEl = document.getElementById(nextInputId);
-            if (nextEl) nextEl.focus();
-        }
-    }
-
-    // Specjalna weryfikacja dla hasła ARCH z czterech pól
-    checkFoodArchiveAnswer() {
-        const char1 = document.getElementById('food-input-1').value.trim();
-        const char2 = document.getElementById('food-input-2').value.trim();
-        const char3 = document.getElementById('food-input-3').value.trim();
-        const char4 = document.getElementById('food-input-4').value.trim();
-        
-        const fullAnswer = (char1 + char2 + char3 + char4).toLowerCase();
-        const errorField = document.getElementById('error-foodBadge');
-
-        if (fullAnswer === 'arch') {
-            if (errorField) errorField.style.display = 'none';
-            this.clearModule('foodBadge');
-        } else {
-            if (errorField) {
-                errorField.style.display = 'block';
-                errorField.textContent = 'ACCESS DENIED: INVALID AUTHORIZATION CODE.';
-            }
-        }
-    }
-
-    // Nowa metoda do weryfikacji haseł
-    checkAnswer(moduleId, correctAnswer) {
-        const inputField = document.getElementById(`input-${moduleId}`);
-        const errorField = document.getElementById(`error-${moduleId}`);
-        
-        if(!inputField) return;
-
-        // Czyszczenie spacji i ignorowanie wielkości liter
-        const userAnswer = inputField.value.trim().toLowerCase();
-
-        if(userAnswer === correctAnswer.toLowerCase()) {
-            if(errorField) errorField.style.display = 'none';
-            this.clearModule(moduleId);
-        } else {
-            if(errorField) {
-                errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INCORRECT INPUT';
-            }
-        }
-    }
-
-    setGameStage(stage){
-        let task = '';
-        switch(stage){
-            case 'BOOT': task = '>>> Locate external power source.'; break;
-            case 'POWER_ON': task = '>>> Locate external code module.'; break;
-            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module.'; break;
-            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core.'; break;
-            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute.'; break;
-            case 'GOOD_CORE': task = '>>> Rebooting reality...'; break;
-            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety.'; break;
-        }
-        this.updateTask(task);
-    }
-
-    async init() {
-        console.log('🎮 Initializing Error Reality Client...');
-        
-        // Blokada klikania w zamknięte <details> na poziomie dokumentu
-        document.addEventListener('click', (e) => {
-            const summary = e.target.closest('summary');
-            if (summary) {
-                const details = summary.parentElement;
-                if (details && details.classList.contains('disabled-summary')) {
-                    e.preventDefault(); // Blokuje otwarcie, jeśli moduł ma klasę blokady
-                }
-            }
-        });
-
-        await this.loadExistingEvents();
-        this.connectWebSocket();
-        
-        setInterval(() => {
-            if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-                console.log('🔄 Reconnecting...');
-                this.connectWebSocket();
-            }
-        }, 5000);
-    }
-
-    async loadExistingEvents() {
-        try {
-            const response = await fetch(`${this.apiUrl}/events`);
-            const data = await response.json();
-            if (data.events) {
-                this.events = data.events;
-                this.updateUI();
-                console.log(`📥 Loaded ${data.events.length} existing events`);
-            }
-        } catch (error) {
-            console.error('❌ Error loading events:', error);
-        }
-    }
-
-    connectWebSocket() {
-        try {
-            this.ws = new WebSocket(this.wsUrl);
-
-            this.ws.onopen = () => {
-                console.log('✅ WebSocket Connected');
-                this.updateConnectionStatus(true);
-            };
-
-            this.ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log('📨 Received:', data);
-                this.events.push(data);
-                this.updateUI();
-                this.addEventToArchive(data);
-            };
-
-            this.ws.onerror = (error) => {
-                console.error('❌ WebSocket Error:', error);
-                this.updateConnectionStatus(false);
-            };
-
-            this.ws.onclose = () => {
-                console.log('🔌 WebSocket Disconnected');
-                this.updateConnectionStatus(false);
-            };
-        } catch (error) {
-            console.error('❌ WebSocket Connection Error:', error);
-            this.updateConnectionStatus(false);
-        }
-    }
-
-    updateUI() {
-        let progressPercent = 4;
-        const unlocked = document.querySelectorAll('.badge.unlocked').length;
-        const restored = document.querySelectorAll('.badge.restored').length;
-
-        progressPercent += unlocked * 12;
-        progressPercent += restored * 24;
-
-        if(progressPercent > 100) progressPercent = 100;
-        
-        document.getElementById('progressFill').style.width = progressPercent + '%';
-        document.getElementById('progressPercent').textContent = progressPercent;
-        
-        let powerStatus = 'OFF';
-        let coreStatus = 'CORRUPTED';
-
-        if (progressPercent > 0) powerStatus = 'BOOTING...';
-        if (progressPercent > 33) { powerStatus = 'ON'; coreStatus = 'REPAIRING...'; }
-        if (progressPercent > 66) { coreStatus = 'RESTORED'; }
-
-        document.getElementById('powerStatus').textContent = powerStatus;
-        document.getElementById('coreStatus').textContent = coreStatus;
-
-        let currentTask = '>>> Locate external power source.';
-        if(progressPercent >= 16) currentTask = '>>> Locate external code module.';
-        if(progressPercent >= 28) currentTask = '>>> Clear unlocked module.';
-        if(progressPercent >= 100) currentTask = '>>> Substitute corrupted core.';
-
-        this.updateTask(currentTask);
-    }
-
-    addEventToArchive(event) {
-        const archiveList = document.getElementById('archiveList');
-        if (archiveList.querySelector('.archive-empty')) {
-            archiveList.innerHTML = '';
-        }
-
-        const eventElement = document.createElement('div');
-        eventElement.className = 'archive-item new-event';
-        eventElement.innerHTML = `
-            <div class="archive-timestamp">⏰ ${this.formatTime(event.timestamp || new Date())}</div>
-            <div class="archive-type">🔹 Typ: ${event.type}</div>
-            <div class="archive-data">📊 ID: ${JSON.stringify(event.data).substring(0, 100)}...</div>
-        `;
-
-        archiveList.insertBefore(eventElement, archiveList.firstChild);
-
-        while (archiveList.children.length > 50) {
-            archiveList.removeChild(archiveList.lastChild);
-        }
-    }
-
-    formatTime(isoString) {
-        const date = new Date(isoString);
-        return date.toLocaleTimeString('pl-PL', { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit' 
-        });
-    }
-
-    updateConnectionStatus(connected) {
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
-
-        if (connected) {
-            statusDot.className = 'status-dot connected';
-            statusText.textContent = 'CONNECTED';
-        } else {
-            statusDot.className = 'status-dot disconnected';
-            statusText.textContent = 'DISCONNECTED';
-        }
-    }
-}
-
-// Globalne funkcje testowe wywoływane z konsoli lub backendu
-window.unlockFood = () => client.unlockModule('foodBadge');
-window.clearFood = () => client.clearModule('foodBadge');
-window.unlockLiving = () => client.unlockModule('livingBadge');
-window.clearLiving = () => client.clearModule('livingBadge');
-window.unlockMemory = () => client.unlockModule('memoryBadge');
-window.clearMemory = () => client.clearModule('memoryBadge');
-window.unlockSanitation = () => client.unlockModule('sanitationBadge');
-window.clearSanitation = () => client.clearModule('sanitationBadge');
-
-document.addEventListener('DOMContentLoaded', () => {
-    window.client = new ErrorRealityClient();
-});
-</script>
-</body>
-</html>
+                <details class="module disabled-summary" id="module-memoryBadge">
+                    <summary>MEMORY ARCHIVE <span class="badge locked" id="memoryBadge">LOCKED</span></summary>
+                    <div class="module-content">
+                        <div class="puzzle-container">
+                            <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Istnieję tylko tam, gdzie jest światło, ale bezpośrednie światło mnie zabija.</p>
+                            <div class="puzzle-input-group">
+                                <input type="text" class
