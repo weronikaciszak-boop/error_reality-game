@@ -940,5 +940,19 @@ document.addEventListener('DOMContentLoaded', () => {
     window.client = new ErrorRealityClient();
 });
 </script>
+
+<div id="adminPanel" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111111; border: 2px solid #ff007f; padding: 20px; border-radius: 8px; z-index: 9999; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
+    <div style="color: #ff007f; font-weight: 600; font-size: 0.9em; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; text-align: center;">
+        — SYSTEM ADMINISTRATION —
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        <input type="password" id="adminKeyInput" placeholder="ENTER ADMIN KEY" style="background: #000; border: 1px solid #ff007f; border-radius: 4px; padding: 10px; color: #ffffff; font-family: 'Montserrat', sans-serif; font-size: 0.9em; text-align: center;">
+        <button class="puzzle-btn" style="background: #ff007f; color: #fff;" onclick="client.triggerAdminReset()">INITIALIZE RESET</button>
+        <button class="puzzle-btn" style="background: #333; color: #ccc; margin-top: 5px;" onclick="document.getElementById('adminPanel').style.display = 'none'">CLOSE</button>
+    </div>
+    <div id="adminError" style="color: #ff007f; font-size: 0.8em; text-align: center; margin-top: 10px; display: none;">ACCESS DENIED</div>
+</div>
+
+
 </body>
 </html>
