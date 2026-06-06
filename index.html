@@ -509,10 +509,15 @@
                     <summary>MEMORY ARCHIVE <span class="badge locked" id="memoryBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Istnieję tylko tam, gdzie jest światło, ale bezpośrednie światło mnie zabija.</p>
+                            <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Odszukaj fizyczne obiekty i dopasuj ich unikalny kod autoryzacyjny.</p>
+                            
+                            <div class="puzzle-image-wrapper">
+                                <img src="memory_puzzle.jpg" alt="Memory Puzzle Data" class="puzzle-img">
+                            </div>
+
                             <div class="puzzle-input-group">
-                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Input info">
-                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'cień')">UPLOAD</button>
+                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Wpisz 4-literowy kod (np. ABCD)">
+                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'CDBA')">UPLOAD</button>
                             </div>
                             <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT INPUT</div>
                         </div>
