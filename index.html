@@ -785,7 +785,7 @@ unlockModule(moduleId){
      * Aktualizuj całe UI - pasek postępu, boxy statusu, info
      */
     updateUI() {
-       let progressPercent = 4;
+        let progressPercent = 4;
 
         const unlocked =
         document.querySelectorAll('.badge.unlocked').length;
@@ -797,9 +797,8 @@ unlockModule(moduleId){
         progressPercent += restored * 24;
 
         if(progressPercent > 100){
-        progressPercent = 100;
+            progressPercent = 100;
         }
-
         
         // Zaktualizuj pasek postępu
         document.getElementById('progressFill').style.width =
