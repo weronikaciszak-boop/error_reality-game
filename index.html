@@ -252,7 +252,7 @@
             box-shadow: 0 0 5px rgba(255, 225, 0, 0.5);
         }
 
-        /* Kontener na 4 litery obok siebie (FOOD STATION) */
+        /* Kontener na kreski wejściowe */
         .letter-inputs-container {
             display: flex;
             gap: 15px;
@@ -280,11 +280,13 @@
             box-shadow: 0 4px 6px -2px rgba(255, 225, 0, 0.3);
         }
 
-       /* Stylizacja i dopasowanie obrazka dla LIVING SPACE */
+        /* Stylizacja i dopasowanie obrazków */
         .puzzle-image-wrapper {
             width: 100%;
-            max-width: 200px; /* Zmniejszony o 2/3 */
+            max-width: 200px;
             margin: 15px auto;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
             overflow: hidden;
             background: #000;
             display: flex;
@@ -469,7 +471,7 @@
                     <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-foodBadge">CORRECT SYRUP ORDER DATA</p>
+                            <p class="puzzle-text" id="text-foodBadge">ZAGADKA: Dopasuj urządzenia kuchenne i odczytaj poprawną kolejność kodu autoryzacyjnego.</p>
                             <div class="puzzle-input-group">
                                 <div class="letter-inputs-container">
                                     <input type="text" maxlength="1" class="char-input" id="food-input-1" placeholder="_" oninput="client.handleCharInput(this, 'food-input-2')">
@@ -509,15 +511,15 @@
                     <summary>MEMORY ARCHIVE <span class="badge locked" id="memoryBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Odszukaj fizyczne obiekty i dopasuj ich unikalny kod autoryzacyjny.</p>
+                            <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Odszukaj ukryte wskazówki na różowych obiektach i podaj właściwy ciąg weryfikacyjny.</p>
                             
                             <div class="puzzle-image-wrapper">
-                                <img src="memory_puzzle.jpg" alt="Memory Puzzle Data" class="puzzle-img">
+                                <img src="memory_puzzle.jpg" alt="Memory Flamingos Data" class="puzzle-img">
                             </div>
 
                             <div class="puzzle-input-group">
-                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Wpisz 4-literowy kod (np. ABCD)">
-                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'CDBA')">UPLOAD</button>
+                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Wpisz kod autoryzacyjny">
+                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'KOD_FLAMINGA')">UPLOAD</button>
                             </div>
                             <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT INPUT</div>
                         </div>
@@ -528,12 +530,23 @@
                     <summary>SANITATION MODULE <span class="badge locked" id="sanitationBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-sanitationBadge">ZAGADKA: Co potrafi biec, chociaż nie ma nóg, i szemrze, chociaż nie ma ust?</p>
-                            <div class="puzzle-input-group">
-                                <input type="text" class="puzzle-input" id="input-sanitationBadge" placeholder="Input info">
-                                <button class="puzzle-btn" onclick="client.checkAnswer('sanitationBadge', 'rzeka')">UPLOAD</button>
+                            <p class="puzzle-text" id="text-sanitationBadge">ZAGADKA: Odszukaj czarne kapsuły w strefie sanitarnej i wydobądź ukryty 5-cyfrowy identyfikator.</p>
+                            
+                            <div class="puzzle-image-wrapper">
+                                <img src="sanitation_puzzle.jpg" alt="Sanitation Pod Data" class="puzzle-img">
                             </div>
-                            <div class="puzzle-error" id="error-sanitationBadge">ERROR - INCORRECT INPUT</div>
+
+                            <div class="puzzle-input-group">
+                                <div class="letter-inputs-container">
+                                    <input type="text" maxlength="1" class="char-input" id="sanitation-input-1" placeholder="_" oninput="client.handleCharInput(this, 'sanitation-input-2')">
+                                    <input type="text" maxlength="1" class="char-input" id="sanitation-input-2" placeholder="_" oninput="client.handleCharInput(this, 'sanitation-input-3')">
+                                    <input type="text" maxlength="1" class="char-input" id="sanitation-input-3" placeholder="_" oninput="client.handleCharInput(this, 'sanitation-input-4')">
+                                    <input type="text" maxlength="1" class="char-input" id="sanitation-input-4" placeholder="_" oninput="client.handleCharInput(this, 'sanitation-input-5')">
+                                    <input type="text" maxlength="1" class="char-input" id="sanitation-input-5" placeholder="_" oninput="client.handleCharInput(this, '')">
+                                </div>
+                                <button class="puzzle-btn" onclick="client.checkSanitationAnswer()">UPLOAD</button>
+                            </div>
+                            <div class="puzzle-error" id="error-sanitationBadge">ERROR - INVALID IDENTIFIER VALUE</div>
                         </div>
                     </div>
                 </details>
@@ -596,7 +609,7 @@ class ErrorRealityClient {
                 if(err) err.style.display = 'none';
                 if(imgWrapper) imgWrapper.style.display = 'none';
                 
-                const textElement = document.getElementById(`text-${moduleId}`);
+                const textElement = document.getElementById('text-' + moduleId);
                 if(textElement) {
                     textElement.textContent = 'MODULE RESTORATION CONFIRMED';
                 }
@@ -613,7 +626,7 @@ class ErrorRealityClient {
             badge.classList.add('unlocked');
             badge.textContent = 'UNLOCKED';
 
-            const parentModule = document.getElementById(`module-${moduleId}`);
+            const parentModule = document.getElementById('module-' + moduleId);
             if(parentModule) {
                 parentModule.classList.remove('disabled-summary');
                 parentModule.setAttribute('open', 'true');
@@ -638,7 +651,7 @@ class ErrorRealityClient {
         const fullAnswer = (char1 + char2 + char3 + char4).toLowerCase();
         const errorField = document.getElementById('error-foodBadge');
 
-        if (fullAnswer === 'arch') {
+        if (fullAnswer === 'cdba') {
             if (errorField) errorField.style.display = 'none';
             this.clearModule('foodBadge');
         } else {
@@ -664,9 +677,30 @@ class ErrorRealityClient {
         }
     }
 
+    checkSanitationAnswer() {
+        const c1 = document.getElementById('sanitation-input-1').value.trim();
+        const c2 = document.getElementById('sanitation-input-2').value.trim();
+        const c3 = document.getElementById('sanitation-input-3').value.trim();
+        const c4 = document.getElementById('sanitation-input-4').value.trim();
+        const c5 = document.getElementById('sanitation-input-5').value.trim();
+        
+        const fullAnswer = c1 + c2 + c3 + c4 + c5;
+        const errorField = document.getElementById('error-sanitationBadge');
+
+        if (fullAnswer === '37767') {
+            if (errorField) errorField.style.display = 'none';
+            this.clearModule('sanitationBadge');
+        } else {
+            if (errorField) {
+                errorField.style.display = 'block';
+                errorField.textContent = 'ERROR - INVALID IDENTIFIER VALUE';
+            }
+        }
+    }
+
     checkAnswer(moduleId, correctAnswer) {
-        const inputField = document.getElementById(`input-${moduleId}`);
-        const errorField = document.getElementById(`error-${moduleId}`);
+        const inputField = document.getElementById('input-' + moduleId);
+        const errorField = document.getElementById('error-' + moduleId);
         
         if(!inputField) return;
 
@@ -723,13 +757,13 @@ class ErrorRealityClient {
 
     async loadExistingEvents() {
         try {
-            const response = await fetch(`${this.apiUrl}/events`);
+            const response = await fetch(this.apiUrl + '/events');
             const data = await response.json();
             if (data.events) {
                 this.events = data.events;
                 this.updateUI();
                 this.events.forEach(event => this.addEventToArchive(event));
-                console.log(`📥 Loaded ${data.events.length} existing events`);
+                console.log('📥 Loaded ' + data.events.length + ' existing events');
             }
         } catch (error) {
             console.error('❌ Error loading events:', error);
