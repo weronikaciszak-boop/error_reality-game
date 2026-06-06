@@ -523,6 +523,7 @@ FOOD STATION
 <span class="badge locked" id="foodBadge">
 LOCKED
 </span>
+</summary>
 
 <div class="module-content">
 Food database corrupted.
@@ -535,7 +536,8 @@ LIVING SPACE
 <span class="badge locked" id="livingBadge">
 LOCKED
 </span>
-
+</summary>
+    
 <div class="module-content">
 Object registry unavailable.
 </div>
@@ -544,10 +546,11 @@ Object registry unavailable.
 <details class="module">
 <summary>
 MEMORY ARCHIVE
-<span class="badge locked" id="memorygBadge">
+<span class="badge locked" id="memoryBadge">
 LOCKED
 </span>
-
+</summary>
+    
 <div class="module-content">
 Archive fragments missing.
 </div>
@@ -559,7 +562,8 @@ SANITATION MODULE
 <span class="badge locked" id="sanitationBadge">
 LOCKED
 </span>
-
+</summary>
+    
 <div class="module-content">
 Render cache damaged.
 </div>
@@ -695,8 +699,7 @@ unlockModule(moduleId){
     
         
         // Inicjalizacja
-        this.init();
-    }
+    
 
     /**
      * Inicjalizacja - ładuje eventy i łączy się z WebSocket'em
@@ -789,8 +792,7 @@ unlockModule(moduleId){
         // Zaktualizuj pasek postępu
         document.getElementById('progressFill').style.width = progressPercent + '%';
         document.getElementById('progressPercent').textContent = progressPercent;
-        document.getElementById('scansCount').textContent = scansCount;
-
+        
         // Zmień status na podstawie progresu
         let powerStatus = 'OFF';
         let coreStatus = 'CORRUPTED';
