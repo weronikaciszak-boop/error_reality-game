@@ -603,13 +603,17 @@ Waiting for external intervention.
  * - Aktualizuje UI w czasie rzeczywistym
  */
 class ErrorRealityClient {
-    constructor() {
-        this.ws = null; // WebSocket połączenie
-        this.events = []; // Tablica wszystkich otrzymanych eventów
-        this.totalScans = 89; // Całkowita liczba skanów do ukończenia
-        this.wsUrl = 'ws://localhost:8000/ws'; // URL WebSocket'a
-        this.apiUrl = 'http://localhost:8000'; // URL API dla REST
-        updateTask(taskText){
+constructor() {
+    this.ws = null;
+    this.events = [];
+    this.totalScans = 89;
+    this.wsUrl = 'ws://localhost:8000/ws';
+    this.apiUrl = 'http://localhost:8000';
+
+    this.init();
+}
+
+updateTask(taskText){
     const task = document.getElementById('activeTask');
     if(task){
         task.textContent = taskText;
@@ -706,8 +710,7 @@ class ErrorRealityClient {
     updateUI() {
         const scansCount = this.events.length;
         let progressPercent = 4;
-        +12 za QR
-        +12 za rozwiązanie
+
         
         // Zaktualizuj pasek postępu
         document.getElementById('progressFill').style.width = progressPercent + '%';
