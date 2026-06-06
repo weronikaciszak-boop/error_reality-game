@@ -650,43 +650,62 @@ class ErrorRealityClient {
         }
     }
 
-    checkFoodArchiveAnswer() {
+   async checkFoodArchiveAnswer() {
         const char1 = document.getElementById('food-input-1').value.trim();
         const char2 = document.getElementById('food-input-2').value.trim();
         const char3 = document.getElementById('food-input-3').value.trim();
         const char4 = document.getElementById('food-input-4').value.trim();
         
-        const fullAnswer = (char1 + char2 + char3 + char4).toLowerCase();
+        const fullAnswer = char1 + char2 + char3 + char4;
         const errorField = document.getElementById('error-foodBadge');
 
-        // Food station verification set back to 'arch'
-        if (fullAnswer === 'arch') {
-            if (errorField) errorField.style.display = 'none';
-            this.clearModule('foodBadge');
-        } else {
-            if (errorField) {
-                errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
+        try {
+            const response = await fetch(`${this.apiUrl}/verify-puzzle`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ module: 'food', answer: fullAnswer })
+            });
+
+            if (response.ok) {
+                if (errorField) errorField.style.display = 'none';
+                this.clearModule('foodBadge');
+            } else {
+                if (errorField) {
+                    errorField.style.display = 'block';
+                    errorField.textContent = 'ACCESS DENIED: INVALID AUTHORIZATION CODE.';
+                }
             }
+        } catch (error) {
+            console.error('Connection error:', error);
         }
     }
 
-    checkLivingAnswer() {
-        const userInput = document.getElementById('living-input').value.trim().toLowerCase();
+    async checkLivingAnswer() {
+        const userInput = document.getElementById('living-input').value.trim();
         const errorField = document.getElementById('error-livingBadge');
 
-        if (userInput === 'b') {
-            if (errorField) errorField.style.display = 'none';
-            this.clearModule('livingBadge');
-        } else {
-            if (errorField) {
-                errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
+        try {
+            const response = await fetch(`${this.apiUrl}/verify-puzzle`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ module: 'living', answer: userInput })
+            });
+
+            if (response.ok) {
+                if (errorField) errorField.style.display = 'none';
+                this.clearModule('livingBadge');
+            } else {
+                if (errorField) {
+                    errorField.style.display = 'block';
+                    errorField.textContent = 'ACCESS DENIED: UNRECOGNIZED SELECTION.';
+                }
             }
+        } catch (error) {
+            console.error('Connection error:', error);
         }
     }
 
-    checkSanitationAnswer() {
+    async checkSanitationAnswer() {
         const c1 = document.getElementById('sanitation-input-1').value.trim();
         const c2 = document.getElementById('sanitation-input-2').value.trim();
         const c3 = document.getElementById('sanitation-input-3').value.trim();
@@ -696,14 +715,24 @@ class ErrorRealityClient {
         const fullAnswer = c1 + c2 + c3 + c4 + c5;
         const errorField = document.getElementById('error-sanitationBadge');
 
-        if (fullAnswer === '37767') {
-            if (errorField) errorField.style.display = 'none';
-            this.clearModule('sanitationBadge');
-        } else {
-            if (errorField) {
-                errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
+        try {
+            const response = await fetch(`${this.apiUrl}/verify-puzzle`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ module: 'sanitation', answer: fullAnswer })
+            });
+
+            if (response.ok) {
+                if (errorField) errorField.style.display = 'none';
+                this.clearModule('sanitationBadge');
+            } else {
+                if (errorField) {
+                    errorField.style.display = 'block';
+                    errorField.textContent = 'ERROR - INVALID IDENTIFIER VALUE';
+                }
             }
+        } catch (error) {
+            console.error('Connection error:', error);
         }
     }
 
