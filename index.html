@@ -594,7 +594,6 @@ class ErrorRealityClient {
         this.wsUrl = 'wss://error-reality-server-1.onrender.com/ws';
         this.apiUrl = 'https://error-reality-server-1.onrender.com';
         
-        // Licznik kliknięć administratora
         this.adminClicks = 0;
         this.adminClickTimer = null;
 
@@ -787,6 +786,7 @@ class ErrorRealityClient {
         }
     }
 
+    // POPRAWIONA FUNKCJA - WYSYŁA HASŁO SPRAWDZANE Z ZMIENNĄ ADMIN_KEY NA RENDERE
     async triggerAdminReset() {
         const key = document.getElementById('adminKeyInput').value.trim();
         const errorField = document.getElementById('adminError');
@@ -795,12 +795,19 @@ class ErrorRealityClient {
             const response = await fetch(`${this.apiUrl}/admin-reset`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ admin_key: key })
+                body: JSON.stringify({ admin_key: key }) // Serwer odbiera klucz i weryfikuje z wartością ADMIN_KEY
             });
 
             if (response.ok) {
                 if (errorField) errorField.style.display = 'none';
+                
+                // Czyszczenie pamięci przeglądarki po udanym restarcie na backendzie
+                localStorage.clear();
+                sessionStorage.clear();
+                this.setGameStage('BOOT');
+                
                 document.getElementById('adminPanel').style.display = 'none';
+                window.location.reload(); // Przeładowanie strony, by gracze widzieli start gry
             } else {
                 if (errorField) {
                     errorField.style.display = 'block';
@@ -880,123 +887,86 @@ class ErrorRealityClient {
 
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('📨 Received:', data);
-                
-                if (data.type === "SYSTEM_RESET") {
-                    window.location.reload(); 
-                    return;
+                if (data.type === 'STATE_UPDATE') {
+                    this.events = data.events;
+                    this.updateUI();
+                } else if (data.type === 'RESET') {
+                    // Reakcja na zdalny reset wysłany przez kogoś innego
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.reload();
                 }
-
-                this.events.push(data);
-                this.updateUI();
-                this.addEventToArchive(data);
-            };
-
-            this.ws.onerror = (error) => {
-                console.error('❌ WebSocket Error:', error);
-                this.updateConnectionStatus(false);
             };
 
             this.ws.onclose = () => {
-                console.log('🔌 WebSocket Disconnected');
+                console.log('❌ WebSocket Disconnected');
                 this.updateConnectionStatus(false);
             };
-        } catch (error) {
-            console.error('❌ WebSocket Connection Error:', error);
+
+            this.ws.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+                this.updateConnectionStatus(false);
+            };
+        } catch (e) {
+            console.error('WebSocket connection failed:', e);
             this.updateConnectionStatus(false);
         }
     }
 
+    updateConnectionStatus(isConnected) {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        if (dot && text) {
+            if (isConnected) {
+                dot.className = 'status-dot connected';
+                text.textContent = 'CONNECTED';
+            } else {
+                dot.className = 'status-dot disconnected';
+                text.textContent = 'DISCONNECTED';
+            }
+        }
+    }
+
     updateUI() {
-        let progressPercent = 4;
-        const unlocked = document.querySelectorAll('.badge.unlocked').length;
-        const restored = document.querySelectorAll('.badge.restored').length;
-
-        progressPercent += unlocked * 12;
-        progressPercent += restored * 24;
-
-        if(progressPercent > 100) progressPercent = 100;
+        // Logika przeliczania stabilności gry na bazie rozwiązanych modułów
+        const totalModules = 4;
+        let restoredCount = 0;
         
-        document.getElementById('progressFill').style.width = progressPercent + '%';
-        document.getElementById('progressPercent').textContent = progressPercent;
+        ['foodBadge', 'livingBadge', 'memoryBadge', 'sanitationBadge'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.classList.contains('restored')) restoredCount++;
+        });
+
+        const percent = Math.round((restoredCount / totalModules) * 100);
         
-        let powerStatus = 'OFF';
-        let coreStatus = 'CORRUPTED';
-
-        if (progressPercent > 0) powerStatus = 'BOOTING...';
-        if (progressPercent > 33) { powerStatus = 'ON'; coreStatus = 'REPAIRING...'; }
-        if (progressPercent > 66) { coreStatus = 'RESTORED'; }
-
-        document.getElementById('powerStatus').textContent = powerStatus;
-        document.getElementById('coreStatus').textContent = coreStatus;
-
-        let currentTask = '>>> Locate external power source.';
-        if(unlocked > 0 && restored === 0) currentTask = '>>> Clear unlocked module.';
-        if(unlocked === 0 && restored > 0) currentTask = '>>> Locate external code module.';
-        if(progressPercent >= 100) currentTask = '>>> Substitute corrupted core.';
-
-        this.updateTask(currentTask);
+        const fill = document.getElementById('progressFill');
+        const txt = document.getElementById('progressPercent');
+        if (fill && txt) {
+            fill.style.width = percent + '%';
+            txt.textContent = percent;
+        }
     }
 
     addEventToArchive(event) {
-        const archiveList = document.getElementById('archiveList');
-        if (!archiveList) return;
+        const list = document.getElementById('archiveList');
+        if (!list) return;
 
-        if (archiveList.querySelector('.archive-empty')) {
-            archiveList.innerHTML = '';
-        }
+        const empty = list.querySelector('.archive-empty');
+        if (empty) empty.remove();
 
-        const eventElement = document.createElement('div');
-        eventElement.className = 'archive-item new-event';
-        eventElement.innerHTML = `
-            <div class="archive-timestamp">[ ${this.formatTime(event.timestamp || new Date())} ]</div>
-            <div class="archive-type">&gt;&gt; SYS_EVENT: ${event.type}</div>
-            <div class="archive-data">&gt;&gt; PAYLOAD: ${JSON.stringify(event.data)}</div>
+        const item = document.createElement('div');
+        item.className = 'archive-item new-event';
+        item.innerHTML = `
+            <span class="archive-timestamp">[${new Date(event.timestamp).toLocaleTimeString()}]</span>
+            <div class="archive-type">${event.type}</div>
+            <div class="archive-data">${event.data || ''}</div>
         `;
-
-        archiveList.insertBefore(eventElement, archiveList.firstChild);
-
-        while (archiveList.children.length > 50) {
-            archiveList.removeChild(archiveList.lastChild);
-        }
-    }
-
-    formatTime(isoString) {
-        const date = new Date(isoString);
-        return date.toLocaleTimeString('en-US', { 
-            hour12: false,
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit' 
-        });
-    }
-
-    updateConnectionStatus(connected) {
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
-
-        if (connected) {
-            statusDot.className = 'status-dot connected';
-            statusText.textContent = 'CONNECTED';
-        } else {
-            statusDot.className = 'status-dot disconnected';
-            statusText.textContent = 'DISCONNECTED';
-        }
+        list.insertBefore(item, list.firstChild);
     }
 }
 
-window.unlockFood = () => client.unlockModule('foodBadge');
-window.clearFood = () => client.clearModule('foodBadge');
-window.unlockLiving = () => client.unlockModule('livingBadge');
-window.clearLiving = () => client.clearModule('livingBadge');
-window.unlockMemory = () => client.unlockModule('memoryBadge');
-window.clearMemory = () => client.clearModule('memoryBadge');
-window.unlockSanitation = () => client.unlockModule('sanitationBadge');
-window.clearSanitation = () => client.clearModule('sanitationBadge');
-
-document.addEventListener('DOMContentLoaded', () => {
-    window.client = new ErrorRealityClient();
-});
+// Uruchomienie klienta
+const client = new ErrorRealityClient();
 </script>
 </body>
 </html>
