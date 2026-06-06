@@ -462,7 +462,7 @@
         
         <div class="task-box">
             <div class="task-title">ACTIVE TASK</div>
-            <div class="task-text" id="activeTask">&gt;&gt;&gt; Locate external power source.</div>
+            <div class="task-text" id="activeTask">&gt;&gt;&gt; LOCATE EXTERNAL POWER SOURCE</div>
         </div>
 
         <!-- MODULES SECTION WITH ENGLISH TEXTS -->
@@ -485,7 +485,7 @@
                                 </div>
                                 <button class="puzzle-btn" onclick="client.checkFoodArchiveAnswer()">UPLOAD</button>
                             </div>
-                            <div class="puzzle-error" id="error-foodBadge">ACCESS DENIED: INVALID AUTHORIZATION CODE.</div>
+                            <div class="puzzle-error" id="error-foodBadge">ERROR - INCORRECT INPUT VALUE</div>
                         </div>
                     </div>
                 </details>
@@ -495,7 +495,7 @@
                     <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-livingBadge">CRITICAL ERROR: OBJECT RENDER FAILED – ELIMINATE NON-EXISTING ELEMENT.</p>
+                            <p class="puzzle-text" id="text-livingBadge">ERROR - INCORRECT INPUT VALUE</p>
                             
                             <div class="puzzle-image-wrapper">
                                 <img src="living_puzzle.jpg" alt="Render Error Data" class="puzzle-img">
@@ -507,7 +507,7 @@
                                 </div>
                                 <button class="puzzle-btn" onclick="client.checkLivingAnswer()">UPLOAD</button>
                             </div>
-                            <div class="puzzle-error" id="error-livingBadge">ACCESS DENIED: UNRECOGNIZED SELECTION.</div>
+                            <div class="puzzle-error" id="error-livingBadge">ERROR - INCORRECT INPUT VALUE</div>
                         </div>
                     </div>
                 </details>
@@ -527,7 +527,7 @@
                                 <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Enter authorization code">
                                 <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'CDBA')">UPLOAD</button>
                             </div>
-                            <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT CODE VALUE</div>
+                            <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT INPUT VALUE</div>
                         </div>
                     </div>
                 </details>
@@ -568,9 +568,9 @@
             <div class="archive-list" id="archiveList">
                 <div class="archive-empty">
                     [00:00:00]<br>
-                    Core corruption detected.<br>
-                    Reality save process failed.<br>
-                    Waiting for external intervention.
+                    Core corruption detected<br>
+                    Reality save process failed<br>
+                    Waiting for external intervention
                 </div>
             </div>
         </div>
@@ -667,7 +667,7 @@ class ErrorRealityClient {
         } else {
             if (errorField) {
                 errorField.style.display = 'block';
-                errorField.textContent = 'ACCESS DENIED: INVALID AUTHORIZATION CODE.';
+                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
             }
         }
     }
@@ -682,7 +682,7 @@ class ErrorRealityClient {
         } else {
             if (errorField) {
                 errorField.style.display = 'block';
-                errorField.textContent = 'ACCESS DENIED: UNRECOGNIZED SELECTION.';
+                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
             }
         }
     }
@@ -703,7 +703,7 @@ class ErrorRealityClient {
         } else {
             if (errorField) {
                 errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INVALID IDENTIFIER VALUE';
+                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
             }
         }
     }
@@ -722,7 +722,7 @@ class ErrorRealityClient {
         } else {
             if(errorField) {
                 errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INCORRECT INPUT';
+                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
             }
         }
     }
@@ -730,13 +730,13 @@ class ErrorRealityClient {
     setGameStage(stage){
         let task = '';
         switch(stage){
-            case 'BOOT': task = '>>> Locate external power source.'; break;
-            case 'POWER_ON': task = '>>> Locate external code module.'; break;
-            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module.'; break;
-            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core.'; break;
-            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute.'; break;
+            case 'BOOT': task = '>>> Locate external power source'; break;
+            case 'POWER_ON': task = '>>> Locate external code module'; break;
+            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module'; break;
+            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core'; break;
+            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute'; break;
             case 'GOOD_CORE': task = '>>> Rebooting reality...'; break;
-            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety.'; break;
+            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety'; break;
         }
         this.updateTask(task);
     }
