@@ -474,20 +474,26 @@
     </div>
 </details>
 
-        <!-- LIVING SPACE -->
-        <details class="module disabled-summary" id="module-livingBadge">
-            <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
-            <div class="module-content">
-                <div class="puzzle-container">
-                    <p class="puzzle-text">ZAGADKA: Im więcej jej zabierasz, tym większa się staje. Co to jest?</p>
-                    <div class="puzzle-input-group">
-                        <input type="text" class="puzzle-input" id="input-livingBadge" placeholder="Input info">
-                        <button class="puzzle-btn" onclick="client.checkAnswer('livingBadge', 'dziura')">UPLOAD</button>
-                    </div>
-                    <div class="puzzle-error" id="error-livingBadge">ERROR - INCORRECT INPUT</div>
-                </div>
+<details class="module disabled-summary" id="module-livingBadge">
+    <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
+    <div class="module-content">
+        <div class="puzzle-container">
+            <p class="puzzle-text" id="text-livingBadge">CRITICAL ERROR: OBJECT RENDER FAILED – ELIMINATE NON-EXISTING ELEMENT.</p>
+            
+            <div class="puzzle-image-wrapper">
+                <img src="living_puzzle.jpg" alt="Render Error Data" class="puzzle-img">
             </div>
-        </details>
+
+            <div class="puzzle-input-group">
+                <div class="answer-input-container">
+                    <input type="text" maxlength="1" class="char-input single-choice" id="living-input" placeholder="?">
+                </div>
+                <button class="puzzle-btn" onclick="client.checkLivingAnswer()">UPLOAD</button>
+            </div>
+            <div class="puzzle-error" id="error-livingBadge">ACCESS DENIED: UNRECOGNIZED SELECTION.</div>
+        </div>
+    </div>
+</details>
 
         <!-- MEMORY ARCHIVE -->
         <details class="module disabled-summary" id="module-memoryBadge">
