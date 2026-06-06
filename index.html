@@ -277,6 +277,7 @@
             box-shadow: 0 4px 6px -2px rgba(255, 225, 0, 0.3);
         }
 
+        /* PRZYWRÓCONE WRAPPERY DLA OBRAZKÓW */
         .puzzle-image-wrapper {
             width: 100%;
             max-width: 200px;
@@ -488,6 +489,10 @@
                         <div class="puzzle-container">
                             <p class="puzzle-text" id="text-livingBadge">RENDERING ERROR - ELIMINATE NON EXISTING MODULE</p>
                             
+                            <div class="puzzle-image-wrapper">
+                                <img src="living_puzzle.jpg" alt="Render Error Data" class="puzzle-img">
+                            </div>
+
                             <div class="puzzle-input-group">
                                 <div class="answer-input-container">
                                     <input type="text" maxlength="1" class="char-input single-choice" id="living-input" placeholder="?">
@@ -505,6 +510,10 @@
                         <div class="puzzle-container">
                             <p class="puzzle-text" id="text-memoryBadge">FIND FLAMING MEMORY MODULES - PROCEED ACCORDING TO INSTRUCTION</p>
                             
+                            <div class="puzzle-image-wrapper">
+                                <img src="memory_puzzle.jpg" alt="Memory Flamingos Data" class="puzzle-img">
+                            </div>
+
                             <div class="puzzle-input-group">
                                 <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Enter authorization code">
                                 <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'CDBA')">UPLOAD</button>
@@ -520,6 +529,10 @@
                         <div class="puzzle-container">
                             <p class="puzzle-text" id="text-sanitationBadge">LOCATE SUBMERGED MEMORY MODULES - EXTRACT CODE</p>
                             
+                            <div class="puzzle-image-wrapper">
+                                <img src="sanitation_puzzle.jpg" alt="Sanitation Pod Data" class="puzzle-img">
+                            </div>
+
                             <div class="puzzle-input-group">
                                 <div class="letter-inputs-container">
                                     <input type="text" maxlength="1" class="char-input" id="sanitation-input-1" placeholder="_" oninput="client.handleCharInput(this, 'sanitation-input-2')">
@@ -602,9 +615,11 @@ class ErrorRealityClient {
             if(container) {
                 const inputGroup = container.querySelector('.puzzle-input-group');
                 const err = container.querySelector('.puzzle-error');
+                const imgWrapper = container.querySelector('.puzzle-image-wrapper');
                 
                 if(inputGroup) inputGroup.style.display = 'none';
                 if(err) err.style.display = 'none';
+                if(imgWrapper) imgWrapper.style.display = 'none'; // Ukrywa obrazek po zaliczeniu
                 
                 const textElement = document.getElementById('text-' + moduleId);
                 if(textElement) {
@@ -767,18 +782,11 @@ class ErrorRealityClient {
         }
     }
 
-    // MODYFIKOWANA METODA RESETU - BEZ HASŁA I SZYBKA REAKCJA LOKALNA
     async triggerAdminReset() {
         console.log("🛠️ Inicjalizacja natychmiastowego resetu lokalnego...");
-        
-        // Czyszczenie pamięci przeglądarki
         localStorage.clear();
         sessionStorage.clear();
-        
-        // Wymuszamy stan początkowy gry
         this.setGameStage('BOOT');
-        
-        // Ukrywamy okno i odświeżamy widok
         document.getElementById('adminPanel').style.display = 'none';
         window.location.reload();
     }
