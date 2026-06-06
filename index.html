@@ -246,6 +246,43 @@
             font-size: 0.9em;
         }
 
+        /* Kontener na 4 litery obok siebie */
+        .letter-inputs-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Stylizacja inputu jako poziomej linii */
+        .char-input {
+            width: 35px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #ffe100;
+            color: #ffffff;
+            text-align: center;
+            font-size: 1.4em;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .char-input:focus {
+            outline: none;
+            border-bottom-color: #ffffff;
+            box-shadow: 0 4px 6px -2px rgba(255, 225, 0, 0.3);
+        }
+        
+        /* Poprawka dla kontenera grupy, aby ładnie układał kreski i przycisk w jednej linii */
+        .puzzle-input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
         .puzzle-input:focus {
             outline: none;
             box-shadow: 0 0 5px rgba(255, 225, 0, 0.5);
@@ -419,18 +456,23 @@
                 
                <!-- FOOD STATION -->
         <details class="module disabled-summary" id="module-foodBadge">
-            <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
-            <div class="module-content">
-                <div class="puzzle-container">
-                    <p class="puzzle-text">ZAGADKA: Co ma klucze, ale nie otwiera zamków, ma przestrzeń, ale nie ma miejsca?</p>
-                    <div class="puzzle-input-group">
-                        <input type="text" class="puzzle-input" id="input-foodBadge" placeholder="Input info">
-                        <button class="puzzle-btn" onclick="client.checkAnswer('foodBadge', 'klawiatura')">UPLOAD</button>
-                    </div>
-                    <div class="puzzle-error" id="error-foodBadge">ERROR - INCORRECT INPUT</div>
+    <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
+    <div class="module-content">
+        <div class="puzzle-container">
+            <p class="puzzle-text" id="text-foodBadge">CORRECT SYRUP ORDER DATA</p>
+            <div class="puzzle-input-group">
+                <div class="letter-inputs-container">
+                    <input type="text" maxlength="1" class="char-input" id="food-input-1" placeholder="_" oninput="client.handleCharInput(this, 'food-input-2')">
+                    <input type="text" maxlength="1" class="char-input" id="food-input-2" placeholder="_" oninput="client.handleCharInput(this, 'food-input-3')">
+                    <input type="text" maxlength="1" class="char-input" id="food-input-3" placeholder="_" oninput="client.handleCharInput(this, 'food-input-4')">
+                    <input type="text" maxlength="1" class="char-input" id="food-input-4" placeholder="_" oninput="client.handleCharInput(this, '')">
                 </div>
+                <button class="puzzle-btn" onclick="client.checkFoodArchiveAnswer()">UPLOAD</button>
             </div>
-        </details>
+            <div class="puzzle-error" id="error-foodBadge">ACCESS DENIED: INVALID AUTHORIZATION CODE.</div>
+        </div>
+    </div>
+</details>
 
         <!-- LIVING SPACE -->
         <details class="module disabled-summary" id="module-livingBadge">
@@ -558,6 +600,35 @@ class ErrorRealityClient {
         }
         this.updateTask('>>> Clear unlocked module.');
         this.updateUI();
+    }
+
+    // Obsługa automatycznego przeskakiwania do kolejnej kreski po wpisaniu litery
+    handleCharInput(currentInput, nextInputId) {
+        if (currentInput.value.length >= 1 && nextInputId !== '') {
+            const nextEl = document.getElementById(nextInputId);
+            if (nextEl) nextEl.focus();
+        }
+    }
+
+    // Specjalna weryfikacja dla hasła ARCH z czterech pól
+    checkFoodArchiveAnswer() {
+        const char1 = document.getElementById('food-input-1').value.trim();
+        const char2 = document.getElementById('food-input-2').value.trim();
+        const char3 = document.getElementById('food-input-3').value.trim();
+        const char4 = document.getElementById('food-input-4').value.trim();
+        
+        const fullAnswer = (char1 + char2 + char3 + char4).toLowerCase();
+        const errorField = document.getElementById('error-foodBadge');
+
+        if (fullAnswer === 'arch') {
+            if (errorField) errorField.style.display = 'none';
+            this.clearModule('foodBadge');
+        } else {
+            if (errorField) {
+                errorField.style.display = 'block';
+                errorField.textContent = 'ACCESS DENIED: INVALID AUTHORIZATION CODE.';
+            }
+        }
     }
 
     // Nowa metoda do weryfikacji haseł
