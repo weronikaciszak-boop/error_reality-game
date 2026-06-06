@@ -738,6 +738,30 @@ class ErrorRealityClient {
             document.getElementById('lastEvent').textContent = lastEvent.type;
             document.getElementById('lastTimestamp').textContent = this.formatTime(lastEvent.timestamp);
         }
+        let currentTask =
+'>>> Locate external power source.';
+
+if(progressPercent >= 4){
+    currentTask =
+    '>>> Locate external power source.';
+}
+
+if(progressPercent >= 16){
+    currentTask =
+    '>>> Locate external code module.';
+}
+
+if(progressPercent >= 28){
+    currentTask =
+    '>>> Clear unlocked module.';
+}
+
+if(progressPercent >= 100){
+    currentTask =
+    '>>> Substitute corrupted core.';
+}
+
+this.updateTask(currentTask);
     }
 
     /**
