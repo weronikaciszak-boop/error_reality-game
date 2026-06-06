@@ -802,8 +802,11 @@ unlockModule(moduleId){
 
         
         // Zaktualizuj pasek postępu
-        document.getElementById('progressFill').style.width = progressPercent + '%';
-        document.getElementById('progressPercent').textContent = progressPercent;
+        document.getElementById('progressFill').style.width =
+        progressPercent + '%';
+
+        document.getElementById('progressPercent').textContent =
+        progressPercent;
         
         // Zmień status na podstawie progresu
         let powerStatus = 'OFF';
