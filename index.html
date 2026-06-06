@@ -786,7 +786,20 @@ unlockModule(moduleId){
      */
     updateUI() {
         const scansCount = this.events.length;
-        let progressPercent = 4;
+       let progressPercent = 4;
+
+        const unlocked =
+        document.querySelectorAll('.badge.unlocked').length;
+
+        const restored =
+        document.querySelectorAll('.badge.restored').length;
+
+        progressPercent += unlocked * 12;
+        progressPercent += restored * 24;
+
+        if(progressPercent > 100){
+        progressPercent = 100;
+        }
 
         
         // Zaktualizuj pasek postępu
@@ -882,16 +895,16 @@ this.updateTask(currentTask);
     updateConnectionStatus(connected) {
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
-        const connectionStatus = document.getElementById('connectionStatus');
+        
 
         if (connected) {
             statusDot.className = 'status-dot connected';
             statusText.textContent = 'CONNECTED';
-            connectionStatus.textContent = 'CONNECTED';
+            
         } else {
             statusDot.className = 'status-dot disconnected';
             statusText.textContent = 'DISCONNECTED';
-            connectionStatus.textContent = 'DISCONNECTED';
+            
         }
     }
 }
