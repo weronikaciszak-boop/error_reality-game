@@ -1,1707 +1,761 @@
- <!DOCTYPE html>
-<html>
+HTML
+
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Error Reality</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-
-<style>
-
-* {
-
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-/* Główny kontener strony - czarne tło, żółty tekst */
-body {
-
-    background: #000000;
-    font-family: 'Montserrat', sans-serif;
-    color: #ffe100;
-    padding: 15px;
-    min-height: 100vh;
-}
-
-
-/* Kontener dla całej zawartości */
-.container {
-    max-width: 100%;
-    margin: auto;
-
-}
-
-
-/* Główny tytuł strony */
-h1 {
-
-    color: #ffe100;
-    text-align: center;
-    margin-bottom: 5px;
-    text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
-    font-size: 2em;
-    letter-spacing: 2px;
-    font-weight: 600;
-
-}
-
-
-/* Podtytuł pod głównym tytułem */
-.subtitle {
-    text-align: center;
-    color: #ffe100;
-    margin-bottom: 20px;
-    font-size: 0.9em;
-                                                                /* animation: flicker 2s infinite;*/
-
-    font-weight: 400;
-
-}
-
-
-            /* Animacja migotania dla podtytułu */
-            /*@keyframes flicker {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.7; }
-
-            }*/
-
-
-/* ===== PASEK POSTĘPU - Pokazuje procent ukończenia gry ===== */
-
-.progress-container {
-
-    margin: 20px 0;
-
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-
-    border-radius: 8px;
-
-    padding: 12px;
-
-    background: rgba(0, 0, 0, 0.3);
-
-}
-
-
-/* Opis paska postępu */
-
-.progress-label {
-
-    color: #ffe100;
-
-    font-size: 0.7em;
-
-    margin-bottom: 8px;
-
-    text-transform: uppercase;
-
-    font-weight: 400;
-
-}
-
-
-/* Główny pasek z kolorową animacją */
-
-.progress-bar {
-
-    width: 100%;
-
-    height: 25px;
-
-    background: rgba(0, 0, 0, 0.5);
-
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-
-    border-radius: 6px;
-
-    overflow: hidden;
-
-    position: relative;
-
-}
-
-
-
-
-                                                                                                            /* core podtekst*/
-
-.core-subtext{
-
-    margin-top:8px;
-
-    font-size:0.75em;
-
-    color:#ffffff;
-
-    opacity:0.8;
-
-    line-height:1.4;
-
-    }
-
-/* Żółty gradient wypełniający pasek */
-
-.progress-fill {
-
-    height: 100%;
-
-    background: linear-gradient(90deg, #ffe100, #ffe100);
-
-    width: 0%;
-
-    transition: width 0.5s ease;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 0.7em;
-
-    color: #000;
-
-    font-weight: 600;
-
-    border-radius: 6px;
-
-}
-
-
-/* Animacja błyszczenia na pasku */
-
-.progress-fill::after {
-
-    content: '';
-
-    position: absolute;
-
-    top: 0;
-
-    left: 0;
-
-    bottom: 0;
-
-    right: 0;
-
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-
-    animation: shimmer 2s infinite;
-
-}
-
-
-@keyframes shimmer {
-
-    0% { transform: translateX(-100%); }
-
-    100% { transform: translateX(100%); }
-
-}
-
-
-                                                                                        /* Procent i liczba skanów */
-
-.progress-percent {
-
-    text-align: LEFT;
-
-    color: #ffe100;
-
-    margin-top: 5px;
-
-    font-size: 0.75em;
-
-    font-weight: 400;
-
-}
-
-
-/* ===== BOXY STATUSU - 4 sekcje pokazujące stan systemu ===== */
-
-.status-grid {
-
-    display: grid;
-
-    grid-template-columns: 1fr;
-
-    gap: 12px;
-
-    margin-bottom: 20px;
-
-}
-
-
-/* Każdy box statusu - biała obwódka, zaokrąglone rogi */
-
-.box {
-
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-
-    border-radius: 8px;
-
-    padding: 15px;
-
-    background: rgba(0, 0, 0, 0.3);
-
-    transition: all 0.3s ease;
-
-}
-
-
-/* Efekt na hover - świecący box */
-
-.box:hover {
-
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-
-    transform: translateY(-2px);
-
-}
-
-
-/* Tytuł boxy - żółty, mały */
-
-.box-title {
-
-    color: #ffe100;
-
-    font-size: 0.7em;
-
-    margin-bottom: 8px;
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-
-    font-weight: 400;
-
-}
-
-
-/* Wartość w boxy - żółta, większa czcionka */
-
-.box-value {
-
-    color: #ffe100;
-
-    font-size: 1.1em;
-
-    font-weight: 600;
-
-}
-
-                                                                    /* opisywanie TASK*/
-
-
-.task-box{
-
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-
-    border-radius: 8px;
-
-    padding: 15px;
-
-    background: rgba(0,0,0,0.3);
-
-    margin-bottom: 20px;
-
-}
-
-
-.task-title{
-
-    color:#ffe100;
-
-    font-size:0.7em;
-
-    text-transform:uppercase;
-
-    letter-spacing:1px;
-
-    margin-bottom:10px;
-
-    font-weight:400;
-
-}
-
-
-.task-text{
-
-    color:#ffffff;
-
-    font-size:1em;
-
-    font-weight:600;
-
-    line-height:1.5;
-
-}
-
-    
-
-/* ===== SEKCJA INFO - Ostatni event i status połączenia ===== */
-
-.info-section {
-
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-
-    border-radius: 8px;
-
-    padding: 12px;
-
-    background: rgba(0, 0, 0, 0.3);
-
-    margin-bottom: 20px;
-
-}
-
-
-/* Tytuł sekcji info */
-
-.info-title {
-
-    color: #ffe100;
-
-    font-size: 0.7em;
-
-    text-transform: uppercase;
-
-    margin-bottom: 10px;
-
-    font-weight: 400;
-
-}
-
-
-    .section-title{
-
-    font-size: 0.7em;
-
-    margin-bottom: 8px;
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-
-    font-weight: 400;
-
-}
-
-
-.module{
-
-    border:0.5px solid rgba(255, 255, 255, 0.5);
-
-    border-radius:8px;
-
-    margin-bottom:10px;
-
-    overflow:hidden;
-
-}
-
-
-.module summary{
-
-    padding:14px;
-
-    cursor:pointer;
-
-    font-size:1em;
-
-    font-weight:600;
-
-    list-style:none;
-
-}
-
-
-.module-content{
-
-    padding:14px;
-
-    border-top:0.5px solid rgba(255,255,255,0.2);
-
-    font-size:0.8em;
-
-    color:#ffffff;
-
-}
-
-.badge{
-
-    float:right;
-
-    padding:4px 10px;
-
-    border-radius:20px;
-
-    font-size:0.7em;
-
-    font-weight:600;
-
-}
-
-
-.locked{
-
-    background:#ff007f;
-
-    color:white;
-
-}
-
-
-.unlocked{
-
-    background:#ffe100;
-
-    color:black;
-
-}
-
-
-.restored{
-
-    background:#ffe100;
-
-    color:black;
-
-    opacity:0.5;
-
-}
-
-/* Grid dla pojedynczych info elementów */
-
-.info-grid {
-
-    display: grid;
-
-    grid-template-columns: 1fr;
-
-    gap: 10px;
-
-}
-
-
-/* Zawartość pojedynczego info elementu */
-
-.info-item {
-
-    color: #ffe100;
-
-}
-
-
-/* Etykieta info - mały żółty tekst */
-
-.info-label {
-
-    color: #ffe100;
-
-    font-size: 0.65em;
-
-    font-weight: 400;
-
-}
-
-
-/* Wartość info - biały, większy tekst */
-
-.info-value {
-
-    font-size: 0.9em;
-
-    font-weight: 600;
-
-    margin-top: 2px;
-
-    color: #ffffff;
-
-}
-
-
-/* ===== ARCHIWUM/HISTORIA - Lista wszystkich skanów z timestamp'ami ===== */
-
-.archive-section {
-
-    border: 0.5px solid solid rgba(255, 255, 255, 0.5);
-
-    border-radius: 8px;
-
-    padding: 15px;
-
-    background: rgba(0, 0, 0, 0.3);
-
-}
-
-
-/* Tytuł archiwum */
-
-.archive-title {
-
-    color: #ffe100;
-
-    font-size: 0.75em;
-
-    text-transform: uppercase;
-
-    margin-bottom: 12px;
-
-    letter-spacing: 1px;
-
-    font-weight: 400;
-
-}
-
-
-/* Scrollowalna lista eventów */
-
-.archive-list {
-
-    max-height: 300px;
-
-    overflow-y: auto;
-
-}
-
-
-/* Pojedynczy event w archiwum */
-
-.archive-item {
-
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
-
-    padding: 10px 0;
-
-    font-size: 0.75em;
-
-}
-
-
-/* Ostatni item bez dolnej linii */
-
-.archive-item:last-child {
-
-    border-bottom: none;
-
-}
-
-
-/* Timestamp eventu - żółty, pogrubiony */
-
-.archive-timestamp {
-
-    color: #ffe100;
-
-    font-weight: 600;
-
-}
-
-
-/* Typ eventu - biały tekst */
-
-.archive-type {
-
-    color: #ffffff;
-
-    margin: 2px 0;
-
-    font-weight: 400;
-
-}
-
-
-/* Dane eventu - szary tekst, mały */
-
-.archive-data {
-
-    color: #cccccc;
-
-    font-size: 0.7em;
-
-    margin-top: 2px;
-
-    font-weight: 400;
-
-}
-
-
-/* Wiadomość gdy archiwum jest puste */
-
-.archive-empty {
-
-    color: #666666;
-
-    text-align: left;
-
-    padding: 20px;
-
-    font-weight: 400;
-
-    font-size: 0.8em;
-
-}
-
-
-/* ===== STATUS POŁĄCZENIA - Indicator w prawym dolnym rogu ===== */
-
-.connection-status {
-
-    position: fixed;
-
-    bottom: 15px;
-
-    right: 15px;
-
-    padding: 8px 12px;
-
-    border: 0.5px solid #ffffff;
-
-    border-radius: 6px;
-
-    background: rgba(0, 0, 0, 0.5);
-
-    font-size: 0.65em;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 6px;
-
-    color: #ffffff;
-
-    font-weight: 400;
-
-}
-
-
-/* Kolorowa kropka - zielona gdy połączone, czerwona gdy rozłączone */
-
-.status-dot {
-
-    width: 8px;
-
-    height: 8px;
-
-    border-radius: 50%;
-
-    animation: pulse 1s infinite;
-
-}
-
-
-/* Status połączone - żółty kolor z świeceniem */
-
-.status-dot.connected {
-
-    background: #ffe100;
-
-    box-shadow: 0 0 8px #ffe100;
-
-}
-
-
-/* Status rozłączone - czerwony bez animacji */
-
-.status-dot.disconnected {
-
-    background: #ff0000;
-
-    animation: none;
-
-}
-
-
-/* Animacja pulsowania dla połączonego statusu */
-
-@keyframes pulse {
-
-    0%, 100% { opacity: 1; }
-
-    50% { opacity: 0.5; }
-
-}
-
-
-/* ===== ANIMACJE ===== */
-
-/* Animacja pojawienia się nowego eventu */
-
-@keyframes slideIn {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(20px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
-
-}
-
-
-/* Klasa dla nowych eventów */
-
-.new-event {
-
-    animation: slideIn 0.5s ease;
-
-}
-
-
-/* ===== STYLIZACJA SCROLLBARA ===== */
-
-.archive-list::-webkit-scrollbar {
-
-    width: 6px;
-
-}
-
-
-.archive-list::-webkit-scrollbar-track {
-
-    background: rgba(0, 0, 0, 0.3);
-
-}
-
-
-.archive-list::-webkit-scrollbar-thumb {
-
-    background: #ffe100;
-
-    border-radius: 3px;
-
-}
-
-
-/* ===== RESPONSYWNOŚĆ - MOBILE FIRST ===== */
-
-@media (max-width: 768px) {
-
-    h1 {
-
-        font-size: 1.8em;
-
-    }
-
-    
-
-    .status-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    
-
-    .info-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    
-
-    .box {
-
-        padding: 12px;
-
-    }
-
-    
-
-    .progress-bar {
-
-        height: 22px;
-
-    }
-
-}
-
-</style>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Reality</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffe100;
+            padding: 15px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: auto;
+        }
+
+        h1 {
+            color: #ffe100;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+            font-size: 2em;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #ffe100;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            font-weight: 400;
+        }
+
+        /* ===== PASEK POSTĘPU ===== */
+        .progress-container {
+            margin: 20px 0;
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-label {
+            color: #ffe100;
+            font-size: 0.7em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .core-subtext {
+            margin-top: 8px;
+            font-size: 0.75em;
+            color: #ffffff;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffe100, #ffe100);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            color: #000;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-percent {
+            text-align: left;
+            color: #ffe100;
+            margin-top: 5px;
+            font-size: 0.75em;
+            font-weight: 400;
+        }
+
+        /* ===== BOXY STATUSU ===== */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .box:hover {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .box-title {
+            color: #ffe100;
+            font-size: 0.7em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .box-value {
+            color: #ffe100;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .task-box {
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .task-title {
+            color: #ffe100;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .task-text {
+            color: #ffffff;
+            font-size: 1em;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 0.7em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 400;
+            color: #ffe100;
+        }
+
+        /* ===== MODUŁY I ZAGADKI ===== */
+        .module {
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .module summary {
+            padding: 14px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            list-style: none;
+            user-select: none;
+        }
+
+        /* Kursor sygnalizujący blokadę dla zamkniętych modułów */
+        .module.disabled-summary summary {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .module-content {
+            padding: 14px;
+            border-top: 0.5px solid rgba(255,255,255,0.2);
+            font-size: 0.85em;
+            color: #ffffff;
+        }
+
+        /* Formularz zagadki wewnątrz modułu */
+        .puzzle-container {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .puzzle-text {
+            color: #cccccc;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .puzzle-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .puzzle-input {
+            flex: 1;
+            background: #111;
+            border: 0.5px solid #ffe100;
+            border-radius: 4px;
+            padding: 8px;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9em;
+        }
+
+        .puzzle-input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 225, 0, 0.5);
+        }
+
+       .puzzle-btn {
+            background: #ffe100;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px; /* Spójne z .box i .module */
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8em;
+        }
+
+        .puzzle-btn:hover {
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 225, 0, 0.4);
+        }
+
+        .puzzle-error {
+            color: #ff007f;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        .badge {
+            float: right;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .locked { background: #ff007f; color: white; }
+        .unlocked { background: #ffe100; color: black; }
+        .restored { background: #ffe100; color: black; opacity: 0.5; }
+
+        /* ===== ARCHIWUM / LOGI ===== */
+        .archive-section {
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .archive-title {
+            color: #ffe100;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .archive-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .archive-item {
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 0;
+            font-size: 0.75em;
+        }
+
+        .archive-item:last-child { border-bottom: none; }
+        .archive-timestamp { color: #ffe100; font-weight: 600; }
+        .archive-type { color: #ffffff; margin: 2px 0; font-weight: 400; }
+        .archive-data { color: #cccccc; font-size: 0.7em; margin-top: 2px; font-weight: 400; }
+
+        .archive-empty {
+            color: #bbbbbb;
+            text-align: left;
+            font-weight: 400;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        /* ===== STATUS POŁĄCZENIA ===== */
+        .connection-status {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            border: 0.5px solid #ffffff;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.5);
+            font-size: 0.65em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ffffff;
+            font-weight: 400;
+            z-index: 1000;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        .status-dot.connected { background: #ffe100; box-shadow: 0 0 8px #ffe100; }
+        .status-dot.disconnected { background: #ff0000; animation: none; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .new-event { animation: slideIn 0.5s ease; }
+
+        .archive-list::-webkit-scrollbar { width: 6px; }
+        .archive-list::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
+        .archive-list::-webkit-scrollbar-thumb { background: #ffe100; border-radius: 3px; }
+
+        @media (min-width: 768px) {
+            .status-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
-
-
 <body>
 
-
 <div class="container">
-
-    
-
-                                                                                            <!-- GŁÓWNY NAGŁÓWEK -->
-
     <h1>ERROR REALITY OS</h1>
-
     <p class="subtitle">UNAUTHORIZED ENTITY DETECTED</p>
 
-
-    <!-- ===== PASEK POSTĘPU - Pokazuje ile % gry ukończone ===== -->
-
+    <!-- PASEK POSTĘPU -->
     <div class="progress-container">
-
         <div class="progress-label">REALITY STABILITY</div>
-
-    <div class="progress-percent">
-
-    Stability: <span id="progressPercent">4</span>%
-
-    </div>
-
-         <div class="progress-bar">
-
+        <div class="progress-percent">Stability: <span id="progressPercent">0</span>%</div>
+        <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
-
         </div>
-
     </div>
 
-
-                                                                            <!-- ===== BOXY STATUSU - 4 sekcje pokazujące stan systemu ===== -->
-
+    <!-- SYSTEM GRIDS -->
     <div class="status-grid">
-
-        <!-- Box 1: Stan zasilania systemu -->
-
         <div class="box">
-
             <div class="box-title">Power Status</div>
-
             <div class="box-value" id="powerStatus">OFF</div>
-
         </div>
-
-        
-
-        <!-- Box 2: Stan rdzenia systemu -->
 
         <div class="box">
-
             <div class="box-title">Core Status</div>
-
-           <div class="box-value" id="coreStatus"> CORRUPTED </div>
-
-         <div class="core-subtext">
-
-         REALITY SAVE PROCESS FAILED
-
+            <div class="box-value" id="coreStatus">CORRUPTED</div>
+            <div class="core-subtext">REALITY SAVE PROCESS FAILED</div>
+        </div>
+        
+        <div class="task-box">
+            <div class="task-title">ACTIVE TASK</div>
+            <div class="task-text" id="activeTask">&gt;&gt;&gt; Locate external power source.</div>
         </div>
 
-               </div>
+        <!-- MODUŁY Z FILTREM I FORMULARZAMI ZAGADEK -->
+        <div class="box">
+            <div class="modules-section">
+                <h2 class="section-title">AVAILABLE MODULES</h2>
+                
+               <!-- FOOD STATION -->
+        <details class="module disabled-summary" id="module-foodBadge">
+            <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
+            <div class="module-content">
+                <div class="puzzle-container">
+                    <p class="puzzle-text">ZAGADKA: Co ma klucze, ale nie otwiera zamków, ma przestrzeń, ale nie ma miejsca?</p>
+                    <div class="puzzle-input-group">
+                        <input type="text" class="puzzle-input" id="input-foodBadge" placeholder="Wpisz kod...">
+                        <button class="puzzle-btn" onclick="client.checkAnswer('foodBadge', 'klawiatura')">UPLOAD</button>
+                    </div>
+                    <div class="puzzle-error" id="error-foodBadge">Niepoprawny kod autoryzacyjny.</div>
+                </div>
+            </div>
+        </details>
 
-                                                                                  
+        <!-- LIVING SPACE -->
+        <details class="module disabled-summary" id="module-livingBadge">
+            <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
+            <div class="module-content">
+                <div class="puzzle-container">
+                    <p class="puzzle-text">ZAGADKA: Im więcej jej zabierasz, tym większa się staje. Co to jest?</p>
+                    <div class="puzzle-input-group">
+                        <input type="text" class="puzzle-input" id="input-livingBadge" placeholder="Wpisz kod...">
+                        <button class="puzzle-btn" onclick="client.checkAnswer('livingBadge', 'dziura')">UPLOAD</button>
+                    </div>
+                    <div class="puzzle-error" id="error-livingBadge">Niepoprawny kod autoryzacyjny.</div>
+                </div>
+            </div>
+        </details>
 
-        <div class="task-box">
+        <!-- MEMORY ARCHIVE -->
+        <details class="module disabled-summary" id="module-memoryBadge">
+            <summary>MEMORY ARCHIVE <span class="badge locked" id="memoryBadge">LOCKED</span></summary>
+            <div class="module-content">
+                <div class="puzzle-container">
+                    <p class="puzzle-text">ZAGADKA: Istnieję tylko tam, gdzie jest światło, ale bezpośrednie światło mnie zabija.</p>
+                    <div class="puzzle-input-group">
+                        <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Wpisz kod...">
+                        <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'cień')">UPLOAD</button>
+                    </div>
+                    <div class="puzzle-error" id="error-memoryBadge">Niepoprawny kod autoryzacyjny.</div>
+                </div>
+            </div>
+        </details>
 
-    <div class="task-title">ACTIVE TASK</div>
+        <!-- SANITATION MODULE -->
+        <details class="module disabled-summary" id="module-sanitationBadge">
+            <summary>SANITATION MODULE <span class="badge locked" id="sanitationBadge">LOCKED</span></summary>
+            <div class="module-content">
+                <div class="puzzle-container">
+                    <p class="puzzle-text">ZAGADKA: Co potrafi biec, chociaż nie ma nóg, i szemrze, chociaż nie ma ust?</p>
+                    <div class="puzzle-input-group">
+                        <input type="text" class="puzzle-input" id="input-sanitationBadge" placeholder="Wpisz kod...">
+                        <button class="puzzle-btn" onclick="client.checkAnswer('sanitationBadge', 'rzeka')">UPLOAD</button>
+                    </div>
+                    <div class="puzzle-error" id="error-sanitationBadge">Niepoprawny kod autoryzacyjny.</div>
+                </div>
+            </div>
+        </details>
+            </div>          
+        </div>   
+    </div> 
 
-    <div class="task-text" id="activeTask">
-
-        >>> Locate external power source.
-
+    <!-- ARCHIWUM / LOGI -->
+    <div class="box">
+        <div class="archive-section">
+            <div class="archive-title">SYSTEM LOG</div>
+            <div class="archive-list" id="archiveList">
+                <div class="archive-empty">
+                    [00:00]<br>
+                    Core corruption detected.<br>
+                    Reality save process failed.<br>
+                    Waiting for external intervention.
+                </div>
+            </div>
+        </div>
     </div>
-
-    </div>
-
-        
-
-                                                                    <!-- : wklejone z chatu  -->
-
-            <!-- Box 3: moduły -->
-
-<div class="box">
-
-<div class="modules-section">
-
-
-<h2 class="section-title">AVAILABLE MODULES</h2>
-
-
-<details class="module">
-
-<summary>
-
-FOOD STATION
-
-<span class="badge locked" id="foodBadge">
-
-LOCKED
-
-</span>
-
-</summary>
-
-
-<div class="module-content">
-
-Food database corrupted.
-
-</div>
-
-</details>
-
-
-<details class="module">
-
-<summary>
-
-LIVING SPACE
-
-<span class="badge locked" id="livingBadge">
-
-LOCKED
-
-</span>
-
-</summary>
-
-    
-
-<div class="module-content">
-
-Object registry unavailable.
-
-</div>
-
-</details>
-
-
-<details class="module">
-
-<summary>
-
-MEMORY ARCHIVE
-
-<span class="badge locked" id="memoryBadge">
-
-LOCKED
-
-</span>
-
-</summary>
-
-    
-
-<div class="module-content">
-
-Archive fragments missing.
-
-</div>
-
-</details>
-
-
-<details class="module">
-
-<summary>
-
-SANITATION MODULE
-
-<span class="badge locked" id="sanitationBadge">
-
-LOCKED
-
-</span>
-
-</summary>
-
-    
-
-<div class="module-content">
-
-Render cache damaged.
-
-</div>
-
-</details>
-
-
-</div>          
-
-</div>   
-
 </div> 
 
-
-            
-
-
-
-    <!-- ===== ARCHIWUM/HISTORIA - Scrollowalna lista wszystkich skanów ===== -->
-
-   <div class="box">
-
-    <div class="archive-section">
-
-        <div class="archive-title">SYSTEM LOG</div>
-
-        <div class="archive-list" id="archiveList">
-
-            <div class="archive-empty">
-
-
-[00:00]<p>
-
-
-Core corruption detected.<p>
-
-
-Reality save process failed.<p>
-
-
-Waiting for external intervention.
-
-
-</div>
-
-    </div>
-
-
-
-
-<!-- ===== STATUS POŁĄCZENIA - Indicator w dolnym rogu (FIXED) ===== -->
-
+<!-- STATUS POŁĄCZENIA -->
 <div class="connection-status">
-
     <div class="status-dot disconnected" id="statusDot"></div>
-
     <span id="statusText">DISCONNECTED</span>
-
 </div>
-
-
-<!-- ===== JAVASCRIPT - Logika obsługi WebSocket i UI ===== -->
 
 <script>
-
-/**
-
- * ErrorRealityClient - Główna klasa obsługująca komunikację z backendem
-
- * - Łączy się z WebSocket'em na localhost:8000
-
- * - Ładuje istniejące eventy z API
-
- * - Aktualizuje UI w czasie rzeczywistym
-
- */
-
 class ErrorRealityClient {
-
-constructor() {
-
-    this.ws = null;
-
-    this.events = [];
-
-    this.totalScans = 89;
-
-    this.wsUrl = 'ws://localhost:8000/ws';
-
-    this.apiUrl = 'http://localhost:8000';
-
-
-    this.init();
-
-}
-
-
-updateTask(taskText){
-
-    const task = document.getElementById('activeTask');
-
-    if(task){
-
-        task.textContent = taskText;
-
+    constructor() {
+        this.ws = null;
+        this.events = [];
+        this.totalScans = 89;
+        this.wsUrl = 'ws://localhost:8000/ws';
+        this.apiUrl = 'http://localhost:8000';
+        this.init();
     }
 
-}
+    updateTask(taskText){
+        const task = document.getElementById('activeTask');
+        if(task){
+            task.textContent = taskText;
+        }
+    }
 
+    clearModule(moduleId){
+        const badge = document.getElementById(moduleId);
+        if(badge) {
+            badge.classList.remove('unlocked');
+            badge.classList.add('restored');
+            badge.textContent = 'RESTORED';
+            
+            // Po poprawnym rozwiązaniu chowamy formularz wpisywania i czyścimy błędy
+            const container = badge.closest('.module');
+            if(container) {
+                const inputGroup = container.querySelector('.puzzle-input-group');
+                const err = container.querySelector('.puzzle-error');
+                if(inputGroup) inputGroup.style.display = 'none';
+                if(err) err.style.display = 'none';
+                container.querySelector('.puzzle-text').textContent = 'MODUŁ PRZYWRÓCONY POMYŚLNIE.';
+                container.removeAttribute('open'); // opcjonalnie zamyka moduł po skończeniu
+            }
+        }
+        this.updateTask('>>> Locate external code module.');
+        this.updateUI();
+    }
 
-clearModule(moduleId){
+    unlockModule(moduleId){
+        const badge = document.getElementById(moduleId);
+        if(badge) {
+            badge.classList.remove('locked');
+            badge.classList.add('unlocked');
+            badge.textContent = 'UNLOCKED';
 
+            // Znajdujemy kontener modułu i pozwalamy go rozwinąć
+            const parentModule = document.getElementById(`module-${moduleId}`);
+            if(parentModule) {
+                parentModule.classList.remove('disabled-summary');
+                parentModule.setAttribute('open', 'true'); // Automatyczne rozwinięcie po unlocku
+            }
+        }
+        this.updateTask('>>> Clear unlocked module.');
+        this.updateUI();
+    }
 
-    const badge = document.getElementById(moduleId);
+    // Nowa metoda do weryfikacji haseł
+    checkAnswer(moduleId, correctAnswer) {
+        const inputField = document.getElementById(`input-${moduleId}`);
+        const errorField = document.getElementById(`error-${moduleId}`);
+        
+        if(!inputField) return;
 
+        // Czyszczenie spacji i ignorowanie wielkości liter
+        const userAnswer = inputField.value.trim().toLowerCase();
 
-    badge.classList.remove('unlocked');
-
-    badge.classList.add('restored');
-
-
-    badge.textContent = 'RESTORED';
-
-
-    this.updateTask(
-
-        '>>> Locate external code module.'
-
-    );
-
-}
-
-
-unlockModule(moduleId){
-
-
-    const badge = document.getElementById(moduleId);
-
-
-    badge.classList.remove('locked');
-
-    badge.classList.add('unlocked');
-
-
-    badge.textContent = 'UNLOCKED';
-
-
-    this.updateTask(
-
-        '>>> Clear unlocked module.'
-
-    );
-
-}
-
+        if(userAnswer === correctAnswer.toLowerCase()) {
+            if(errorField) errorField.style.display = 'none';
+            this.clearModule(moduleId);
+        } else {
+            if(errorField) {
+                errorField.style.display = 'block';
+                errorField.textContent = 'Niepoprawny kod autoryzacyjny. Spróbuj ponownie.';
+            }
+        }
+    }
 
     setGameStage(stage){
-
-
-    let task = '';
-
-
-    switch(stage){
-
-
-        case 'BOOT':
-
-            task = '>>> Locate external power source.';
-
-            break;
-
-
-        case 'POWER_ON':
-
-            task = '>>> Locate external code module.';
-
-            break;
-
-
-        case 'MODULE_UNLOCKED':
-
-            task = '>>> Clear unlocked module.';
-
-            break;
-
-
-        case 'ALL_MODULES_CLEARED':
-
-            task = '>>> Substitute corrupted core.';
-
-            break;
-
-
-        case 'BAD_CORE':
-
-            task = '>>> Core validation failed. Locate valid substitute.';
-
-            break;
-
-
-        case 'GOOD_CORE':
-
-            task = '>>> Rebooting reality...';
-
-            break;
-
-
-        case 'ENDING':
-
-            task = '>>> Reality rebooting. Exit system for safety.';
-
-            break;
-
+        let task = '';
+        switch(stage){
+            case 'BOOT': task = '>>> Locate external power source.'; break;
+            case 'POWER_ON': task = '>>> Locate external code module.'; break;
+            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module.'; break;
+            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core.'; break;
+            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute.'; break;
+            case 'GOOD_CORE': task = '>>> Rebooting reality...'; break;
+            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety.'; break;
+        }
+        this.updateTask(task);
     }
-
-
-    this.updateTask(task);
-
-}
-
-
-
-
-    
-
-        
-
-        // Inicjalizacja
-
-    
-
-
-    /**
-
-     * Inicjalizacja - ładuje eventy i łączy się z WebSocket'em
-
-     */
 
     async init() {
-
         console.log('🎮 Initializing Error Reality Client...');
-
         
-
-        // Załaduj istniejące eventy z backendu
+        // Blokada klikania w zamknięte <details> na poziomie dokumentu
+        document.addEventListener('click', (e) => {
+            const summary = e.target.closest('summary');
+            if (summary) {
+                const details = summary.parentElement;
+                if (details && details.classList.contains('disabled-summary')) {
+                    e.preventDefault(); // Blokuje otwarcie, jeśli moduł ma klasę blokady
+                }
+            }
+        });
 
         await this.loadExistingEvents();
-
-        
-
-        // Nawiąż połączenie WebSocket
-
         this.connectWebSocket();
-
         
-
-        // Spróbuj ponownie co 5 sekund jeśli połączenie spadło
-
         setInterval(() => {
-
             if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-
                 console.log('🔄 Reconnecting...');
-
                 this.connectWebSocket();
-
             }
-
         }, 5000);
-
     }
-
-
-    /**
-
-     * Załaduj istniejące eventy z backendu (REST API)
-
-     */
 
     async loadExistingEvents() {
-
         try {
-
             const response = await fetch(`${this.apiUrl}/events`);
-
             const data = await response.json();
-
-            
-
             if (data.events) {
-
                 this.events = data.events;
-
                 this.updateUI();
-
                 console.log(`📥 Loaded ${data.events.length} existing events`);
-
             }
-
         } catch (error) {
-
             console.error('❌ Error loading events:', error);
-
         }
-
     }
-
-
-    /**
-
-     * Nawiąż połączenie WebSocket z backendem
-
-     */
 
     connectWebSocket() {
-
         try {
-
             this.ws = new WebSocket(this.wsUrl);
 
-
-            // Połączenie nawiązane
-
             this.ws.onopen = () => {
-
                 console.log('✅ WebSocket Connected');
-
                 this.updateConnectionStatus(true);
-
             };
-
-
-            // Otrzymano wiadomość z backendu
 
             this.ws.onmessage = (event) => {
-
                 const data = JSON.parse(event.data);
-
                 console.log('📨 Received:', data);
-
-                
-
-                // Dodaj nowy event do tablicy
-
                 this.events.push(data);
-
                 this.updateUI();
-
                 this.addEventToArchive(data);
-
             };
-
-
-            // Błąd WebSocket'a
 
             this.ws.onerror = (error) => {
-
                 console.error('❌ WebSocket Error:', error);
-
                 this.updateConnectionStatus(false);
-
             };
-
-
-            // Połączenie zamknięte
 
             this.ws.onclose = () => {
-
                 console.log('🔌 WebSocket Disconnected');
-
                 this.updateConnectionStatus(false);
-
             };
-
         } catch (error) {
-
             console.error('❌ WebSocket Connection Error:', error);
-
             this.updateConnectionStatus(false);
-
         }
-
     }
-
-
-    /**
-
-     * Aktualizuj całe UI - pasek postępu, boxy statusu, info
-
-     */
 
     updateUI() {
-
         let progressPercent = 4;
-
-
-        const unlocked =
-
-        document.querySelectorAll('.badge.unlocked').length;
-
-
-        const restored =
-
-        document.querySelectorAll('.badge.restored').length;
-
+        const unlocked = document.querySelectorAll('.badge.unlocked').length;
+        const restored = document.querySelectorAll('.badge.restored').length;
 
         progressPercent += unlocked * 12;
-
         progressPercent += restored * 24;
 
-
-        if(progressPercent > 100){
-
-            progressPercent = 100;
-
-        }
-
+        if(progressPercent > 100) progressPercent = 100;
         
-
-        // Zaktualizuj pasek postępu
-
-        document.getElementById('progressFill').style.width =
-
-        progressPercent + '%';
-
-
-        document.getElementById('progressPercent').textContent =
-
-        progressPercent;
-
+        document.getElementById('progressFill').style.width = progressPercent + '%';
+        document.getElementById('progressPercent').textContent = progressPercent;
         
-
-        // Zmień status na podstawie progresu
-
         let powerStatus = 'OFF';
-
         let coreStatus = 'CORRUPTED';
 
-        let systemHealth = 'CRITICAL';
-
-
         if (progressPercent > 0) powerStatus = 'BOOTING...';
-
         if (progressPercent > 33) { powerStatus = 'ON'; coreStatus = 'REPAIRING...'; }
-
-        if (progressPercent > 66) { coreStatus = 'RESTORED'; systemHealth = 'RECOVERING'; }
-
-        if (progressPercent >= 100) { systemHealth = 'ONLINE'; }
-
+        if (progressPercent > 66) { coreStatus = 'RESTORED'; }
 
         document.getElementById('powerStatus').textContent = powerStatus;
-
         document.getElementById('coreStatus').textContent = coreStatus;
 
-        
+        let currentTask = '>>> Locate external power source.';
+        if(progressPercent >= 16) currentTask = '>>> Locate external code module.';
+        if(progressPercent >= 28) currentTask = '>>> Clear unlocked module.';
+        if(progressPercent >= 100) currentTask = '>>> Substitute corrupted core.';
 
-
-
-
-        let currentTask =
-
-'>>> Locate external power source.';
-
-
-if(progressPercent >= 4){
-
-    currentTask =
-
-    '>>> Locate external power source.';
-
-}
-
-
-if(progressPercent >= 16){
-
-    currentTask =
-
-    '>>> Locate external code module.';
-
-}
-
-
-if(progressPercent >= 28){
-
-    currentTask =
-
-    '>>> Clear unlocked module.';
-
-}
-
-
-if(progressPercent >= 100){
-
-    currentTask =
-
-    '>>> Substitute corrupted core.';
-
-}
-
-
-this.updateTask(currentTask);
-
+        this.updateTask(currentTask);
     }
 
-
-    /**
-
-     * Dodaj nowy event do archiwum/historii
-
-     */
-
     addEventToArchive(event) {
-
         const archiveList = document.getElementById('archiveList');
-
-        
-
-        // Jeśli to pierwszy event, wyczyść wiadomość "oczekiwanie"
-
         if (archiveList.querySelector('.archive-empty')) {
-
             archiveList.innerHTML = '';
-
         }
 
-
-        // Utwórz nowy element dla eventu
-
         const eventElement = document.createElement('div');
-
         eventElement.className = 'archive-item new-event';
-
         eventElement.innerHTML = `
-
-            <div class="archive-timestamp">⏰ ${this.formatTime(event.timestamp)}</div>
-
+            <div class="archive-timestamp">⏰ ${this.formatTime(event.timestamp || new Date())}</div>
             <div class="archive-type">🔹 Typ: ${event.type}</div>
-
             <div class="archive-data">📊 ID: ${JSON.stringify(event.data).substring(0, 100)}...</div>
-
         `;
-
-
-        // Dodaj na górę listy (najnowszy najpierw)
 
         archiveList.insertBefore(eventElement, archiveList.firstChild);
 
-
-        // Zachowaj tylko ostatnie 50 eventów w UI
-
         while (archiveList.children.length > 50) {
-
             archiveList.removeChild(archiveList.lastChild);
-
         }
-
     }
-
-
-    /**
-
-     * Formatuj timestamp ISO do czasu PL (HH:MM:SS)
-
-     */
 
     formatTime(isoString) {
-
         const date = new Date(isoString);
-
         return date.toLocaleTimeString('pl-PL', { 
-
             hour: '2-digit', 
-
             minute: '2-digit', 
-
             second: '2-digit' 
-
         });
-
     }
-
-
-    /**
-
-     * Aktualizuj status połączenia (kolor kropki i tekst)
-
-     */
 
     updateConnectionStatus(connected) {
-
         const statusDot = document.getElementById('statusDot');
-
         const statusText = document.getElementById('statusText');
 
-        
-
-
         if (connected) {
-
             statusDot.className = 'status-dot connected';
-
             statusText.textContent = 'CONNECTED';
-
-            
-
         } else {
-
             statusDot.className = 'status-dot disconnected';
-
             statusText.textContent = 'DISCONNECTED';
-
-            
-
         }
-
     }
-
 }
 
-
-window.unlockFood = () =>
-
-client.unlockModule('foodBadge');
-
-
-window.clearFood = () =>
-
-client.clearModule('foodBadge');
-
-
-window.unlockLiving = () =>
-
-client.unlockModule('livingBadge');
-
-
-window.clearLiving = () =>
-
-client.clearModule('livingBadge');
-
-
-window.unlockMemory = () =>
-
-client.unlockModule('memoryBadge');
-
-
-window.clearMemory = () =>
-
-client.clearModule('memoryBadge');
-
-
-window.unlockSanitation = () =>
-
-client.unlockModule('sanitationBadge');
-
-
-window.clearSanitation = () =>
-
-client.clearModule('sanitationBadge');
-
-
-    
-
-// Inicjalizuj klienta gdy strona się załaduje
+// Globalne funkcje testowe wywoływane z konsoli lub backendu
+window.unlockFood = () => client.unlockModule('foodBadge');
+window.clearFood = () => client.clearModule('foodBadge');
+window.unlockLiving = () => client.unlockModule('livingBadge');
+window.clearLiving = () => client.clearModule('livingBadge');
+window.unlockMemory = () => client.unlockModule('memoryBadge');
+window.clearMemory = () => client.clearModule('memoryBadge');
+window.unlockSanitation = () => client.unlockModule('sanitationBadge');
+window.clearSanitation = () => client.clearModule('sanitationBadge');
 
 document.addEventListener('DOMContentLoaded', () => {
-
     window.client = new ErrorRealityClient();
-
 });
-
 </script>
-
-
 </body>
-
-</html> 
+</html>
