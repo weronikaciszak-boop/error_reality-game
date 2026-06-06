@@ -891,9 +891,9 @@ async checkAnswer(moduleId, dummyCode) {
         const eventElement = document.createElement('div');
         eventElement.className = 'archive-item new-event';
         eventElement.innerHTML = `
-            <div class="archive-timestamp">⏰ ${this.formatTime(event.timestamp || new Date())}</div>
-            <div class="archive-type">🔹 TYPE: ${event.type}</div>
-            <div class="archive-data">📊 DATA: ${JSON.stringify(event.data).substring(0, 100)}...</div>
+            <div class="archive-timestamp">[ ${this.formatTime(event.timestamp || new Date())} ]</div>
+            <div class="archive-type">&gt;&gt; SYS_EVENT: ${event.type}</div>
+            <div class="archive-data">&gt;&gt; PAYLOAD: ${JSON.stringify(event.data)}</div>
         `;
 
         archiveList.insertBefore(eventElement, archiveList.firstChild);
