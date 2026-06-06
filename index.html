@@ -619,6 +619,76 @@ updateTask(taskText){
         task.textContent = taskText;
     }
 }
+
+clearModule(moduleId){
+
+    const badge = document.getElementById(moduleId);
+
+    badge.classList.remove('unlocked');
+    badge.classList.add('restored');
+
+    badge.textContent = 'RESTORED';
+
+    this.updateTask(
+        '>>> Locate external code module.'
+    );
+}
+
+unlockModule(moduleId){
+
+    const badge = document.getElementById(moduleId);
+
+    badge.classList.remove('locked');
+    badge.classList.add('unlocked');
+
+    badge.textContent = 'UNLOCKED';
+
+    this.updateTask(
+        '>>> Clear unlocked module.'
+    );
+}
+
+    setGameStage(stage){
+
+    let task = '';
+
+    switch(stage){
+
+        case 'BOOT':
+            task = '>>> Locate external power source.';
+            break;
+
+        case 'POWER_ON':
+            task = '>>> Locate external code module.';
+            break;
+
+        case 'MODULE_UNLOCKED':
+            task = '>>> Clear unlocked module.';
+            break;
+
+        case 'ALL_MODULES_CLEARED':
+            task = '>>> Substitute corrupted core.';
+            break;
+
+        case 'BAD_CORE':
+            task = '>>> Core validation failed. Locate valid substitute.';
+            break;
+
+        case 'GOOD_CORE':
+            task = '>>> Rebooting reality...';
+            break;
+
+        case 'ENDING':
+            task = '>>> Reality rebooting. Exit system for safety.';
+            break;
+    }
+
+    this.updateTask(task);
+}
+
+
+
+    
         
         // Inicjalizacja
         this.init();
