@@ -513,4 +513,348 @@
                         <div class="puzzle-container">
                             <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Istnieję tylko tam, gdzie jest światło, ale bezpośrednie światło mnie zabija.</p>
                             <div class="puzzle-input-group">
-                                <input type="text" class
+                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Input info">
+                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'cień')">UPLOAD</button>
+                            </div>
+                            <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT INPUT</div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="module disabled-summary" id="module-sanitationBadge">
+                    <summary>SANITATION MODULE <span class="badge locked" id="sanitationBadge">LOCKED</span></summary>
+                    <div class="module-content">
+                        <div class="puzzle-container">
+                            <p class="puzzle-text" id="text-sanitationBadge">ZAGADKA: Co potrafi biec, chociaż nie ma nóg, i szemrze, chociaż nie ma ust?</p>
+                            <div class="puzzle-input-group">
+                                <input type="text" class="puzzle-input" id="input-sanitationBadge" placeholder="Input info">
+                                <button class="puzzle-btn" onclick="client.checkAnswer('sanitationBadge', 'rzeka')">UPLOAD</button>
+                            </div>
+                            <div class="puzzle-error" id="error-sanitationBadge">ERROR - INCORRECT INPUT</div>
+                        </div>
+                    </div>
+                </details>
+            </div>          
+        </div>   
+    </div> 
+
+    <div class="box">
+        <div class="archive-section">
+            <div class="archive-title">SYSTEM LOG</div>
+            <div class="archive-list" id="archiveList">
+                <div class="archive-empty">
+                    [00:00:00]<br>
+                    Core corruption detected.<br>
+                    Reality save process failed.<br>
+                    Waiting for external intervention.
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<div class="connection-status">
+    <div class="status-dot disconnected" id="statusDot"></div>
+    <span id="statusText">DISCONNECTED</span>
+</div>
+
+<script>
+class ErrorRealityClient {
+    constructor() {
+        this.ws = null;
+        this.events = [];
+        this.totalScans = 89;
+        this.wsUrl = 'ws://localhost:8000/ws';
+        this.apiUrl = 'http://localhost:8000';
+        this.init();
+    }
+
+    updateTask(taskText){
+        const task = document.getElementById('activeTask');
+        if(task){
+            task.textContent = taskText;
+        }
+    }
+
+    clearModule(moduleId){
+        const badge = document.getElementById(moduleId);
+        if(badge) {
+            badge.classList.remove('unlocked');
+            badge.classList.add('restored');
+            badge.textContent = 'RESTORED';
+            
+            const container = badge.closest('.module');
+            if(container) {
+                const inputGroup = container.querySelector('.puzzle-input-group');
+                const err = container.querySelector('.puzzle-error');
+                const imgWrapper = container.querySelector('.puzzle-image-wrapper');
+                
+                if(inputGroup) inputGroup.style.display = 'none';
+                if(err) err.style.display = 'none';
+                if(imgWrapper) imgWrapper.style.display = 'none';
+                
+                const textElement = document.getElementById(`text-${moduleId}`);
+                if(textElement) {
+                    textElement.textContent = 'MODULE RESTORATION CONFIRMED';
+                }
+                container.removeAttribute('open');
+            }
+        }
+        this.updateUI();
+    }
+
+    unlockModule(moduleId){
+        const badge = document.getElementById(moduleId);
+        if(badge) {
+            badge.classList.remove('locked');
+            badge.classList.add('unlocked');
+            badge.textContent = 'UNLOCKED';
+
+            const parentModule = document.getElementById(`module-${moduleId}`);
+            if(parentModule) {
+                parentModule.classList.remove('disabled-summary');
+                parentModule.setAttribute('open', 'true');
+            }
+        }
+        this.updateUI();
+    }
+
+    handleCharInput(currentInput, nextInputId) {
+        if (currentInput.value.length >= 1 && nextInputId !== '') {
+            const nextEl = document.getElementById(nextInputId);
+            if (nextEl) nextEl.focus();
+        }
+    }
+
+    checkFoodArchiveAnswer() {
+        const char1 = document.getElementById('food-input-1').value.trim();
+        const char2 = document.getElementById('food-input-2').value.trim();
+        const char3 = document.getElementById('food-input-3').value.trim();
+        const char4 = document.getElementById('food-input-4').value.trim();
+        
+        const fullAnswer = (char1 + char2 + char3 + char4).toLowerCase();
+        const errorField = document.getElementById('error-foodBadge');
+
+        if (fullAnswer === 'arch') {
+            if (errorField) errorField.style.display = 'none';
+            this.clearModule('foodBadge');
+        } else {
+            if (errorField) {
+                errorField.style.display = 'block';
+                errorField.textContent = 'ACCESS DENIED: INVALID AUTHORIZATION CODE.';
+            }
+        }
+    }
+
+    checkLivingAnswer() {
+        const userInput = document.getElementById('living-input').value.trim().toLowerCase();
+        const errorField = document.getElementById('error-livingBadge');
+
+        if (userInput === 'b') {
+            if (errorField) errorField.style.display = 'none';
+            this.clearModule('livingBadge');
+        } else {
+            if (errorField) {
+                errorField.style.display = 'block';
+                errorField.textContent = 'ACCESS DENIED: UNRECOGNIZED SELECTION.';
+            }
+        }
+    }
+
+    checkAnswer(moduleId, correctAnswer) {
+        const inputField = document.getElementById(`input-${moduleId}`);
+        const errorField = document.getElementById(`error-${moduleId}`);
+        
+        if(!inputField) return;
+
+        const userAnswer = inputField.value.trim().toLowerCase();
+
+        if(userAnswer === correctAnswer.toLowerCase()) {
+            if(errorField) errorField.style.display = 'none';
+            this.clearModule(moduleId);
+        } else {
+            if(errorField) {
+                errorField.style.display = 'block';
+                errorField.textContent = 'ERROR - INCORRECT INPUT';
+            }
+        }
+    }
+
+    setGameStage(stage){
+        let task = '';
+        switch(stage){
+            case 'BOOT': task = '>>> Locate external power source.'; break;
+            case 'POWER_ON': task = '>>> Locate external code module.'; break;
+            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module.'; break;
+            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core.'; break;
+            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute.'; break;
+            case 'GOOD_CORE': task = '>>> Rebooting reality...'; break;
+            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety.'; break;
+        }
+        this.updateTask(task);
+    }
+
+    async init() {
+        console.log('🎮 Initializing Error Reality Client...');
+        
+        document.addEventListener('click', (e) => {
+            const summary = e.target.closest('summary');
+            if (summary) {
+                const details = summary.parentElement;
+                if (details && details.classList.contains('disabled-summary')) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        await this.loadExistingEvents();
+        this.connectWebSocket();
+        
+        setInterval(() => {
+            if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+                console.log('🔄 Reconnecting...');
+                this.connectWebSocket();
+            }
+        }, 5000);
+    }
+
+    async loadExistingEvents() {
+        try {
+            const response = await fetch(`${this.apiUrl}/events`);
+            const data = await response.json();
+            if (data.events) {
+                this.events = data.events;
+                this.updateUI();
+                this.events.forEach(event => this.addEventToArchive(event));
+                console.log(`📥 Loaded ${data.events.length} existing events`);
+            }
+        } catch (error) {
+            console.error('❌ Error loading events:', error);
+        }
+    }
+
+    connectWebSocket() {
+        try {
+            this.ws = new WebSocket(this.wsUrl);
+
+            this.ws.onopen = () => {
+                console.log('✅ WebSocket Connected');
+                this.updateConnectionStatus(true);
+            };
+
+            this.ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('📨 Received:', data);
+                this.events.push(data);
+                this.updateUI();
+                this.addEventToArchive(data);
+            };
+
+            this.ws.onerror = (error) => {
+                console.error('❌ WebSocket Error:', error);
+                this.updateConnectionStatus(false);
+            };
+
+            this.ws.onclose = () => {
+                console.log('🔌 WebSocket Disconnected');
+                this.updateConnectionStatus(false);
+            };
+        } catch (error) {
+            console.error('❌ WebSocket Connection Error:', error);
+            this.updateConnectionStatus(false);
+        }
+    }
+
+    updateUI() {
+        let progressPercent = 4;
+        const unlocked = document.querySelectorAll('.badge.unlocked').length;
+        const restored = document.querySelectorAll('.badge.restored').length;
+
+        progressPercent += unlocked * 12;
+        progressPercent += restored * 24;
+
+        if(progressPercent > 100) progressPercent = 100;
+        
+        document.getElementById('progressFill').style.width = progressPercent + '%';
+        document.getElementById('progressPercent').textContent = progressPercent;
+        
+        let powerStatus = 'OFF';
+        let coreStatus = 'CORRUPTED';
+
+        if (progressPercent > 0) powerStatus = 'BOOTING...';
+        if (progressPercent > 33) { powerStatus = 'ON'; coreStatus = 'REPAIRING...'; }
+        if (progressPercent > 66) { coreStatus = 'RESTORED'; }
+
+        document.getElementById('powerStatus').textContent = powerStatus;
+        document.getElementById('coreStatus').textContent = coreStatus;
+
+        let currentTask = '>>> Locate external power source.';
+        if(unlocked > 0 && restored === 0) currentTask = '>>> Clear unlocked module.';
+        if(unlocked === 0 && restored > 0) currentTask = '>>> Locate external code module.';
+        if(progressPercent >= 100) currentTask = '>>> Substitute corrupted core.';
+
+        this.updateTask(currentTask);
+    }
+
+    addEventToArchive(event) {
+        const archiveList = document.getElementById('archiveList');
+        if (!archiveList) return;
+
+        if (archiveList.querySelector('.archive-empty')) {
+            archiveList.innerHTML = '';
+        }
+
+        const eventElement = document.createElement('div');
+        eventElement.className = 'archive-item new-event';
+        eventElement.innerHTML = `
+            <div class="archive-timestamp">⏰ ${this.formatTime(event.timestamp || new Date())}</div>
+            <div class="archive-type">🔹 TYPE: ${event.type}</div>
+            <div class="archive-data">📊 DATA: ${JSON.stringify(event.data).substring(0, 100)}...</div>
+        `;
+
+        archiveList.insertBefore(eventElement, archiveList.firstChild);
+
+        while (archiveList.children.length > 50) {
+            archiveList.removeChild(archiveList.lastChild);
+        }
+    }
+
+    formatTime(isoString) {
+        const date = new Date(isoString);
+        return date.toLocaleTimeString('en-US', { 
+            hour12: false,
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        });
+    }
+
+    updateConnectionStatus(connected) {
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        if (connected) {
+            statusDot.className = 'status-dot connected';
+            statusText.textContent = 'CONNECTED';
+        } else {
+            statusDot.className = 'status-dot disconnected';
+            statusText.textContent = 'DISCONNECTED';
+        }
+    }
+}
+
+window.unlockFood = () => client.unlockModule('foodBadge');
+window.clearFood = () => client.clearModule('foodBadge');
+window.unlockLiving = () => client.unlockModule('livingBadge');
+window.clearLiving = () => client.clearModule('livingBadge');
+window.unlockMemory = () => client.unlockModule('memoryBadge');
+window.clearMemory = () => client.clearModule('memoryBadge');
+window.unlockSanitation = () => client.unlockModule('sanitationBadge');
+window.clearSanitation = () => client.clearModule('sanitationBadge');
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.client = new ErrorRealityClient();
+});
+</script>
+</body>
+</html>
