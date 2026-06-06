@@ -302,7 +302,7 @@ h1 {
 
 /* ===== ARCHIWUM/HISTORIA - Lista wszystkich skanów z timestamp'ami ===== */
 .archive-section {
-    border: 0.5px solid solid rgba(255, 255, 255, 0.5);
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
     border-radius: 8px;
     padding: 15px;
     background: rgba(0, 0, 0, 0.3);
@@ -611,109 +611,68 @@ Waiting for external intervention.
  * - Aktualizuje UI w czasie rzeczywistym
  */
 class ErrorRealityClient {
-constructor() {
-    this.ws = null;
-    this.events = [];
-    this.totalScans = 89;
-    this.wsUrl = 'ws://localhost:8000/ws';
-    this.apiUrl = 'http://localhost:8000';
+    constructor() {
+        this.ws = null;
+        this.events = [];
+        this.totalScans = 89;
+        this.wsUrl = 'ws://localhost:8000/ws';
+        this.apiUrl = 'http://localhost:8000';
 
-    this.init();
-}
-
-updateTask(taskText){
-    const task = document.getElementById('activeTask');
-    if(task){
-        task.textContent = taskText;
+        this.init();
+        // Wymuszamy pierwsze renderowanie UI zaraz po utworzeniu obiektu
+        this.updateUI(); 
     }
-}
 
-clearModule(moduleId){
+    updateTask(taskText){
+        const task = document.getElementById('activeTask');
+        if(task){
+            task.textContent = taskText;
+        }
+    }
 
-    const badge = document.getElementById(moduleId);
+    clearModule(moduleId){
+        const badge = document.getElementById(moduleId);
+        if(!badge) return;
 
-    badge.classList.remove('unlocked');
-    badge.classList.add('restored');
+        badge.classList.remove('unlocked', 'locked');
+        badge.classList.add('restored');
+        badge.textContent = 'RESTORED';
 
-    badge.textContent = 'RESTORED';
+        // Aktualizujemy pasek, bo zmieniła się klasa badge'a
+        this.updateUI(); 
+    }
 
-    this.updateTask(
-        '>>> Locate external code module.'
-    );
-}
+    unlockModule(moduleId){
+        const badge = document.getElementById(moduleId);
+        if(!badge) return;
 
-unlockModule(moduleId){
+        badge.classList.remove('locked', 'restored');
+        badge.classList.add('unlocked');
+        badge.textContent = 'UNLOCKED';
 
-    const badge = document.getElementById(moduleId);
-
-    badge.classList.remove('locked');
-    badge.classList.add('unlocked');
-
-    badge.textContent = 'UNLOCKED';
-
-    this.updateTask(
-        '>>> Clear unlocked module.'
-    );
-}
+        // Aktualizujemy pasek, bo zmieniła się klasa badge'a
+        this.updateUI(); 
+    }
 
     setGameStage(stage){
-
-    let task = '';
-
-    switch(stage){
-
-        case 'BOOT':
-            task = '>>> Locate external power source.';
-            break;
-
-        case 'POWER_ON':
-            task = '>>> Locate external code module.';
-            break;
-
-        case 'MODULE_UNLOCKED':
-            task = '>>> Clear unlocked module.';
-            break;
-
-        case 'ALL_MODULES_CLEARED':
-            task = '>>> Substitute corrupted core.';
-            break;
-
-        case 'BAD_CORE':
-            task = '>>> Core validation failed. Locate valid substitute.';
-            break;
-
-        case 'GOOD_CORE':
-            task = '>>> Rebooting reality...';
-            break;
-
-        case 'ENDING':
-            task = '>>> Reality rebooting. Exit system for safety.';
-            break;
+        let task = '';
+        switch(stage){
+            case 'BOOT': task = '>>> Locate external power source.'; break;
+            case 'POWER_ON': task = '>>> Locate external code module.'; break;
+            case 'MODULE_UNLOCKED': task = '>>> Clear unlocked module.'; break;
+            case 'ALL_MODULES_CLEARED': task = '>>> Substitute corrupted core.'; break;
+            case 'BAD_CORE': task = '>>> Core validation failed. Locate valid substitute.'; break;
+            case 'GOOD_CORE': task = '>>> Rebooting reality...'; break;
+            case 'ENDING': task = '>>> Reality rebooting. Exit system for safety.'; break;
+        }
+        this.updateTask(task);
     }
 
-    this.updateTask(task);
-}
-
-
-
-    
-        
-        // Inicjalizacja
-    
-
-    /**
-     * Inicjalizacja - ładuje eventy i łączy się z WebSocket'em
-     */
     async init() {
         console.log('🎮 Initializing Error Reality Client...');
-        
-        // Załaduj istniejące eventy z backendu
         await this.loadExistingEvents();
-        
-        // Nawiąż połączenie WebSocket
         this.connectWebSocket();
         
-        // Spróbuj ponownie co 5 sekund jeśli połączenie spadło
         setInterval(() => {
             if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
                 console.log('🔄 Reconnecting...');
@@ -722,9 +681,6 @@ unlockModule(moduleId){
         }, 5000);
     }
 
-    /**
-     * Załaduj istniejące eventy z backendu (REST API)
-     */
     async loadExistingEvents() {
         try {
             const response = await fetch(`${this.apiUrl}/events`);
@@ -740,37 +696,29 @@ unlockModule(moduleId){
         }
     }
 
-    /**
-     * Nawiąż połączenie WebSocket z backendem
-     */
     connectWebSocket() {
         try {
             this.ws = new WebSocket(this.wsUrl);
 
-            // Połączenie nawiązane
             this.ws.onopen = () => {
                 console.log('✅ WebSocket Connected');
                 this.updateConnectionStatus(true);
             };
 
-            // Otrzymano wiadomość z backendu
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 console.log('📨 Received:', data);
                 
-                // Dodaj nowy event do tablicy
                 this.events.push(data);
                 this.updateUI();
                 this.addEventToArchive(data);
             };
 
-            // Błąd WebSocket'a
             this.ws.onerror = (error) => {
                 console.error('❌ WebSocket Error:', error);
                 this.updateConnectionStatus(false);
             };
 
-            // Połączenie zamknięte
             this.ws.onclose = () => {
                 console.log('🔌 WebSocket Disconnected');
                 this.updateConnectionStatus(false);
@@ -781,17 +729,12 @@ unlockModule(moduleId){
         }
     }
 
-    /**
-     * Aktualizuj całe UI - pasek postępu, boxy statusu, info
-     */
     updateUI() {
         let progressPercent = 4;
 
-        const unlocked =
-        document.querySelectorAll('.badge.unlocked').length;
-
-        const restored =
-        document.querySelectorAll('.badge.restored').length;
+        // Dynamicznie zliczamy odblokowane i naprawione moduły obecne w HTML
+        const unlocked = document.querySelectorAll('.badge.unlocked').length;
+        const restored = document.querySelectorAll('.badge.restored').length;
 
         progressPercent += unlocked * 12;
         progressPercent += restored * 24;
@@ -800,67 +743,44 @@ unlockModule(moduleId){
             progressPercent = 100;
         }
         
-        // Zaktualizuj pasek postępu
-        document.getElementById('progressFill').style.width =
-        progressPercent + '%';
-
-        document.getElementById('progressPercent').textContent =
-        progressPercent;
+        // Zaktualizuj pasek postępu (szerokość CSS i tekst)
+        const fillElement = document.getElementById('progressFill');
+        const percentElement = document.getElementById('progressPercent');
+        
+        if(fillElement) fillElement.style.width = progressPercent + '%';
+        if(percentElement) percentElement.textContent = progressPercent;
         
         // Zmień status na podstawie progresu
         let powerStatus = 'OFF';
         let coreStatus = 'CORRUPTED';
-        let systemHealth = 'CRITICAL';
 
         if (progressPercent > 0) powerStatus = 'BOOTING...';
         if (progressPercent > 33) { powerStatus = 'ON'; coreStatus = 'REPAIRING...'; }
-        if (progressPercent > 66) { coreStatus = 'RESTORED'; systemHealth = 'RECOVERING'; }
-        if (progressPercent >= 100) { systemHealth = 'ONLINE'; }
+        if (progressPercent > 66) { coreStatus = 'RESTORED'; }
 
-        document.getElementById('powerStatus').textContent = powerStatus;
-        document.getElementById('coreStatus').textContent = coreStatus;
+        const powerDom = document.getElementById('powerStatus');
+        const coreDom = document.getElementById('coreStatus');
         
+        if(powerDom) powerDom.textContent = powerStatus;
+        if(coreDom) coreDom.textContent = coreStatus;
 
+        // Logika zadań aktywnych
+        let currentTask = '>>> Locate external power source.';
+        if(progressPercent >= 16) currentTask = '>>> Locate external code module.';
+        if(progressPercent >= 28) currentTask = '>>> Clear unlocked module.';
+        if(progressPercent >= 100) currentTask = '>>> Substitute corrupted core.';
 
-
-        let currentTask =
-'>>> Locate external power source.';
-
-if(progressPercent >= 4){
-    currentTask =
-    '>>> Locate external power source.';
-}
-
-if(progressPercent >= 16){
-    currentTask =
-    '>>> Locate external code module.';
-}
-
-if(progressPercent >= 28){
-    currentTask =
-    '>>> Clear unlocked module.';
-}
-
-if(progressPercent >= 100){
-    currentTask =
-    '>>> Substitute corrupted core.';
-}
-
-this.updateTask(currentTask);
+        this.updateTask(currentTask);
     }
 
-    /**
-     * Dodaj nowy event do archiwum/historii
-     */
     addEventToArchive(event) {
         const archiveList = document.getElementById('archiveList');
+        if(!archiveList) return;
         
-        // Jeśli to pierwszy event, wyczyść wiadomość "oczekiwanie"
         if (archiveList.querySelector('.archive-empty')) {
             archiveList.innerHTML = '';
         }
 
-        // Utwórz nowy element dla eventu
         const eventElement = document.createElement('div');
         eventElement.className = 'archive-item new-event';
         eventElement.innerHTML = `
@@ -869,20 +789,15 @@ this.updateTask(currentTask);
             <div class="archive-data">📊 ID: ${JSON.stringify(event.data).substring(0, 100)}...</div>
         `;
 
-        // Dodaj na górę listy (najnowszy najpierw)
         archiveList.insertBefore(eventElement, archiveList.firstChild);
 
-        // Zachowaj tylko ostatnie 50 eventów w UI
         while (archiveList.children.length > 50) {
             archiveList.removeChild(archiveList.lastChild);
         }
     }
 
-    /**
-     * Formatuj timestamp ISO do czasu PL (HH:MM:SS)
-     */
     formatTime(isoString) {
-        const date = new Date(isoString);
+        const date = isoString ? new Date(isoString) : new Date();
         return date.toLocaleTimeString('pl-PL', { 
             hour: '2-digit', 
             minute: '2-digit', 
@@ -890,52 +805,32 @@ this.updateTask(currentTask);
         });
     }
 
-    /**
-     * Aktualizuj status połączenia (kolor kropki i tekst)
-     */
     updateConnectionStatus(connected) {
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         
+        if (!statusDot || !statusText) return;
 
         if (connected) {
             statusDot.className = 'status-dot connected';
             statusText.textContent = 'CONNECTED';
-            
         } else {
             statusDot.className = 'status-dot disconnected';
             statusText.textContent = 'DISCONNECTED';
-            
         }
     }
 }
 
-window.unlockFood = () =>
-client.unlockModule('foodBadge');
-
-window.clearFood = () =>
-client.clearModule('foodBadge');
-
-window.unlockLiving = () =>
-client.unlockModule('livingBadge');
-
-window.clearLiving = () =>
-client.clearModule('livingBadge');
-
-window.unlockMemory = () =>
-client.unlockModule('memoryBadge');
-
-window.clearMemory = () =>
-client.clearModule('memoryBadge');
-
-window.unlockSanitation = () =>
-client.unlockModule('sanitationBadge');
-
-window.clearSanitation = () =>
-client.clearModule('sanitationBadge');
-
+// Globalne funkcje do testowania w konsoli przeglądarki
+window.unlockFood = () => client.unlockModule('foodBadge');
+window.clearFood = () => client.clearModule('foodBadge');
+window.unlockLiving = () => client.unlockModule('livingBadge');
+window.clearLiving = () => client.clearModule('livingBadge');
+window.unlockMemory = () => client.unlockModule('memoryBadge');
+window.clearMemory = () => client.clearModule('memoryBadge');
+window.unlockSanitation = () => client.unlockModule('sanitationBadge');
+window.clearSanitation = () => client.clearModule('sanitationBadge');
     
-// Inicjalizuj klienta gdy strona się załaduje
 document.addEventListener('DOMContentLoaded', () => {
     window.client = new ErrorRealityClient();
 });
