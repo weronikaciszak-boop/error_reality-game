@@ -47,7 +47,7 @@
             font-weight: 400;
         }
 
-        /* ===== PASEK POSTĘPU ===== */
+        /* ===== PROGRESS BAR ===== */
         .progress-container {
             margin: 20px 0;
             border: 0.5px solid rgba(255, 255, 255, 0.5);
@@ -117,7 +117,7 @@
             font-weight: 400;
         }
 
-        /* ===== BOXY STATUSU ===== */
+        /* ===== STATUS BOXES ===== */
         .status-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -186,7 +186,7 @@
             color: #ffe100;
         }
 
-        /* ===== MODUŁY I ZAGADKI ===== */
+        /* ===== MODULES & PUZZLES ===== */
         .module {
             border: 0.5px solid rgba(255, 255, 255, 0.5);
             border-radius: 8px;
@@ -252,14 +252,14 @@
             box-shadow: 0 0 5px rgba(255, 225, 0, 0.5);
         }
 
-        /* Kontener na kreski wejściowe */
+        /* Input letter lines wrapper */
         .letter-inputs-container {
             display: flex;
             gap: 15px;
             align-items: center;
         }
 
-        /* Stylizacja inputu jako poziomej linii */
+        /* Horizontal input line styling */
         .char-input {
             width: 35px;
             height: 40px;
@@ -280,15 +280,15 @@
             box-shadow: 0 4px 6px -2px rgba(255, 225, 0, 0.3);
         }
 
-        /* Stylizacja i dopasowanie obrazków */
+        /* NO BORDERS ON IMAGE WRAPPERS */
         .puzzle-image-wrapper {
             width: 100%;
             max-width: 200px;
             margin: 15px auto;
-            border: 0.5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+            border: none; /* Removed border */
+            border-radius: 0;
             overflow: hidden;
-            background: #000;
+            background: transparent;
             display: flex;
             justify-content: center;
         }
@@ -342,7 +342,7 @@
         .unlocked { background: #ffe100; color: black; }
         .restored { background: #ffe100; color: black; opacity: 0.5; }
 
-        /* ===== ARCHIWUM / LOGI ===== */
+        /* ===== LOGS SECTION ===== */
         .archive-section {
             border: 0.5px solid rgba(255, 255, 255, 0.5);
             border-radius: 8px;
@@ -383,7 +383,7 @@
             line-height: 1.6;
         }
 
-        /* ===== STATUS POŁĄCZENIA ===== */
+        /* ===== CONNECTION STATUS ===== */
         .connection-status {
             position: fixed;
             bottom: 15px;
@@ -438,6 +438,7 @@
     <h1>ERROR REALITY OS</h1>
     <p class="subtitle">UNAUTHORIZED ENTITY DETECTED</p>
 
+    <!-- PROGRESS CONTAINER -->
     <div class="progress-container">
         <div class="progress-label">REALITY STABILITY</div>
         <div class="progress-percent">Stability: <span id="progressPercent">0</span>%</div>
@@ -446,6 +447,7 @@
         </div>
     </div>
 
+    <!-- SYSTEM GRIDS -->
     <div class="status-grid">
         <div class="box">
             <div class="box-title">Power Status</div>
@@ -463,15 +465,17 @@
             <div class="task-text" id="activeTask">&gt;&gt;&gt; Locate external power source.</div>
         </div>
 
+        <!-- MODULES SECTION WITH ENGLISH TEXTS -->
         <div class="box">
             <div class="modules-section">
                 <h2 class="section-title">AVAILABLE MODULES</h2>
                 
+                <!-- FOOD STATION (Pass: arch) -->
                 <details class="module disabled-summary" id="module-foodBadge">
                     <summary>FOOD STATION <span class="badge locked" id="foodBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-foodBadge">ZAGADKA: Dopasuj urządzenia kuchenne i odczytaj poprawną kolejność kodu autoryzacyjnego.</p>
+                            <p class="puzzle-text" id="text-foodBadge">PUZZLE: Match the kitchen appliances and read the correct authorization sequence.</p>
                             <div class="puzzle-input-group">
                                 <div class="letter-inputs-container">
                                     <input type="text" maxlength="1" class="char-input" id="food-input-1" placeholder="_" oninput="client.handleCharInput(this, 'food-input-2')">
@@ -486,6 +490,7 @@
                     </div>
                 </details>
 
+                <!-- LIVING SPACE -->
                 <details class="module disabled-summary" id="module-livingBadge">
                     <summary>LIVING SPACE <span class="badge locked" id="livingBadge">LOCKED</span></summary>
                     <div class="module-content">
@@ -507,30 +512,32 @@
                     </div>
                 </details>
 
+                <!-- MEMORY ARCHIVE (Pass: CDBA) -->
                 <details class="module disabled-summary" id="module-memoryBadge">
                     <summary>MEMORY ARCHIVE <span class="badge locked" id="memoryBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-memoryBadge">ZAGADKA: Odszukaj ukryte wskazówki na różowych obiektach i podaj właściwy ciąg weryfikacyjny.</p>
+                            <p class="puzzle-text" id="text-memoryBadge">PUZZLE: Find the hidden clues on the physical objects and submit the correct verification sequence.</p>
                             
                             <div class="puzzle-image-wrapper">
                                 <img src="memory_puzzle.jpg" alt="Memory Flamingos Data" class="puzzle-img">
                             </div>
 
                             <div class="puzzle-input-group">
-                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Wpisz kod autoryzacyjny">
-                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'KOD_FLAMINGA')">UPLOAD</button>
+                                <input type="text" class="puzzle-input" id="input-memoryBadge" placeholder="Enter authorization code">
+                                <button class="puzzle-btn" onclick="client.checkAnswer('memoryBadge', 'CDBA')">UPLOAD</button>
                             </div>
-                            <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT INPUT</div>
+                            <div class="puzzle-error" id="error-memoryBadge">ERROR - INCORRECT CODE VALUE</div>
                         </div>
                     </div>
                 </details>
 
+                <!-- SANITATION MODULE (Pass: 37767) -->
                 <details class="module disabled-summary" id="module-sanitationBadge">
                     <summary>SANITATION MODULE <span class="badge locked" id="sanitationBadge">LOCKED</span></summary>
                     <div class="module-content">
                         <div class="puzzle-container">
-                            <p class="puzzle-text" id="text-sanitationBadge">ZAGADKA: Odszukaj czarne kapsuły w strefie sanitarnej i wydobądź ukryty 5-cyfrowy identyfikator.</p>
+                            <p class="puzzle-text" id="text-sanitationBadge">PUZZLE: Locate the submerged pods in the sanitation zone and extract the 5-digit security key.</p>
                             
                             <div class="puzzle-image-wrapper">
                                 <img src="sanitation_puzzle.jpg" alt="Sanitation Pod Data" class="puzzle-img">
@@ -554,6 +561,7 @@
         </div>   
     </div> 
 
+    <!-- LOGS -->
     <div class="box">
         <div class="archive-section">
             <div class="archive-title">SYSTEM LOG</div>
@@ -569,6 +577,7 @@
     </div>
 </div> 
 
+<!-- CONNECTION STATUS -->
 <div class="connection-status">
     <div class="status-dot disconnected" id="statusDot"></div>
     <span id="statusText">DISCONNECTED</span>
@@ -651,7 +660,8 @@ class ErrorRealityClient {
         const fullAnswer = (char1 + char2 + char3 + char4).toLowerCase();
         const errorField = document.getElementById('error-foodBadge');
 
-        if (fullAnswer === 'cdba') {
+        // Food station verification set back to 'arch'
+        if (fullAnswer === 'arch') {
             if (errorField) errorField.style.display = 'none';
             this.clearModule('foodBadge');
         } else {
