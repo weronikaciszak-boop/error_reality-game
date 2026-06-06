@@ -731,16 +731,8 @@ updateTask(taskText){
         document.getElementById('coreStatus').textContent = coreStatus;
         
 
-        // Zaktualizuj liczę skanów
-        document.getElementById('activeScanCount').textContent = scansCount;
-        document.getElementById('totalEvents').textContent = scansCount;
 
-        // Zaktualizuj info o ostatnim evencie
-        if (this.events.length > 0) {
-            const lastEvent = this.events[this.events.length - 1];
-            document.getElementById('lastEvent').textContent = lastEvent.type;
-            document.getElementById('lastTimestamp').textContent = this.formatTime(lastEvent.timestamp);
-        }
+
         let currentTask =
 '>>> Locate external power source.';
 
