@@ -892,14 +892,22 @@ class ErrorRealityClient {
     }
 
     // TUTAJ JEST NOWA, ZINTEGROWANA LOGIKA DETEKCJI PRĄDU Z BACKENDU
-    updateUI() {
+updateUI() {
         let isPowerOn = false;
+        let isFoodUnlocked = false; // Nowa zmienna na blokadę NFC
         
-        // Przeszukujemy historię z bazy danych serwera
+        // Przeglądamy historię zdarzeń z serwera
         this.events.forEach(event => {
             if (event.type === 'POWER_ON') {
                 isPowerOn = true;
             }
+            
+            // Sprawdzamy, czy przyszedł sygnał z czytnika NFC o odblokowaniu jedzenia
+            if (event.type === 'MODULE_UNLOCKED' && event.data && event.data.includes('food')) {
+                isFoodUnlocked = true;
+            }
+
+            // Jeśli w bazie są już zaliczone zagadki
             if (event.type === 'PUZZLE_SOLVED' || event.type === 'MODULE_RESTORED') {
                 if (event.data && event.data.includes('food')) this.clearModule('foodBadge');
                 if (event.data && event.data.includes('living')) this.clearModule('livingBadge');
@@ -910,31 +918,33 @@ class ErrorRealityClient {
 
         const powerStatusEl = document.getElementById('powerStatus');
         
-        // Dynamiczna zmiana stanów na ekranie
+        // 1. OBSŁUGA SAMEGO PRĄDU
         if (isPowerOn) {
             if (powerStatusEl) powerStatusEl.textContent = 'ONLINE';
-            this.setGameStage('POWER_ON');
+            this.setGameStage('POWER_ON'); // Task: >>> LOCATE EXTERNAL CODE MODULE
             
-            const foodBadge = document.getElementById('foodBadge');
-            if (foodBadge && !foodBadge.classList.contains('restored')) {
-                this.unlockModule('foodBadge');
+            // 2. OBSŁUGA NFC (Dopiero gdy prąd JEST i karta NFC została przyłożona)
+            if (isFoodUnlocked) {
+                const foodBadge = document.getElementById('foodBadge');
+                if (foodBadge && !foodBadge.classList.contains('restored')) {
+                    this.unlockModule('foodBadge');
+                }
             }
         } else {
+            // Brak prądu na starcie
             if (powerStatusEl) powerStatusEl.textContent = 'OFF';
-            this.setGameStage('BOOT');
+            this.setGameStage('BOOT'); // Task: >>> LOCATE EXTERNAL POWER SOURCE
         }
 
-        // Pasek postępu rzeczywistości
+        // Pasek postępu
         const totalModules = 4;
         let restoredCount = 0;
-        
         ['foodBadge', 'livingBadge', 'memoryBadge', 'sanitationBadge'].forEach(id => {
             const el = document.getElementById(id);
             if (el && el.classList.contains('restored')) restoredCount++;
         });
 
         const percent = Math.round((restoredCount / totalModules) * 100);
-        
         const fill = document.getElementById('progressFill');
         const txt = document.getElementById('progressPercent');
         if (fill && txt) {
