@@ -588,8 +588,8 @@ class ErrorRealityClient {
         this.ws = null;
         this.events = [];
         this.totalScans = 89;
-        this.wsUrl = 'ws://localhost:8000/ws';
-        this.apiUrl = 'http://localhost:8000';
+        this.apiUrl = 'https://error-reality-server-1.onrender.com';
+        this.wsUrl = 'wss://error-reality-server-1.onrender.com/ws'; // Prefiks wss:// dla bezpiecznych WebSocketów na Renderze
         this.init();
     }
 
@@ -672,7 +672,7 @@ class ErrorRealityClient {
             } else {
                 if (errorField) {
                     errorField.style.display = 'block';
-                    errorField.textContent = 'ACCESS DENIED: INVALID AUTHORIZATION CODE.';
+                    errorField.textContent = 'ERROR - INVALID INPUT VALUE';
                 }
             }
         } catch (error) {
@@ -697,7 +697,7 @@ class ErrorRealityClient {
             } else {
                 if (errorField) {
                     errorField.style.display = 'block';
-                    errorField.textContent = 'ACCESS DENIED: UNRECOGNIZED SELECTION.';
+                    errorField.textContent = 'ERROR - INVALID INPUT VALUE';
                 }
             }
         } catch (error) {
@@ -728,7 +728,7 @@ class ErrorRealityClient {
             } else {
                 if (errorField) {
                     errorField.style.display = 'block';
-                    errorField.textContent = 'ERROR - INVALID IDENTIFIER VALUE';
+                    errorField.textContent = 'ERROR - INVALID INPUT VALUE';
                 }
             }
         } catch (error) {
@@ -736,25 +736,34 @@ class ErrorRealityClient {
         }
     }
 
-    checkAnswer(moduleId, correctAnswer) {
+async checkAnswer(moduleId, dummyCode) {
         const inputField = document.getElementById('input-' + moduleId);
         const errorField = document.getElementById('error-' + moduleId);
         
         if(!inputField) return;
 
-        const userAnswer = inputField.value.trim().toLowerCase();
+        const userAnswer = inputField.value.trim();
 
-        if(userAnswer === correctAnswer.toLowerCase()) {
-            if(errorField) errorField.style.display = 'none';
-            this.clearModule(moduleId);
-        } else {
-            if(errorField) {
-                errorField.style.display = 'block';
-                errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
+        try {
+            const response = await fetch(`${this.apiUrl}/verify-puzzle`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ module: 'memory', answer: userAnswer })
+            });
+
+            if(response.ok) {
+                if(errorField) errorField.style.display = 'none';
+                this.clearModule(moduleId);
+            } else {
+                if(errorField) {
+                    errorField.style.display = 'block';
+                    errorField.textContent = 'ERROR - INCORRECT INPUT VALUE';
+                }
             }
+        } catch (error) {
+            console.error('Connection error:', error);
         }
     }
-
     setGameStage(stage){
         let task = '';
         switch(stage){
