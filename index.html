@@ -592,6 +592,7 @@ class ErrorRealityClient {
         
         this.adminClicks = 0;
         this.adminClickTimer = null;
+        this.events = [];
 
         this.init();
     }
@@ -842,7 +843,7 @@ class ErrorRealityClient {
                     this.gameState = data.game_state;
                 }
                 this.updateUI();
-                this.events.forEach(event => this.addEventToArchive(event));
+                this.rebuildArchive();
                 console.log('📥 Loaded ' + data.events.length + ' existing events');
             }
         } catch (error) {
@@ -862,11 +863,12 @@ class ErrorRealityClient {
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'STATE_UPDATE') {
-                    this.events = data.events;
+                    this.events = data.events || [];
                     if(data.game_state){
                         this.gameState = data.game_state;
                     }
                     this.updateUI();
+                    this.rebuildArchive();
                 } else if (data.type === 'RESET') {
                     localStorage.clear();
                     sessionStorage.clear();
@@ -963,21 +965,48 @@ class ErrorRealityClient {
         }
     }
 
-    addEventToArchive(event) {
+    rebuildArchive() {
         const list = document.getElementById('archiveList');
         if (!list) return;
 
-        const empty = list.querySelector('.archive-empty');
-        if (empty) empty.remove();
+        list.innerHTML = '';
 
-        const item = document.createElement('div');
-        item.className = 'archive-item new-event';
-        item.innerHTML = `
-            <span class="archive-timestamp">[${new Date(event.timestamp).toLocaleTimeString()}]</span>
-            <div class="archive-type">${event.type}</div>
-            <div class="archive-data">${event.data || ''}</div>
-        `;
-        list.insertBefore(item, list.firstChild);
+        if (!this.events || this.events.length === 0) {
+            list.innerHTML = `
+                <div class="archive-empty">
+                    [00:00:00]<br>
+                    Core corruption detected<br>
+                    Reality save process failed<br>
+                    Waiting for external intervention
+                </div>`;
+            return;
+        }
+
+        // Renderowanie od najnowszego do najstarszego
+        for (let i = this.events.length - 1; i >= 0; i--) {
+            const event = this.events[i];
+            const item = document.createElement('div');
+            item.className = 'archive-item';
+            
+            // Formatowanie czytelnego czasu z ISO stringa
+            let timeStr = '00:00:00';
+            try {
+                timeStr = new Date(event.timestamp).toLocaleTimeString();
+            } catch(e) {}
+
+            // Ładne formatowanie opcjonalnych danych (np. słowników/obiektów z Pythona)
+            let dataStr = '';
+            if (event.data) {
+                dataStr = typeof event.data === 'object' ? JSON.stringify(event.data) : event.data;
+            }
+
+            item.innerHTML = `
+                <span class="archive-timestamp">[${timeStr}]</span>
+                <div class="archive-type">${event.type}</div>
+                <div class="archive-data">${dataStr}</div>
+            `;
+            list.appendChild(item);
+        }
     }
 }
 
