@@ -936,7 +936,21 @@ updateUI() {
             }
 
             // Jeśli w bazie są już zaliczone zagadki
-            if (event.type === 'PUZZLE_SOLVED' || event.type === 'MODULE_RESTORED') {
+           if (restoredModules.includes('food')) {
+    this.clearModule('foodBadge');
+}
+
+if (restoredModules.includes('living')) {
+    this.clearModule('livingBadge');
+}
+
+if (restoredModules.includes('memory')) {
+    this.clearModule('memoryBadge');
+}
+
+if (restoredModules.includes('sanitation')) {
+    this.clearModule('sanitationBadge');
+} {
                 if (event.data && event.data.includes('food')) this.clearModule('foodBadge');
                 if (event.data && event.data.includes('living')) this.clearModule('livingBadge');
                 if (event.data && event.data.includes('memory')) this.clearModule('memoryBadge');
