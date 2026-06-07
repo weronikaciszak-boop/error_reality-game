@@ -947,7 +947,7 @@ updateUI() {
         const powerStatusEl = document.getElementById('powerStatus');
         
         // 1. OBSŁUGA SAMEGO PRĄDU
-        if (isPowerOn) {
+        if (this.gameState.power) {
             if (powerStatusEl) powerStatusEl.textContent = 'ONLINE';
             this.setGameStage('POWER_ON'); // Task: >>> LOCATE EXTERNAL CODE MODULE
             
