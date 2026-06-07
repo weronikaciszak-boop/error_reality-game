@@ -780,13 +780,26 @@ class ErrorRealityClient {
     }
 
     async triggerAdminReset() {
-        console.log("🛠️ Inicjalizacja natychmiastowego resetu lokalnego...");
+
+    try {
+
+        await fetch(this.apiUrl + '/reset', {
+            method: 'POST'
+        });
+
         localStorage.clear();
         sessionStorage.clear();
-        this.setGameStage('BOOT');
+
         document.getElementById('adminPanel').style.display = 'none';
+
         window.location.reload();
+
+    } catch(error) {
+
+        console.error('Reset failed:', error);
+
     }
+}
 
     setGameStage(stage){
         let task = '';
