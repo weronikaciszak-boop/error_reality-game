@@ -780,26 +780,19 @@ class ErrorRealityClient {
     }
 
     async triggerAdminReset() {
+        try {
+            await fetch(this.apiUrl + '/reset', {
+                method: 'POST'
+            });
 
-    try {
-
-        await fetch(this.apiUrl + '/reset', {
-            method: 'POST'
-        });
-
-        localStorage.clear();
-        sessionStorage.clear();
-
-        document.getElementById('adminPanel').style.display = 'none';
-
-        window.location.reload();
-
-    } catch(error) {
-
-        console.error('Reset failed:', error);
-
+            localStorage.clear();
+            sessionStorage.clear();
+            document.getElementById('adminPanel').style.display = 'none';
+            window.location.reload();
+        } catch(error) {
+            console.error('Reset failed:', error);
+        }
     }
-}
 
     setGameStage(stage){
         let task = '';
@@ -844,19 +837,14 @@ class ErrorRealityClient {
             const response = await fetch(this.apiUrl + '/events');
             const data = await response.json();
             if (data.events) {
-
-    this.events = data.events;
-
-    if(data.game_state){
-        this.gameState = data.game_state;
-    }
-
-    this.updateUI();
-
-    this.events.forEach(event => this.addEventToArchive(event));
-
-    console.log('📥 Loaded ' + data.events.length + ' existing events');
-}
+                this.events = data.events;
+                if(data.game_state){
+                    this.gameState = data.game_state;
+                }
+                this.updateUI();
+                this.events.forEach(event => this.addEventToArchive(event));
+                console.log('📥 Loaded ' + data.events.length + ' existing events');
+            }
         } catch (error) {
             console.error('❌ Error loading events:', error);
         }
@@ -874,15 +862,11 @@ class ErrorRealityClient {
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'STATE_UPDATE') {
-
-    this.events = data.events;
-
-    if(data.game_state){
-        this.gameState = data.game_state;
-    }
-
-    this.updateUI();
-}
+                    this.events = data.events;
+                    if(data.game_state){
+                        this.gameState = data.game_state;
+                    }
+                    this.updateUI();
                 } else if (data.type === 'RESET') {
                     localStorage.clear();
                     sessionStorage.clear();
@@ -919,74 +903,58 @@ class ErrorRealityClient {
         }
     }
 
-    // TUTAJ JEST NOWA, ZINTEGROWANA LOGIKA DETEKCJI PRĄDU Z BACKENDU
-updateUI() {
-        let isPowerOn = false;
-        let isFoodUnlocked = false; // Nowa zmienna na blokadę NFC
-        
-        // Przeglądamy historię zdarzeń z serwera
-        this.events.forEach(event => {
-            if (event.type === 'POWER_ON') {
-                isPowerOn = true;
-            }
-            
-            // Sprawdzamy, czy przyszedł sygnał z czytnika NFC o odblokowaniu jedzenia
-            if (event.type === 'MODULE_UNLOCKED' && event.data && event.data.includes('food')) {
-                isFoodUnlocked = true;
-            }
+    updateUI() {
+        if (!this.gameState) {
+            return;
+        }
 
-            // Jeśli w bazie są już zaliczone zagadki
-           if (restoredModules.includes('food')) {
-    this.clearModule('foodBadge');
-}
+        const isPowerOn = this.gameState.power;
+        const unlockedModules = this.gameState.unlocked_modules || [];
+        const restoredModules = this.gameState.restored_modules || [];
 
-if (restoredModules.includes('living')) {
-    this.clearModule('livingBadge');
-}
-
-if (restoredModules.includes('memory')) {
-    this.clearModule('memoryBadge');
-}
-
-if (restoredModules.includes('sanitation')) {
-    this.clearModule('sanitationBadge');
-} {
-                if (event.data && event.data.includes('food')) this.clearModule('foodBadge');
-                if (event.data && event.data.includes('living')) this.clearModule('livingBadge');
-                if (event.data && event.data.includes('memory')) this.clearModule('memoryBadge');
-                if (event.data && event.data.includes('sanitation')) this.clearModule('sanitationBadge');
-            }
-        });
+        if (restoredModules.includes('food')) this.clearModule('foodBadge');
+        if (restoredModules.includes('living')) this.clearModule('livingBadge');
+        if (restoredModules.includes('memory')) this.clearModule('memoryBadge');
+        if (restoredModules.includes('sanitation')) this.clearModule('sanitationBadge');
 
         const powerStatusEl = document.getElementById('powerStatus');
         
-        // 1. OBSŁUGA SAMEGO PRĄDU
-        if (this.gameState.power) {
+        if (isPowerOn) {
             if (powerStatusEl) powerStatusEl.textContent = 'ONLINE';
-            this.setGameStage('POWER_ON'); // Task: >>> LOCATE EXTERNAL CODE MODULE
+            this.setGameStage('POWER_ON'); 
             
-            // 2. OBSŁUGA NFC (Dopiero gdy prąd JEST i karta NFC została przyłożona)
-          if (unlockedModules.includes('food')) {
+            if (unlockedModules.includes('food')) {
                 const foodBadge = document.getElementById('foodBadge');
                 if (foodBadge && !foodBadge.classList.contains('restored')) {
                     this.unlockModule('foodBadge');
                 }
             }
+            if (unlockedModules.includes('living')) {
+                const livingBadge = document.getElementById('livingBadge');
+                if (livingBadge && !livingBadge.classList.contains('restored')) {
+                    this.unlockModule('livingBadge');
+                }
+            }
+            if (unlockedModules.includes('memory')) {
+                const memoryBadge = document.getElementById('memoryBadge');
+                if (memoryBadge && !memoryBadge.classList.contains('restored')) {
+                    this.unlockModule('memoryBadge');
+                }
+            }
+            if (unlockedModules.includes('sanitation')) {
+                const sanitationBadge = document.getElementById('sanitationBadge');
+                if (sanitationBadge && !sanitationBadge.classList.contains('restored')) {
+                    this.unlockModule('sanitationBadge');
+                }
+            }
+
         } else {
-            // Brak prądu na starcie
             if (powerStatusEl) powerStatusEl.textContent = 'OFF';
-            this.setGameStage('BOOT'); // Task: >>> LOCATE EXTERNAL POWER SOURCE
+            this.setGameStage('BOOT'); 
         }
 
-        // Pasek postępu
-        const totalModules = 4;
-        let restoredCount = 0;
-        ['foodBadge', 'livingBadge', 'memoryBadge', 'sanitationBadge'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el && el.classList.contains('restored')) restoredCount++;
-        });
-
-        const percent = Math.round((restoredCount / totalModules) * 100);
+        const percent = this.gameState.progress || 0;
+        
         const fill = document.getElementById('progressFill');
         const txt = document.getElementById('progressPercent');
         if (fill && txt) {
