@@ -852,10 +852,11 @@ class ErrorRealityClient {
     }
 
     this.updateUI();
+
+    this.events.forEach(event => this.addEventToArchive(event));
+
+    console.log('📥 Loaded ' + data.events.length + ' existing events');
 }
-                this.events.forEach(event => this.addEventToArchive(event));
-                console.log('📥 Loaded ' + data.events.length + ' existing events');
-            }
         } catch (error) {
             console.error('❌ Error loading events:', error);
         }
