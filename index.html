@@ -844,8 +844,15 @@ class ErrorRealityClient {
             const response = await fetch(this.apiUrl + '/events');
             const data = await response.json();
             if (data.events) {
-                this.events = data.events;
-                this.updateUI();
+
+    this.events = data.events;
+
+    if(data.game_state){
+        this.gameState = data.game_state;
+    }
+
+    this.updateUI();
+}
                 this.events.forEach(event => this.addEventToArchive(event));
                 console.log('📥 Loaded ' + data.events.length + ' existing events');
             }
