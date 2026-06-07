@@ -874,8 +874,15 @@ class ErrorRealityClient {
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'STATE_UPDATE') {
-                    this.events = data.events;
-                    this.updateUI();
+
+    this.events = data.events;
+
+    if(data.game_state){
+        this.gameState = data.game_state;
+    }
+
+    this.updateUI();
+}
                 } else if (data.type === 'RESET') {
                     localStorage.clear();
                     sessionStorage.clear();
