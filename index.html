@@ -952,7 +952,7 @@ updateUI() {
             this.setGameStage('POWER_ON'); // Task: >>> LOCATE EXTERNAL CODE MODULE
             
             // 2. OBSŁUGA NFC (Dopiero gdy prąd JEST i karta NFC została przyłożona)
-            if (isFoodUnlocked) {
+          if (unlockedModules.includes('food')) {
                 const foodBadge = document.getElementById('foodBadge');
                 if (foodBadge && !foodBadge.classList.contains('restored')) {
                     this.unlockModule('foodBadge');
