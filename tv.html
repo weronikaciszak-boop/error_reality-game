@@ -10,7 +10,8 @@ body{
     margin:0;
     background:black;
     color:#ffd400;
-    font-family:'Share Tech Mono', monospace;
+    /* Zmieniamy czcionkę globalnie na Major Mono Display */
+    font-family: 'Major Mono Display', monospace;
     overflow:hidden;
 }
 body::before{
@@ -39,55 +40,62 @@ body::before{
     justify-content:center;
     align-items:center;
     width:100%;
-    height:100vh;
-
 }
 
 #errorTitle{
+    font-family: 'Major Mono Display', monospace;
     font-size:min(220px,18vw);
     font-weight:300;
     letter-spacing:18px;
-    text-shadow:
-        0 0 2px #ffd400,
-        0 0 3px #ffd400;
-     animation:flicker 3s infinite;
-     position:relative;
+    /* Zostawiłem tylko mikro-cień, żeby litery były wyraźne na czarnym tle, bez wielkiej łuny */
+    text-shadow: 0 0 2px #ffd400; 
+    animation:flicker 3s infinite;
+    
+    /* FIX NA CENTROWANIE TYTUŁU: */
+    position:relative;
+    display: block;
+    text-align: center;
+    width: 100%;
 }
 
-    #errorTitle::after{
+#errorTitle::after{
     content:'ERROR';
-
-    position:absolute;
-    left:3px;
-    top:0;
-
+    font-family: 'Major Mono Display', monospace;
     color:#ff4fd8;
-
     opacity:0.2;
-
     animation:glitch 2s infinite;
+
+    /* FIX NA CENTROWANIE GLITCHA: */
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    margin: 0 auto;
+    text-align: center;
 }
 
 
-    #message{
+#message{
     color:#ff4fd8;
     text-transform:uppercase;
     letter-spacing:4px;
-font-size:36px;
+    font-size:36px;
     margin-top:30px;
-        
+    text-align: center; /* Wyśrodkowanie podtytułu */
 }
 
 #systemMessage{
     margin-top:20px;
     font-size:28px;
     min-height:40px;
+    text-align: center; /* Wyśrodkowanie komunikatów */
 }
     
 #objective{
     margin-top:60px;
     font-size:26px;
     color:#ffd400;
+    text-align: center; /* Wyśrodkowanie zadań */
 }
 
 .progress-wrapper{
@@ -122,9 +130,10 @@ font-size:36px;
 #percent{
     margin-top:15px;
     font-size:32px;
+    text-align: center;
 }
 
- .system-message{
+.system-message{
     color:#ffd400;
 }
 
@@ -132,7 +141,7 @@ font-size:36px;
     color:#ff4fd8;
 }
 
- .scanline{
+.scanline{
     position:fixed;
     width:100%;
     height:4px;
@@ -141,12 +150,12 @@ font-size:36px;
     animation:scan 6s linear infinite;
 }
 
-    @keyframes flicker{
+@keyframes flicker{
     0%{opacity:1;}
     50%{opacity:0.8;}
     100%{opacity:1;}
 }
-    @keyframes scan{
+@keyframes scan{
     from{
         top:-10px;
     }
@@ -156,28 +165,12 @@ font-size:36px;
 }
 
 @keyframes glitch{
-
-    0%{
-        transform:translateX(0);
-    }
-
-    5%{
-        transform:translateX(-3px);
-    }
-
-    10%{
-        transform:translateX(3px);
-    }
-
-    15%{
-        transform:translateX(0);
-    }
-
-    100%{
-        transform:translateX(0);
-    }
+    0%{  transform:translateX(0);  }
+    5%{  transform:translateX(-4px); } /* Lekko zwiększyłem, żeby efekt na tej czcionce był bardziej widoczny */
+    10%{ transform:translateX(4px);  }
+    15%{ transform:translateX(0);  }
+    100%{transform:translateX(0);  }
 }
-    
 </style>
 </head>
 
