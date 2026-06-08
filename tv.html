@@ -194,9 +194,6 @@ REALITY RECOVERY PROTOCOL ACTIVE
 <div id="systemMessage" class="system-message">
 INITIALIZING...
 </div>
-<div id="objective">
-LOCATE EXTERNAL POWER SOURCE
-</div>
 
 </div>
 
@@ -252,24 +249,7 @@ ws.onmessage = (event)=>{
     document.getElementById('fill').style.width =
         game.progress + '%';
 
-    if(!game.power){
 
-        document.getElementById('objective').innerText =
-        'LOCATE EXTERNAL POWER SOURCE';
-
-    }
-    else if(game.restored_modules.length < 4){
-
-        document.getElementById('objective').innerText =
-        'RESTORE CORRUPTED MODULES';
-
-    }
-    else{
-
-        document.getElementById('objective').innerText =
-        'CORE REPLACEMENT REQUIRED';
-
-    }
 };
     
 </script>
