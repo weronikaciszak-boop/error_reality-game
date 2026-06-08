@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Error Reality TV</title>
+
+<style>
+
+body{
+    margin:0;
+    background:black;
+    color:#ff4fd8;
+    font-family:monospace;
+    overflow:hidden;
+}
+
+.screen{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+#errorTitle{
+    font-size:120px;
+    font-weight:bold;
+    letter-spacing:10px;
+}
+
+#message{
+    font-size:36px;
+    margin-top:30px;
+}
+
+#objective{
+    margin-top:60px;
+    font-size:26px;
+    color:#ffd400;
+}
+
+.progress-wrapper{
+    width:60%;
+    height:24px;
+    border:2px solid #ffd400;
+    margin-top:40px;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:#ffd400;
+}
+
+#percent{
+    margin-top:15px;
+    font-size:32px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="screen">
+
+<div id="errorTitle">ERROR</div>
+
+<div id="message">
+REALITY RECOVERY PROTOCOL ACTIVE
+</div>
+
+<div class="progress-wrapper">
+<div class="progress-fill" id="fill"></div>
+</div>
+
+<div id="percent">0%</div>
+
+<div id="objective">
+LOCATE EXTERNAL POWER SOURCE
+</div>
+
+</div>
+
+<script>
+
+const ws = new WebSocket(
+'wss://error-reality-server-1.onrender.com/ws'
+);
+
+ws.onmessage = (event)=>{
+
+    const data = JSON.parse(event.data);
+
+    if(data.type !== 'STATE_UPDATE')
+        return;
+
+    const game = data.game_state;
+
+    if(!game)
+        return;
+
+    document.getElementById('percent').innerText =
+        game.progress + '%';
+
+    document.getElementById('fill').style.width =
+        game.progress + '%';
+
+    if(!game.power){
+
+        document.getElementById('objective').innerText =
+        'LOCATE EXTERNAL POWER SOURCE';
+
+    }
+
+    else if(game.restored_modules.length < 4){
+
+        document.getElementById('objective').innerText =
+        'RESTORE CORRUPTED MODULES';
+
+    }
+
+    else{
+
+        document.getElementById('objective').innerText =
+        'CORE REPLACEMENT REQUIRED';
+
+    }
+};
+
+</script>
+
+</body>
+</html>
