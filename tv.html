@@ -6,13 +6,30 @@
 <title>Error Reality TV</title>
 
 <style>
-
 body{
     margin:0;
     background:black;
     color:#ffd400;
     font-family:monospace;
     overflow:hidden;
+}
+body::before{
+    content:'';
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+
+    background:
+    repeating-linear-gradient(
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.03) 3px
+    );
+
+    opacity:0.2;
 }
 
 .screen{
@@ -21,19 +38,52 @@ body{
     flex-direction:column;
     justify-content:center;
     align-items:center;
+    width:100%;
+    height:100vh;
+
 }
 
 #errorTitle{
-    font-size:120px;
-    font-weight:bold;
-    letter-spacing:10px;
+    font-size:min(220px,18vw);
+    font-weight:900;
+    letter-spacing:18px;
+    text-shadow:
+        0 0 10px #ffd400,
+        0 0 30px #ffd400;
+     animation:flicker 3s infinite;
+     position:relative;
 }
 
-#message{
-    font-size:36px;
+    #errorTitle::after{
+    content:'ERROR';
+
+    position:absolute;
+    left:3px;
+    top:0;
+
+    color:#ff4fd8;
+
+    opacity:0.2;
+
+    animation:glitch 2s infinite;
+}
+
+
+    #message{
+    color:#ff4fd8;
+    text-transform:uppercase;
+    letter-spacing:4px;
+font-size:36px;
     margin-top:30px;
+        
 }
 
+#systemMessage{
+    margin-top:20px;
+    font-size:28px;
+    min-height:40px;
+}
+    
 #objective{
     margin-top:60px;
     font-size:26px;
@@ -52,8 +102,21 @@ body{
 .progress-fill{
     height:100%;
     width:0%;
-    background:#ffd400;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ffd400,
+        #fff57a,
+        #ffd400
+    );
+
+    box-shadow:
+        0 0 15px #ffd400;
+
     border-radius:20px;
+
+    transition:width 0.8s ease;
 }
 
 #percent{
@@ -69,6 +132,52 @@ body{
     color:#ff4fd8;
 }
 
+ .scanline{
+    position:fixed;
+    width:100%;
+    height:4px;
+    background:rgba(255,212,0,0.25);
+    top:-10px;
+    animation:scan 6s linear infinite;
+}
+
+    @keyframes flicker{
+    0%{opacity:1;}
+    50%{opacity:0.8;}
+    100%{opacity:1;}
+}
+    @keyframes scan{
+    from{
+        top:-10px;
+    }
+    to{
+        top:100%;
+    }
+}
+
+@keyframes glitch{
+
+    0%{
+        transform:translateX(0);
+    }
+
+    5%{
+        transform:translateX(-3px);
+    }
+
+    10%{
+        transform:translateX(3px);
+    }
+
+    15%{
+        transform:translateX(0);
+    }
+
+    100%{
+        transform:translateX(0);
+    }
+}
+    
 </style>
 </head>
 
@@ -85,9 +194,13 @@ REALITY RECOVERY PROTOCOL ACTIVE
 <div class="progress-wrapper">
 <div class="progress-fill" id="fill"></div>
 </div>
-
+    
+<div class="scanline"></div>
+    
 <div id="percent">0%</div>
-
+<div id="systemMessage" class="system-message">
+INITIALIZING...
+</div>
 <div id="objective">
 LOCATE EXTERNAL POWER SOURCE
 </div>
@@ -112,6 +225,34 @@ ws.onmessage = (event)=>{
     if(!game)
         return;
 
+    const msg =
+    document.getElementById('systemMessage');
+
+    if(!game.power){
+
+        msg.innerText =
+        'AWAITING EXTERNAL POWER SOURCE';
+
+    }
+    else if(game.restored_modules.length === 0){
+
+        msg.innerText =
+        'FIRST MODULE DETECTED';
+
+    }
+    else if(game.restored_modules.length < 4){
+
+        msg.innerText =
+        'RECOVERING LOST DATA';
+
+    }
+    else{
+
+        msg.innerText =
+        'CORE STORAGE REQUIRED';
+
+    }
+
     document.getElementById('percent').innerText =
         game.progress + '%';
 
@@ -124,14 +265,12 @@ ws.onmessage = (event)=>{
         'LOCATE EXTERNAL POWER SOURCE';
 
     }
-
     else if(game.restored_modules.length < 4){
 
         document.getElementById('objective').innerText =
         'RESTORE CORRUPTED MODULES';
 
     }
-
     else{
 
         document.getElementById('objective').innerText =
@@ -139,7 +278,7 @@ ws.onmessage = (event)=>{
 
     }
 };
-
+    
 </script>
 
 </body>
