@@ -240,6 +240,8 @@ body::before{
     }
 
 }
+
+
     
 @keyframes glitch{
     0%{
@@ -310,7 +312,9 @@ const ws = new WebSocket(
 'wss://error-reality-server-1.onrender.com/ws'
 );
 
-    function showAnomaly(text){
+let badFloppyShown = false;
+
+function showAnomaly(text){
 
     const overlay =
     document.getElementById('anomalyOverlay');
@@ -327,55 +331,114 @@ const ws = new WebSocket(
     },4000);
 }
 
-ws.onmessage = (event)=>{
-
-    const data = JSON.parse(event.data);
-
-    if(data.type !== 'STATE_UPDATE')
-        return;
-
-    const game = data.game_state;
-
-    if(!game)
-        return;
+function handleGameState(game){
 
     const msg =
     document.getElementById('systemMessage');
 
+    document.getElementById('percent').innerText =
+    game.progress + '%';
+
+    document.getElementById('fill').style.width =
+    game.progress + '%';
+
     if(!game.power){
 
         msg.innerText =
-        'AWAITING EXTERNAL POWER SOURCE';
+        'LOCATE EXTERNAL POWER SOURCE';
 
+        return;
     }
-    else if(game.restored_modules.length === 0){
+
+    if(
+        game.restored_modules.length === 0
+    ){
 
         msg.innerText =
-        'FIRST MODULE DETECTED';
+        'LOCATE EXTERNAL CODE MODULES';
 
     }
-    else if(game.restored_modules.length < 4){
+
+    else if(
+        game.restored_modules.length < 4
+    ){
 
         msg.innerText =
-        'RECOVERING LOST DATA';
+        'CLEAR UNLOCKED MODULE';
 
     }
+
     else{
 
         msg.innerText =
-        'CORE STORAGE REQUIRED';
+        'REBOOTING REALITY...';
 
     }
 
-    document.getElementById('percent').innerText =
-        game.progress + '%';
+    if(
+        game.bad_floppy &&
+        !badFloppyShown
+    ){
 
-    document.getElementById('fill').style.width =
-        game.progress + '%';
+        badFloppyShown = true;
 
+        showAnomaly(
+            'CORRUPTED STORAGE DETECTED'
+        );
+
+        msg.innerText =
+        'SUBSTITUTE CORE REQUIRED';
+    }
+
+    if(
+        game.duck_bad
+    ){
+
+        showAnomaly(
+            'INVALID CORE DETECTED'
+        );
+
+        msg.innerText =
+        'CORE VALIDATION FAILED';
+    }
+
+    if(
+        game.duck_good
+    ){
+
+        msg.innerText =
+        'REBOOTING REALITY...';
+    }
+}
+
+window.debugState = (state)=>{
+
+    handleGameState(state);
 
 };
-    
+
+ws.onmessage = (event)=>{
+
+    const data =
+    JSON.parse(event.data);
+
+    if(
+        data.type !== 'STATE_UPDATE'
+    ){
+        return;
+    }
+
+    if(
+        !data.game_state
+    ){
+        return;
+    }
+
+    handleGameState(
+        data.game_state
+    );
+};
+
 </script>
 
 </body>
