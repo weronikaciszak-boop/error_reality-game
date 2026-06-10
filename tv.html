@@ -73,7 +73,39 @@ body::before{
     margin: 0 auto;
     text-align: center;
 }
+#debugPanel{
 
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+
+    z-index:99999;
+}
+
+#debugPanel button{
+
+    background:black;
+    color:#ffd400;
+
+    border:1px solid #ffd400;
+
+    padding:10px 14px;
+
+    font-family:'Share Tech Mono', monospace;
+
+    cursor:pointer;
+}
+
+#debugPanel button:hover{
+
+    background:#ffd400;
+    color:black;
+}
 
 #message{
     color:#ff4fd8;
@@ -468,7 +500,9 @@ ws.onmessage = (event)=>{
 
 </script>
 
-    <button onclick="testBadFloppy()">
+<div id="debugPanel">
+
+<button onclick="testBadFloppy()">
 BAD FLOPPY
 </button>
 
@@ -488,4 +522,3 @@ RESET
 
 </body>
 </html>
-
