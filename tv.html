@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 
+
+const HA_URL =http://192.168.1.137:8123/profile/security
+const HA_TOKEN =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhMTU4OWM0ODFiY2Y0NmE0YTIyNmJjYmZhNDBhMzYyOSIsImlhdCI6MTc4MTEyMzY2MywiZXhwIjoyMDk2NDgzNjYzfQ.VQcvW23zRZ4OQSJbelXmQyDJEhaqCmkUd2DDVfoQcMk
+    
 <title>Error Reality TV</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -484,6 +488,15 @@ function handleGameState(game){
 
         return;
     }
+    if(
+    game.power &&
+    !startSceneTriggered
+){
+
+    startSceneTriggered = true;
+
+    runScene('error_start');
+}
 
     if(
         game.restored_modules.length === 0
