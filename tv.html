@@ -451,13 +451,11 @@ function handleGameState(game){
         'CORE VALIDATION FAILED';
     }
 
-    if(
-        game.duck_good
-    ){
+    if(game.duck_good){
 
-        msg.innerText =
-        'REBOOTING REALITY...';
-    }
+    startFinalSequence();
+
+}
 }
 
 window.debugState = (state)=>{
