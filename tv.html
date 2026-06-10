@@ -331,6 +331,48 @@ function showAnomaly(text){
     },4000);
 }
 
+let rebootSequenceStarted = false;
+
+async function startRebootSequence(){
+
+    if(rebootSequenceStarted)
+        return;
+
+    rebootSequenceStarted = true;
+
+    const msg =
+    document.getElementById('systemMessage');
+
+    msg.innerText =
+    'REBOOTING REALITY...';
+
+    await sleep(3000);
+
+    msg.innerText =
+    'REBOOT FAILED';
+
+    await sleep(2500);
+
+    msg.innerText =
+    'DATA MISSING';
+
+    await sleep(2500);
+
+    msg.innerText =
+    'SPARE CORE STORAGE OFFLINE';
+
+    await sleep(2500);
+
+    msg.innerText =
+    'SUBSTITUTE CORE REQUIRED';
+}
+
+function sleep(ms){
+    return new Promise(resolve =>
+        setTimeout(resolve, ms)
+    );
+}
+    
 function handleGameState(game){
 
     const msg =
@@ -375,20 +417,7 @@ function handleGameState(game){
 
     }
 
-    if(
-        game.bad_floppy &&
-        !badFloppyShown
-    ){
-
-        badFloppyShown = true;
-
-        showAnomaly(
-            'CORRUPTED STORAGE DETECTED'
-        );
-
-        msg.innerText =
-        'SUBSTITUTE CORE REQUIRED';
-    }
+    
 
     if(
         game.duck_bad
