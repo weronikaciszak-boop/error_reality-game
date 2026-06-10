@@ -362,7 +362,42 @@ function showAnomaly(text){
     },4000);
 }
 
+let rebootSequenceStarted = false;
 
+function sleep(ms){
+    return new Promise(resolve =>
+        setTimeout(resolve, ms)
+    );
+}
+
+async function startRebootSequence(){
+
+    if(rebootSequenceStarted)
+        return;
+
+    rebootSequenceStarted = true;
+
+    const msg =
+    document.getElementById('systemMessage');
+
+    msg.innerText =
+    'REBOOTING REALITY...';
+
+    await sleep(3000);
+
+    msg.innerText =
+    'REBOOT FAILED';
+
+    await sleep(3000);
+
+    msg.innerText =
+    'DATA MISSING';
+
+    await sleep(3000);
+
+    msg.innerText =
+    'LOCATE SUBSTITUTE CORE';
+}
     
 function handleGameState(game){
 
