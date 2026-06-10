@@ -345,6 +345,16 @@ SPRZATANIE
 
 <script>
 
+ async function runScene(sceneName){
+
+    await fetch(
+        `https://error-reality-server-1.onrender.com/scene/${sceneName}`,
+        {
+            method:'POST'
+        }
+    );
+} 
+
 const ws = new WebSocket(
 'wss://error-reality-server-1.onrender.com/ws'
 );
