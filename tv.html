@@ -405,6 +405,44 @@ window.debugState = (state)=>{
     handleGameState(state);
 
 };
+    function testBadFloppy(){
+
+    showAnomaly(
+        'DATA CORRUPTED'
+    );
+
+}
+
+function testBadDuck(){
+
+    showAnomaly(
+        'INVALID CORE DETECTED'
+    );
+
+    document.getElementById(
+        'systemMessage'
+    ).innerText =
+    'CORE VALIDATION FAILED';
+
+}
+
+function testGoodDuck(){
+
+    document.getElementById(
+        'systemMessage'
+    ).innerText =
+    'REBOOTING REALITY...';
+
+}
+
+function resetDebug(){
+
+    document.getElementById(
+        'systemMessage'
+    ).innerText =
+    'INITIALIZING...';
+
+}
 
 ws.onmessage = (event)=>{
 
@@ -430,5 +468,24 @@ ws.onmessage = (event)=>{
 
 </script>
 
+    <button onclick="testBadFloppy()">
+BAD FLOPPY
+</button>
+
+<button onclick="testBadDuck()">
+BAD DUCK
+</button>
+
+<button onclick="testGoodDuck()">
+GOOD DUCK
+</button>
+
+<button onclick="resetDebug()">
+RESET
+</button>
+
+</div>
+
 </body>
 </html>
+
