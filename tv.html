@@ -516,7 +516,14 @@ function handleGameState(game){
 
     }
 
-    
+    if(
+    game.restored_modules.length >= 4 &&
+    !rebootSequenceStarted
+){
+
+    startRebootSequence();
+
+}
     
 
     if(
