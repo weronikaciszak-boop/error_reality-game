@@ -2,9 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
-
-  
 <title>Error Reality TV</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -12,7 +9,6 @@ body{
     margin:0;
     background:black;
     color:#ffd400;
-    /* Zmieniamy czcionkę globalnie na Major Mono Display */
     font-family: 'Share Tech Mono', monospace;
     overflow:hidden;
 }
@@ -24,14 +20,12 @@ body::before{
     width:100%;
     height:100%;
     pointer-events:none;
-
     background:
     repeating-linear-gradient(
         transparent,
         transparent 2px,
         rgba(255,255,255,0.03) 3px
     );
-
     opacity:0.2;
 }
 
@@ -49,11 +43,8 @@ body::before{
     font-size:min(220px,18vw);
     font-weight:100;
     letter-spacing:18px;
-    /* Zostawiłem tylko mikro-cień, żeby litery były wyraźne na czarnym tle, bez wielkiej łuny */
     text-shadow: 0 0 2px #ffd400; 
     animation:flicker 3s infinite;
-    
-    /* FIX NA CENTROWANIE TYTUŁU: */
     position:relative;
     display: block;
     text-align: center;
@@ -66,8 +57,6 @@ body::before{
     color:#ff4fd8;
     opacity:0.2;
     animation:glitch 2s infinite;
-
-    /* FIX NA CENTROWANIE GLITCHA: */
     position:absolute;
     top:0;
     left:0;
@@ -78,32 +67,23 @@ body::before{
 #debugPanel{
     min-width:180px;
     position:fixed;
-
     right:40px;
     bottom:40px;
-
     display:flex;
     flex-direction:column;
     gap:10px;
-
     z-index:99999;
 }
 #debugPanel button{
-
     background:black;
     color:#ffd400;
-
     border:1px solid #ffd400;
-
     padding:10px 14px;
-
     font-family:'Share Tech Mono', monospace;
-
     cursor:pointer;
 }
 
 #debugPanel button:hover{
-
     background:#ffd400;
     color:black;
 }
@@ -114,20 +94,16 @@ body::before{
     letter-spacing:4px;
     font-size:36px;
     margin-top:30px;
-    text-align: center; /* Wyśrodkowanie podtytułu */
+    text-align: center;
 }
 #errorTitle::before{
     content:'ERROR';
-
     position:absolute;
     top:0;
     left:0;
     right:0;
-
     color:#00ffff;
-
     opacity:0.15;
-
     animation:glitch2 2.4s infinite;
 }
     
@@ -135,14 +111,14 @@ body::before{
     margin-top:20px;
     font-size:28px;
     min-height:40px;
-    text-align: center; /* Wyśrodkowanie komunikatów */
+    text-align: center;
 }
     
 #objective{
     margin-top:60px;
     font-size:26px;
     color:#ffd400;
-    text-align: center; /* Wyśrodkowanie zadań */
+    text-align: center;
 }
 
 .progress-wrapper{
@@ -157,7 +133,6 @@ body::before{
 .progress-fill{
     height:100%;
     width:0%;
-
     background:
     linear-gradient(
         90deg,
@@ -165,12 +140,8 @@ body::before{
         #fff57a,
         #ffd400
     );
-
-    box-shadow:
-        0 0 15px #ffd400;
-
+    box-shadow:0 0 15px #ffd400;
     border-radius:20px;
-
     transition:width 0.8s ease;
 }
 
@@ -197,30 +168,20 @@ body::before{
     animation:scan 6s linear infinite;
 }
 
-    #anomalyOverlay{
+#anomalyOverlay{
     position:fixed;
     top:50%;
     left:50%;
-
     transform:translate(-50%,-50%);
-
     width:700px;
     max-width:80vw;
-
     border:3px solid #ff4fd8;
-
     background:rgba(0,0,0,0.95);
-
     padding:40px;
-
     text-align:center;
-
     color:#ff4fd8;
-
     display:none;
-
     z-index:9999;
-
     box-shadow:
         0 0 20px #ff4fd8,
         0 0 60px rgba(255,79,216,0.3);
@@ -242,64 +203,25 @@ body::before{
     100%{opacity:1;}
 }
 @keyframes scan{
-    from{
-        top:-10px;
-    }
-    to{
-        top:100%;
-    }
+    from{top:-10px;}
+    to{top:100%;}
 }
 
 @keyframes glitch2{
-
-    0%{
-        transform:translateX(0);
-    }
-
-    8%{
-        transform:translateX(8px);
-    }
-
-    16%{
-        transform:translateX(-8px);
-    }
-
-    24%{
-        transform:translateX(0);
-    }
-
-    100%{
-        transform:translateX(0);
-    }
-
+    0%{transform:translateX(0);}
+    8%{transform:translateX(8px);}
+    16%{transform:translateX(-8px);}
+    24%{transform:translateX(0);}
+    100%{transform:translateX(0);}
 }
 
-
-    
 @keyframes glitch{
-    0%{
-        transform:translateX(0);
-    }
-
-    5%{
-        transform:translateX(-12px);
-    }
-
-    10%{
-        transform:translateX(12px);
-    }
-
-    15%{
-        transform:translateX(-6px);
-    }
-
-    20%{
-        transform:translateX(0);
-    }
-
-    100%{
-        transform:translateX(0);
-    }
+    0%{transform:translateX(0);}
+    5%{transform:translateX(-12px);}
+    10%{transform:translateX(12px);}
+    15%{transform:translateX(-6px);}
+    20%{transform:translateX(0);}
+    100%{transform:translateX(0);}
 }
 </style>
 </head>
@@ -307,325 +229,155 @@ body::before{
 <body>
 
 <div class="screen">
-
-<div id="errorTitle">ERROR</div>
-
-<div id="message">
-REALITY RECOVERY PROTOCOL ACTIVE
-</div>
-
-<div class="progress-wrapper">
-<div class="progress-fill" id="fill"></div>
-</div>
-    
-<div class="scanline"></div>
-    
-<div id="percent">0%</div>
-<div id="systemMessage" class="system-message">
-INITIALIZING...
-</div>
+    <div id="errorTitle">ERROR</div>
+    <div id="message">REALITY RECOVERY PROTOCOL ACTIVE</div>
+    <div class="progress-wrapper">
+        <div class="progress-fill" id="fill"></div>
+    </div>
+    <div class="scanline"></div>
+    <div id="percent">0%</div>
+    <div id="systemMessage" class="system-message">INITIALIZING...</div>
 
     <div id="anomalyOverlay">
-
-    <div id="anomalyTitle">
-        ERROR
+        <div id="anomalyTitle">ERROR</div>
+        <div id="anomalyText">CORRUPTED STORAGE DETECTED</div>
     </div>
-
-    <div id="anomalyText">
-        CORRUPTED STORAGE DETECTED
-    </div>
-
-</div>
-
-function cleanupScene(){
-
-    runScene(
-        'error_sprzatanie'
-    );
-}
-
 </div>
 
 <script>
+// --- NASZA DODANA FUNKCJA JAVASCRIPT ---
+function cleanupScene(){
+    runScene('error_sprzatanie');
+}
 
- async function runScene(sceneName){
-
+async function runScene(sceneName){
     await fetch(
         `https://error-reality-server-1.onrender.com/scene/${sceneName}`,
-        {
-            method:'POST'
-        }
+        { method:'POST' }
     );
 } 
 
-const ws = new WebSocket(
-'wss://error-reality-server-1.onrender.com/ws'
-);
-
-
+const ws = new WebSocket('wss://error-reality-server-1.onrender.com/ws');
 
 function showAnomaly(text){
-
-    const overlay =
-    document.getElementById('anomalyOverlay');
-
-    const label =
-    document.getElementById('anomalyText');
-
+    const overlay = document.getElementById('anomalyOverlay');
+    const label = document.getElementById('anomalyText');
     label.innerText = text;
-
     overlay.style.display = 'block';
-
     setTimeout(()=>{
         overlay.style.display = 'none';
     },4000);
 }
 
 let rebootSequenceStarted = false;
-
 function sleep(ms){
-    return new Promise(resolve =>
-        setTimeout(resolve, ms)
-    );
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-   
 
 let startSceneTriggered = false;
-    
-    async function startRebootSequence(){
-
-    if(rebootSequenceStarted)
-        return;
-
+async function startRebootSequence(){
+    if(rebootSequenceStarted) return;
     rebootSequenceStarted = true;
-
-    const msg =
-    document.getElementById('systemMessage');
-
-    msg.innerText =
-    'REBOOTING REALITY...';
-
+    const msg = document.getElementById('systemMessage');
+    msg.innerText = 'REBOOTING REALITY...';
     await sleep(3000);
-
-    msg.innerText =
-    'REBOOT FAILED';
-
+    msg.innerText = 'REBOOT FAILED';
     await sleep(3000);
-
-    msg.innerText =
-    'DATA MISSING';
-
+    msg.innerText = 'DATA MISSING';
     await sleep(3000);
-
-    msg.innerText =
-    'LOCATE SUBSTITUTE CORE';
+    msg.innerText = 'LOCATE SUBSTITUTE CORE';
 }
 
-    let finalSequenceStarted = false;
-
+let finalSequenceStarted = false;
 async function startFinalSequence(){
-
-    if(finalSequenceStarted)
-        return;
-
+    if(finalSequenceStarted) return;
     finalSequenceStarted = true;
-
-    const msg =
-    document.getElementById('systemMessage');
-
-    msg.innerText =
-    'SUBSTITUTE CORE ACCEPTED';
-
+    const msg = document.getElementById('systemMessage');
+    msg.innerText = 'SUBSTITUTE CORE ACCEPTED';
     await sleep(3000);
-
-    msg.innerText =
-    'PERSONNEL PLEASE LEAVE REALITY AREA';
-
+    msg.innerText = 'PERSONNEL PLEASE LEAVE REALITY AREA';
     await sleep(3000);
-
-    msg.innerText =
-'REALITY REBOOT COMMENCING';
-await runScene('error_end');
-    /*
-    tutaj później:
-    Home Assistant
-    balkon
-    światła
-    dym
-    */
+    msg.innerText = 'REALITY REBOOT COMMENCING';
+    await runScene('error_end');
 }
     
 function handleGameState(game){
-
-    const msg =
-    document.getElementById('systemMessage');
-
-    document.getElementById('percent').innerText =
-    game.progress + '%';
-
-    document.getElementById('fill').style.width =
-    game.progress + '%';
+    const msg = document.getElementById('systemMessage');
+    document.getElementById('percent').innerText = game.progress + '%';
+    document.getElementById('fill').style.width = game.progress + '%';
 
     if(!game.power){
-
-        msg.innerText =
-        'LOCATE EXTERNAL POWER SOURCE';
-
+        msg.innerText = 'LOCATE EXTERNAL POWER SOURCE';
         return;
     }
-   if(
-    game.power &&
-    !startSceneTriggered
-){
-
-    startSceneTriggered = true;
-    runScene('error_start');
-}
-   
-
-    if(
-        game.restored_modules.length === 0
-    ){
-
-        msg.innerText =
-        'LOCATE EXTERNAL CODE MODULES';
-
+    if(game.power && !startSceneTriggered){
+        startSceneTriggered = true;
+        runScene('error_start');
     }
 
-    else if(
-        game.restored_modules.length < 4
-    ){
-
-        msg.innerText =
-        'CLEAR UNLOCKED MODULE';
-
+    if(game.restored_modules.length === 0){
+        msg.innerText = 'LOCATE EXTERNAL CODE MODULES';
+    } else if(game.restored_modules.length < 4){
+        msg.innerText = 'CLEAR UNLOCKED MODULE';
     }
 
-    if(
-    game.restored_modules.length >= 4 &&
-    !rebootSequenceStarted
-){
-
-    startRebootSequence();
-
-}
+    if(game.restored_modules.length >= 4 && !rebootSequenceStarted){
+        startRebootSequence();
+    }
     
-
-    if(
-        game.duck_bad
-    ){
-
-        showAnomaly(
-            'INVALID CORE DETECTED'
-        );
-
-        msg.innerText =
-        'CORE VALIDATION FAILED';
+    if(game.duck_bad){
+        showAnomaly('INVALID CORE DETECTED');
+        msg.innerText = 'CORE VALIDATION FAILED';
     }
-
     if(game.duck_good){
-
-    startFinalSequence();
-
-}
+        startFinalSequence();
+    }
 }
 
 window.debugState = (state)=>{
-
     handleGameState(state);
-
 };
-    function testBadFloppy(){
 
-    showAnomaly(
-        'DATA CORRUPTED'
-    );
-
+function testBadFloppy(){
+    showAnomaly('DATA CORRUPTED');
 }
 
 function testBadDuck(){
-
-    showAnomaly(
-        'INVALID CORE DETECTED'
-    );
-
-    document.getElementById(
-        'systemMessage'
-    ).innerText =
-    'CORE VALIDATION FAILED';
-
+    showAnomaly('INVALID CORE DETECTED');
+    document.getElementById('systemMessage').innerText = 'CORE VALIDATION FAILED';
 }
 
 function testGoodDuck(){
-
-    document.getElementById(
-        'systemMessage'
-    ).innerText =
-    'REBOOTING REALITY...';
-
+    document.getElementById('systemMessage').innerText = 'REBOOTING REALITY...';
 }
 
 function resetDebug(){
-
-    document.getElementById(
-        'systemMessage'
-    ).innerText =
-    'INITIALIZING...';
-
+    document.getElementById('systemMessage').innerText = 'INITIALIZING...';
 }
 
 ws.onmessage = (event)=>{
-
-    const data =
-    JSON.parse(event.data);
-
-    if(
-        data.type !== 'STATE_UPDATE'
-    ){
-        return;
-    }
-
-    if(
-        !data.game_state
-    ){
-        return;
-    }
-
-    handleGameState(
-        data.game_state
-    );
+    const data = JSON.parse(event.data);
+    if(data.type !== 'STATE_UPDATE'){ return; }
+    if(!data.game_state){ return; }
+    handleGameState(data.game_state);
 };
 
-   async function cleanupScene(){
-
+// Uwaga: Zauważyłem, że na dole kodu miałaś też drugą funkcję o tej samej nazwie wykonującą fetch na inny endpoint. 
+// Zostawiam ją tutaj, ale pamiętaj, że w JS dwie funkcje o tej samej nazwie mogą się nadpisywać!
+async function cleanupScene_ServerVersion(){
     await fetch(
         'https://error-reality-server-1.onrender.com/cleanup',
-        {
-            method:'POST'
-        }
+        { method:'POST' }
     );
 }
 </script>
 
 <div id="debugPanel">
-
-<button onclick="testBadFloppy()">
-BAD FLOPPY
-</button>
-
-<button onclick="testBadDuck()">
-BAD DUCK
-</button>
-
-<button onclick="testGoodDuck()">
-GOOD DUCK
-</button>
-
-<button onclick="resetDebug()">
-RESET
-</button>
-
+    <button onclick="cleanupScene()">SPRZĄTANIE</button>
+    <button onclick="testBadFloppy()">BAD FLOPPY</button>
+    <button onclick="testBadDuck()">BAD DUCK</button>
+    <button onclick="testGoodDuck()">GOOD DUCK</button>
+    <button onclick="resetDebug()">RESET</button>
 </div>
 
 </body>
