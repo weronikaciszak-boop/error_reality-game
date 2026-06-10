@@ -588,13 +588,15 @@ ws.onmessage = (event)=>{
     );
 };
 
-    function cleanupScene(){
+   async function cleanupScene(){
 
-    runScene(
-        'error_sprzatanie'
+    await fetch(
+        'https://TWOJ-BACKEND.onrender.com/cleanup',
+        {
+            method:'POST'
+        }
     );
 }
-
 </script>
 
 <div id="debugPanel">
