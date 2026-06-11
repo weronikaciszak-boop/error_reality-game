@@ -587,7 +587,8 @@ class ErrorRealityClient {
         this.ws = null;
         this.gameState = null;
         this.totalScans = 89;
-        this.wsUrl = 'wss://error-reality-server-1.onrender.com/ws';
+        // DODANO: Prawidłowy identyfikator ?client=player dla serwera backendu
+        this.wsUrl = 'wss://error-reality-server-1.onrender.com/ws?client=player';
         this.apiUrl = 'https://error-reality-server-1.onrender.com';
         
         this.adminClicks = 0;
@@ -633,6 +634,9 @@ class ErrorRealityClient {
     unlockModule(moduleId){
         const badge = document.getElementById(moduleId);
         if(badge) {
+            // Jeśli moduł jest już rozwiązany na serwerze, ignorujemy ponowne odblokowanie
+            if (badge.classList.contains('restored')) return;
+
             badge.classList.remove('locked');
             badge.classList.add('unlocked');
             badge.textContent = 'UNLOCKED';
@@ -809,6 +813,112 @@ class ErrorRealityClient {
         this.updateTask(task);
     }
 
+    // DODANO: Brakująca, kluczowa funkcja aktualizująca UI na podstawie stanu gry z backendu
+    updateUI() {
+        if (!this.gameState) return;
+
+        // Aktualizacja postępu i stabilności
+        const progress = this.gameState.progress || 0;
+        document.getElementById('progressPercent').textContent = progress;
+        document.getElementById('progressFill').style.width = progress + '%';
+
+        // Aktualizacja statusu zasilania
+        const powerEl = document.getElementById('powerStatus');
+        if (powerEl) {
+            powerEl.textContent = this.gameState.power ? "ON" : "OFF";
+            powerEl.style.color = this.gameState.power ? "#ffe100" : "#ff007f";
+        }
+
+        // Aktualizacja statusu rdzenia
+        const coreEl = document.getElementById('coreStatus');
+        if (coreEl) {
+            if (this.gameState.duck_good) {
+                coreEl.textContent = "STABLE";
+                coreEl.style.color = "#ffe100";
+                this.setGameStage('GOOD_CORE');
+            } else if (this.gameState.duck_bad) {
+                coreEl.textContent = "VALIDATION FAILED";
+                coreEl.style.color = "#ff007f";
+                this.setGameStage('BAD_CORE');
+            } else {
+                coreEl.textContent = "CORRUPTED";
+                coreEl.style.color = "#ffe100";
+            }
+        }
+
+        // Automatyczne odblokowywanie modułów przesłanych z serwera (np. przez MQTT/Home Assistant)
+        if (this.gameState.unlocked_modules) {
+            this.gameState.unlocked_modules.forEach(mod => {
+                this.unlockModule(mod + 'Badge');
+            });
+            if (this.gameState.unlocked_modules.length > 0 && this.gameState.restored_modules.length < 4) {
+                this.setGameStage('MODULE_UNLOCKED');
+            }
+        }
+
+        // Automatyczne oznaczanie modułów jako rozwiązane
+        if (this.gameState.restored_modules) {
+            this.gameState.restored_modules.forEach(mod => {
+                this.clearModule(mod + 'Badge');
+            });
+            if (this.gameState.restored_modules.length >= 4) {
+                this.setGameStage('ALL_MODULES_CLEARED');
+            }
+        }
+
+        // Domyślny stan początkowy (brak prądu)
+        if (!this.gameState.power) {
+            this.setGameStage('BOOT');
+        } else if (this.gameState.power && this.gameState.unlocked_modules.length === 0) {
+            this.setGameStage('POWER_ON');
+        }
+    }
+
+    updateConnectionStatus(isConnected) {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        if (dot && text) {
+            if (isConnected) {
+                dot.classList.remove('disconnected');
+                dot.classList.add('connected');
+                text.textContent = 'CONNECTED';
+            } else {
+                dot.classList.remove('connected');
+                dot.classList.add('disconnected');
+                text.textContent = 'DISCONNECTED';
+            }
+        }
+    }
+
+    rebuildArchive() {
+        const list = document.getElementById('archiveList');
+        if (!list) return;
+        if (this.events.length === 0) {
+            list.innerHTML = `
+                <div class="archive-empty">
+                    [00:00:00]<br>
+                    Core corruption detected<br>
+                    Reality save process failed<br>
+                    Waiting for external intervention
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = '';
+        // Mapowanie zdarzeń na czytelne logi systemowe w czasie rzeczywistym
+        this.events.forEach(evt => {
+            const item = document.createElement('div');
+            item.className = 'archive-item';
+            item.innerHTML = `
+                <span class="archive-timestamp">[${evt.timestamp || 'SYSTEM'}]</span>
+                <div class="archive-type">${evt.type}</div>
+                <div class="archive-data">${evt.message || ''}</div>
+            `;
+            list.appendChild(item);
+        });
+        list.scrollTop = list.scrollHeight;
+    }
+
     async init() {
         console.log('🎮 Initializing Error Reality Client...');
         
@@ -890,127 +1000,11 @@ class ErrorRealityClient {
             this.updateConnectionStatus(false);
         }
     }
-
-    updateConnectionStatus(isConnected) {
-        const dot = document.getElementById('statusDot');
-        const text = document.getElementById('statusText');
-        if (dot && text) {
-            if (isConnected) {
-                dot.className = 'status-dot connected';
-                text.textContent = 'CONNECTED';
-            } else {
-                dot.className = 'status-dot disconnected';
-                text.textContent = 'DISCONNECTED';
-            }
-        }
-    }
-
-    updateUI() {
-        if (!this.gameState) {
-            return;
-        }
-
-        const isPowerOn = this.gameState.power;
-        const unlockedModules = this.gameState.unlocked_modules || [];
-        const restoredModules = this.gameState.restored_modules || [];
-
-        if (restoredModules.includes('food')) this.clearModule('foodBadge');
-        if (restoredModules.includes('living')) this.clearModule('livingBadge');
-        if (restoredModules.includes('memory')) this.clearModule('memoryBadge');
-        if (restoredModules.includes('sanitation')) this.clearModule('sanitationBadge');
-
-        const powerStatusEl = document.getElementById('powerStatus');
-        
-        if (isPowerOn) {
-            if (powerStatusEl) powerStatusEl.textContent = 'ONLINE';
-            this.setGameStage('POWER_ON'); 
-            
-            if (unlockedModules.includes('food')) {
-                const foodBadge = document.getElementById('foodBadge');
-                if (foodBadge && !foodBadge.classList.contains('restored')) {
-                    this.unlockModule('foodBadge');
-                }
-            }
-            if (unlockedModules.includes('living')) {
-                const livingBadge = document.getElementById('livingBadge');
-                if (livingBadge && !livingBadge.classList.contains('restored')) {
-                    this.unlockModule('livingBadge');
-                }
-            }
-            if (unlockedModules.includes('memory')) {
-                const memoryBadge = document.getElementById('memoryBadge');
-                if (memoryBadge && !memoryBadge.classList.contains('restored')) {
-                    this.unlockModule('memoryBadge');
-                }
-            }
-            if (unlockedModules.includes('sanitation')) {
-                const sanitationBadge = document.getElementById('sanitationBadge');
-                if (sanitationBadge && !sanitationBadge.classList.contains('restored')) {
-                    this.unlockModule('sanitationBadge');
-                }
-            }
-
-        } else {
-            if (powerStatusEl) powerStatusEl.textContent = 'OFF';
-            this.setGameStage('BOOT'); 
-        }
-
-        const percent = this.gameState.progress || 0;
-        
-        const fill = document.getElementById('progressFill');
-        const txt = document.getElementById('progressPercent');
-        if (fill && txt) {
-            fill.style.width = percent + '%';
-            txt.textContent = percent;
-        }
-    }
-
-    rebuildArchive() {
-        const list = document.getElementById('archiveList');
-        if (!list) return;
-
-        list.innerHTML = '';
-
-        if (!this.events || this.events.length === 0) {
-            list.innerHTML = `
-                <div class="archive-empty">
-                    [00:00:00]<br>
-                    Core corruption detected<br>
-                    Reality save process failed<br>
-                    Waiting for external intervention
-                </div>`;
-            return;
-        }
-
-        // Renderowanie od najnowszego do najstarszego
-        for (let i = this.events.length - 1; i >= 0; i--) {
-            const event = this.events[i];
-            const item = document.createElement('div');
-            item.className = 'archive-item';
-            
-            // Formatowanie czytelnego czasu z ISO stringa
-            let timeStr = '00:00:00';
-            try {
-                timeStr = new Date(event.timestamp).toLocaleTimeString();
-            } catch(e) {}
-
-            // Ładne formatowanie opcjonalnych danych (np. słowników/obiektów z Pythona)
-            let dataStr = '';
-            if (event.data) {
-                dataStr = typeof event.data === 'object' ? JSON.stringify(event.data) : event.data;
-            }
-
-            item.innerHTML = `
-                <span class="archive-timestamp">[${timeStr}]</span>
-                <div class="archive-type">${event.type}</div>
-                <div class="archive-data">${dataStr}</div>
-            `;
-            list.appendChild(item);
-        }
-    }
 }
 
+// Uruchomienie klienta gry po załadowaniu strony
 const client = new ErrorRealityClient();
 </script>
+
 </body>
 </html>
