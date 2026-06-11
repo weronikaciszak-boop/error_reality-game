@@ -239,14 +239,29 @@ body::before{
 </div>
 
 <script>
-// --- NASZA DODANA FUNKCJA JAVASCRIPT ---
-function cleanupScene(){
-    runScene('error_sprzatanie');
-}
+// --- UTWORZENIE ADRESÓW SERWERA RENDERA ---
+const SERVER_HTTP = "https://error-reality-server-1.onrender.com";
+const SERVER_WS = "wss://error-reality-server-1.onrender.com/ws?client=tv";
 
+// --- KONFIGURACJA SEZPIECZNEGO WEBSOCKETA ---
+const ws = new WebSocket(SERVER_WS);
 
+ws.onopen = () => {
+    console.log("✅ TV zsynchronizowany z głównym serwerem");
+};
 
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type !== 'STATE_UPDATE') { return; }
+    if (!data.game_state) { return; }
+    handleGameState(data.game_state);
+};
 
+ws.onclose = () => {
+    console.log("❌ Rozłączono TV z serwerem. Próba ponownego połączenia...");
+};
+
+// --- FUNKCJE OBSŁUGI GRY ---
 function showAnomaly(text){
     const overlay = document.getElementById('anomalyOverlay');
     const label = document.getElementById('anomalyText');
@@ -262,34 +277,13 @@ function sleep(ms){
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-    async function runScene(sceneName){
-
-    try{
-
-        await fetch(
-            `${HA_URL}/api/services/scene/turn_on`,
-            {
-                method:'POST',
-
-                headers:{
-                    'Authorization':
-                    `Bearer ${HA_TOKEN}`,
-
-                    'Content-Type':
-                    'application/json'
-                },
-
-                body:JSON.stringify({
-                    entity_id:
-                    `scene.${sceneName}`
-                })
-            }
-        );
-
-    }catch(err){
-
-        console.error(err);
-
+// Przekierowanie żądania sceny na backend Rendera za pomocą bezpiecznego GET
+async function runScene(sceneName){
+    try {
+        await fetch(`${SERVER_HTTP}/scene/${sceneName}`);
+        console.log(`Wywołano scenę przez serwer: ${sceneName}`);
+    } catch(err) {
+        console.error("Błąd wysyłania sceny do serwera:", err);
     }
 }
 
@@ -317,7 +311,7 @@ async function startFinalSequence(){
     msg.innerText = 'PERSONNEL PLEASE LEAVE REALITY AREA';
     await sleep(3000);
     msg.innerText = 'REALITY REBOOT COMMENCING';
-    await runScene('error_end');
+    // Serwer sam wywoła odpowiedni webhook po zmianie stanu
 }
     
 function handleGameState(game){
@@ -327,11 +321,10 @@ function handleGameState(game){
 
     if(!game.power){
         msg.innerText = 'LOCATE EXTERNAL POWER SOURCE';
+        startSceneTriggered = false;
+        rebootSequenceStarted = false;
+        finalSequenceStarted = false;
         return;
-    }
-    if(game.power && !startSceneTriggered){
-        startSceneTriggered = true;
-        runScene('error_start');
     }
 
     if(game.restored_modules.length === 0){
@@ -353,9 +346,10 @@ function handleGameState(game){
     }
 }
 
-window.debugState = (state)=>{
-    handleGameState(state);
-};
+// PANEL DEBUGOWANIA (PRZYCISKI EKRAMU TV)
+function cleanupScene(){
+    runScene('error_sprzatanie');
+}
 
 function testBadFloppy(){
     showAnomaly('DATA CORRUPTED');
@@ -370,24 +364,13 @@ function testGoodDuck(){
     document.getElementById('systemMessage').innerText = 'REBOOTING REALITY...';
 }
 
-function resetDebug(){
-    document.getElementById('systemMessage').innerText = 'INITIALIZING...';
-}
-
-ws.onmessage = (event)=>{
-    const data = JSON.parse(event.data);
-    if(data.type !== 'STATE_UPDATE'){ return; }
-    if(!data.game_state){ return; }
-    handleGameState(data.game_state);
-};
-
-// Uwaga: Zauważyłem, że na dole kodu miałaś też drugą funkcję o tej samej nazwie wykonującą fetch na inny endpoint. 
-// Zostawiam ją tutaj, ale pamiętaj, że w JS dwie funkcje o tej samej nazwie mogą się nadpisywać!
-async function cleanupScene_ServerVersion(){
-    await fetch(
-        'https://error-reality-server-1.onrender.com/cleanup',
-        { method:'POST' }
-    );
+async function triggerResetFromServer(){
+    try {
+        await fetch(`${SERVER_HTTP}/reset`, { method: 'POST' });
+        document.getElementById('systemMessage').innerText = 'INITIALIZING...';
+    } catch (err) {
+        console.error("Błąd resetowania:", err);
+    }
 }
 </script>
 
@@ -396,7 +379,7 @@ async function cleanupScene_ServerVersion(){
     <button onclick="testBadFloppy()">BAD FLOPPY</button>
     <button onclick="testBadDuck()">BAD DUCK</button>
     <button onclick="testGoodDuck()">GOOD DUCK</button>
-    <button onclick="resetDebug()">RESET</button>
+    <button onclick="triggerResetFromServer()">RESET</button>
 </div>
 
 </body>
