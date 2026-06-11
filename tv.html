@@ -274,6 +274,37 @@ function sleep(ms){
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+    async function runScene(sceneName){
+
+    try{
+
+        await fetch(
+            `${HA_URL}/api/services/scene/turn_on`,
+            {
+                method:'POST',
+
+                headers:{
+                    'Authorization':
+                    `Bearer ${HA_TOKEN}`,
+
+                    'Content-Type':
+                    'application/json'
+                },
+
+                body:JSON.stringify({
+                    entity_id:
+                    `scene.${sceneName}`
+                })
+            }
+        );
+
+    }catch(err){
+
+        console.error(err);
+
+    }
+}
+
 let startSceneTriggered = false;
 async function startRebootSequence(){
     if(rebootSequenceStarted) return;
