@@ -341,6 +341,10 @@ function handleGameState(game){
         showAnomaly('INVALID CORE DETECTED');
         msg.innerText = 'CORE VALIDATION FAILED';
     }
+    if(game.bad_floppy){
+    showAnomaly("DATA CORRUPTED");
+    msg.innerText = "CORRUPTED STORAGE DETECTED";
+    }
     if(game.duck_good){
         startFinalSequence();
     }
