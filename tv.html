@@ -351,31 +351,31 @@ function handleGameState(game){
 }
 
 // PANEL DEBUGOWANIA (PRZYCISKI EKRAMU TV)
-function cleanupScene(){
-    runScene('error_sprzatanie');
-}
-
-function testBadFloppy(){
-    showAnomaly('DATA CORRUPTED');
-}
-
-function testBadDuck(){
-    showAnomaly('INVALID CORE DETECTED');
-    document.getElementById('systemMessage').innerText = 'CORE VALIDATION FAILED';
-}
-
-function testGoodDuck(){
-    document.getElementById('systemMessage').innerText = 'REBOOTING REALITY...';
-}
-
-async function triggerResetFromServer(){
-    try {
-        await fetch(`${SERVER_HTTP}/reset`, { method: 'POST' });
-        document.getElementById('systemMessage').innerText = 'INITIALIZING...';
-    } catch (err) {
-        console.error("Błąd resetowania:", err);
-    }
-}
+//function cleanupScene(){
+//    runScene('error_sprzatanie');
+//}
+//
+//function testBadFloppy(){
+//    showAnomaly('DATA CORRUPTED');
+//}
+//
+//function testBadDuck(){
+//    showAnomaly('INVALID CORE DETECTED');
+//    document.getElementById('systemMessage').innerText = 'CORE VALIDATION FAILED';
+//}
+//
+//function testGoodDuck(){
+//    document.getElementById('systemMessage').innerText = 'REBOOTING REALITY...';
+//}
+//
+//async function triggerResetFromServer(){
+//    try {
+//        await fetch(`${SERVER_HTTP}/reset`, { method: 'POST' });
+ //       document.getElementById('systemMessage').innerText = 'INITIALIZING...';
+//    } catch (err) {
+//        console.error("Błąd resetowania:", err);
+//    }
+//}
 </script>
 
 <div id="debugPanel">
