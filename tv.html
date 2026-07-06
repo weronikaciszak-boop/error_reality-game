@@ -292,7 +292,7 @@ async function startRebootSequence(){
     if(rebootSequenceStarted) return;
     rebootSequenceStarted = true;
     const msg = document.getElementById('systemMessage');
-    msg.innerText = 'REBOOTING REALITY...';
+    msg.innerText = 'REALITY REBOOT COMMENCING';
     await sleep(3000);
     msg.innerText = 'REBOOT FAILED';
     await sleep(3000);
@@ -306,11 +306,8 @@ async function startFinalSequence(){
     if(finalSequenceStarted) return;
     finalSequenceStarted = true;
     const msg = document.getElementById('systemMessage');
-    msg.innerText = 'SUBSTITUTE CORE ACCEPTED';
-    await sleep(3000);
-    msg.innerText = 'PERSONNEL PLEASE LEAVE REALITY AREA';
-    await sleep(3000);
     msg.innerText = 'REALITY REBOOT COMMENCING';
+
     // Serwer sam wywoła odpowiedni webhook po zmianie stanu
 }
     
